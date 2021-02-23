@@ -8,7 +8,7 @@ import H5 from '../../atomics/h5'
 import I from '../../atomics/I'
 import './style.css'
 
-class Login extends Component {
+class LoginAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -26,28 +26,33 @@ class Login extends Component {
         return ( 
             <>
                 <ContainerSingle className="container-login">
-                    <ContainerSingle className="mb-3">
-                        <Label htmlFor="exampleFormControlInput1" className="form-label">
-                            Email :
-                        </Label>
-                        <ContainerSingle className="email-container">
-                            <Input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Input your username"/>
+                    <ContainerSingle className="border-login">
+                        <ContainerSingle className="mb-3">
+                            <H3 className="title-login">Login Admin</H3>
                         </ContainerSingle>
-                    </ContainerSingle>
-                    <ContainerSingle className="mb-3">
-                        <Label htmlFor="exampleFormControlInput2" className="form-label">
-                            Password :
-                        </Label>
-                        <ContainerSingle>
-                            <ContainerSingle className="password-container">
-                                <Input type={this.state.type} className="form-control" id="exampleFormControlInput2"/>
+                        <ContainerSingle className="mb-3">
+                            <Label htmlFor="exampleFormControlInput1" className="form-label">
+                                Email :
+                            </Label>
+                            <ContainerSingle className="email-container">
+                                <Input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Input your username"/>
                             </ContainerSingle>
-                            <ContainerSingle className="eye-slash-container">
-                                <I 
-                                    className={this.state.type === 'text' ? 'far fa-eye-slash' : 'far fa-eye'} 
-                                    id="togglePassword"
-                                    onClick={this.handleEye}
-                                ></I>
+                        </ContainerSingle>
+                        <ContainerSingle className="mb-3">
+                            <Label htmlFor="exampleFormControlInput2" className="form-label">
+                                Password :
+                            </Label>
+                            <ContainerSingle>
+                                <ContainerSingle className="password-container">
+                                    <Input type={this.state.type} className="form-control" id="exampleFormControlInput2"/>
+                                </ContainerSingle>
+                                <ContainerSingle className="eye-slash-container">
+                                    <I 
+                                        className={this.state.type === 'text' ? 'far fa-eye-slash' : 'far fa-eye'} 
+                                        id="togglePassword"
+                                        onClick={this.handleEye}
+                                    ></I>
+                                </ContainerSingle>
                             </ContainerSingle>
                         </ContainerSingle>
                     </ContainerSingle>
@@ -78,4 +83,4 @@ class Login extends Component {
     }
 }
  
-export default Login;
+export default LoginAdmin;
