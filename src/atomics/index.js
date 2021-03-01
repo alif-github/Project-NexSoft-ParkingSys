@@ -19,6 +19,8 @@ import TRow from './atomics-component/table-row'
 import TH from './atomics-component/table-head-item'
 import TBody from './atomics-component/table-body'
 import TD from './atomics-component/table-body-item'
+import SelectSm from './atomics-component/select'
+import Option from './atomics-component/option'
 
 export {
     A,
@@ -41,5 +43,7 @@ export {
     TRow,
     TH,
     TBody,
-    TD
+    TD,
+    SelectSm,
+    Option
  }
