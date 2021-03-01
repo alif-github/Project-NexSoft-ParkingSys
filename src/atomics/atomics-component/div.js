@@ -7,9 +7,9 @@ class ContainerSingle extends Component {
     }
 
     render() {
-        const { className , children , onClick } = this.props 
+        const { className , children , onClick , id } = this.props 
         return ( 
-            <div className={className} onClick={onClick}>
+            <div className={className} onClick={onClick} id={id}>
                 {children}
             </div>
          );

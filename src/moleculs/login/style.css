@@ -17,7 +17,7 @@
 
 .image-logo-login {
     width: 50%;
-    margin-left: 28vh;
+    margin-left: 25vh;
 }
 
 .image-login {
@@ -40,7 +40,7 @@
 }
 
 .title-login-text {
-    text-align: center;
+    text-align: justify;
     margin-top: 10vh;
 }
 
@@ -72,7 +72,7 @@
     box-sizing: border-box;
     padding-left: 7vh;
     padding-top: 7vh;
-    border-radius: 5vh;
+    border-radius: 3vh;
     box-shadow: 6px 6px 15px rgba(0,0,0,0.8);
 }
 
@@ -81,3 +81,20 @@
     margin-right: 5vh;
     margin-bottom: 5vh;
 }
+
+.btn-link {
+    margin-top: 2vh;
+}
+
+.btn-login {
+    margin-top: 4vh;
+    margin-right: 11vh;
+    width: 90%;
+}
+
+.link-anchor {
+    margin-left: 9vh;
+    text-decoration: none;
+    cursor: pointer;
+}
+

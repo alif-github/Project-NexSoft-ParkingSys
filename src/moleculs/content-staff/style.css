@@ -1,0 +1,24 @@
+.btn {
+    margin-left: 2%;
+    margin-right: 2%;
+    height: min-content;
+    font-size: small;
+}
+
+THead {
+    background-color: black;
+    color: white;
+}
+
+TH , TR {
+    text-align: center;
+}
+
+TR {
+    font-size: small;
+    padding: 1vh;
+}
+
+.position-table {
+    margin-top: 11vh;
+}

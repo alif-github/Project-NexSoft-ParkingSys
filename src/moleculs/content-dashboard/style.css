@@ -1,0 +1,76 @@
+.background-content-dashboard-adm {
+    width: 100%;
+    height: 100%;
+}
+
+.title-content {
+    width: 100%;
+    border: black 1px solid;
+}
+
+.judul {
+    font-size: x-large;
+    font-weight: 500;
+}
+
+.div-atas {
+    width: 100%;
+}
+
+.title-dashboard {
+    width: 100%;
+    border: 1px solid black;
+}
+
+.div-atas {
+    margin-top: 10vh;
+}
+
+.div-atas-1 , .div-atas-2 {
+    width: 40%;
+    height: 20vh;
+    border: 1px solid white;
+    float: left;
+    padding: 2vh;
+    box-sizing: border-box;
+    border-radius: 2vh;
+    text-align: center;
+    box-shadow: 4px 4px 15px rgba(25,24,24,0.6);
+}
+
+.div-atas-1 {
+    margin-right: 5%;
+    margin-left: 8%;
+}
+
+.div-bawah-1 , .div-bawah-2 {
+    margin-top: 10vh;
+    width: 40%;
+    height: 20vh;
+    border: 1px solid white;
+    float: left;
+    padding: 2vh;
+    box-sizing: border-box;
+    border-radius: 2vh;
+    text-align: center;
+    box-shadow: 4px 4px 15px rgba(25,24,24,0.6);
+}
+
+.div-bawah-1 {
+    margin-right: 5%;
+    margin-left: 8%;
+}
+
+.judul-item {
+    margin-bottom: 5vh;
+    background-color: #fcb134;
+    border-radius: 2vh 2vh 0vh 0vh;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    box-sizing: border-box;
+}
+
+.content-item {
+    font-size: x-large;
+    font-weight: 500;
+}

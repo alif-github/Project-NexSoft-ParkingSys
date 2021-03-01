@@ -6,9 +6,9 @@ class Button extends Component {
         this.state = {  }
     }
     render() {
-        const { type , children } = this.props 
+        const { className , children } = this.props 
         return ( 
-            <button type={type}>{children}</button>
+            <button type="button" className={className}>{children}</button>
          );
     }
 }

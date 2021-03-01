@@ -6,9 +6,9 @@ class A extends Component {
         this.state = {  }
     }
     render() { 
+        const { href , className , children , onClick } = this.props
         return ( 
-            <a href="https://netdom.ir" class="text-gold" target="_blank" rel="noopener noreferrer">mahdiyar
-          anari</a>
+            <a href={href} className={className} onClick={onClick}>{children}</a>
          );
     }
 }

@@ -8,7 +8,7 @@ class I extends Component {
     render() { 
         const { className , id , onClick ,children } = this.props
         return ( 
-            <i className={className} id={id} onClick={onClick}>{children}</i>
+            <i className={className} id={id} onClick={onClick} aria-hidden="true">{children}</i>
         );
     }
 }
