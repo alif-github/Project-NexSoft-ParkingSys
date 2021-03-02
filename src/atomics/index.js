@@ -21,6 +21,8 @@ import TBody from './atomics-component/table-body'
 import TD from './atomics-component/table-body-item'
 import SelectSm from './atomics-component/select'
 import Option from './atomics-component/option'
+import ButtonModal from './atomics-component/button-modal'
+import ContainerModal from './atomics-component/div-modal'
 
 export {
     A,
@@ -45,5 +47,7 @@ export {
     TBody,
     TD,
     SelectSm,
-    Option
+    Option,
+    ButtonModal,
+    ContainerModal
  }

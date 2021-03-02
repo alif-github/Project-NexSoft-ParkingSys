@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux"
 import {
     ContainerSingle,
     Span,
@@ -12,6 +13,7 @@ import {
     Option,
     Button,
     I } from '../../atomics'
+import ModalDetailStaff from '../modal-detail-staff'
 import { makeStyles } from '@material-ui/core'
 import { Pagination } from '@material-ui/lab'
 import './style.css'
@@ -29,7 +31,8 @@ class Staff extends Component {
         super(props);
         this.state = { 
             dummy: []
-         }
+        }
+
         this.loopingDummy = () => {
             const dummyArray = []
             for (var i = 0; i < 7; i++) {
@@ -47,7 +50,7 @@ class Staff extends Component {
             }
             this.setState({
                 dummy: dummyArray
-            })
+            });
         }
     }
 
@@ -74,7 +77,7 @@ class Staff extends Component {
                         <input className="form-control form-control-sm form-opt" type="text" placeholder="Find.." aria-label=".form-control-sm example" />
                     </ContainerSingle>
                     <ContainerSingle className="panel-control-add">
-                        <Button className="btn btn-success btn-add">
+                        <Button className="btn btn-success btn-add" onClick={() => this.props.history.push('/adm-home/staff/add')}>
                             <Span><I className="fa fa-plus fa-icon" aria-hidden="true"></I></Span>
                                 Add Staff
                         </Button>
@@ -102,11 +105,10 @@ class Staff extends Component {
                                         <TD>{el.status}</TD>
                                         <TD>{el.posisi}</TD>
                                         <TD>
-                                            <Button className="btn btn-secondary">
-                                                <Span><I className="fa fa-info fa-icon" aria-hidden="true"></I></Span>
-                                                Detail
-                                            </Button>
-                                            <Button className="btn btn-warning">
+                                            <ContainerSingle className="detail" onClick={() => this.props.addDummy(this.state.dummy,idx)}>
+                                                <ModalDetailStaff />
+                                            </ContainerSingle>
+                                            <Button className="btn btn-warning" onClick={() => this.props.history.push('/adm-home/staff/update/'+el.id)}>
                                                 <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
                                                 Edit
                                             </Button>
@@ -141,5 +143,15 @@ class Staff extends Component {
          );
     }
 }
+
+const mapStateToProps = state => ({
+
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addDummy: (user,idx) => dispatch({ type: 'ADD_DATASTAFF' , payload: {user,idx} })
+    }
+}
  
-export default Staff;
+export default connect(mapStateToProps , mapDispatchToProps)(Staff);

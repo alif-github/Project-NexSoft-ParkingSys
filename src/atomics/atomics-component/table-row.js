@@ -6,9 +6,9 @@ class TRow extends Component {
         this.state = {  }
     }
     render() { 
-        const { children } = this.props
+        const { className , children } = this.props
         return ( 
-            <tr>{children}</tr>
+            <tr className={className}>{children}</tr>
          );
     }
 }

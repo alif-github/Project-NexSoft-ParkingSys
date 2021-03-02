@@ -1,0 +1,40 @@
+.container-add {
+    width: 100%;
+    border: 1px solid white;
+    padding: 2%;
+    box-sizing: border-box;
+    height: 100%;
+    box-shadow: 4px 4px 15px rgba(25,24,24,0.6);
+    border-radius: 3vh;
+}
+
+.container-add-left , .container-add-right {
+    float: left;
+    width: 50%;
+}
+
+.judul-container-add {
+    width: 100%;
+    text-align: center;
+    padding: 1%;
+    background-color: #fcb134;
+    border-radius: 2vh 2vh 0vh 0vh;
+    margin-bottom: 2%;
+}
+
+.input-control {
+    margin-bottom: 3%;
+    width: 100%;
+}
+
+.btn-float {
+    float: right;
+}
+
+.i-float {
+    margin-right: 7.5vh;
+}
+
+.tombol-control {
+    margin-top: 4.3vh;
+}

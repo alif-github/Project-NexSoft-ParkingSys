@@ -3,11 +3,6 @@
     margin-right: 2%;
     height: min-content;
     font-size: small;
-    float: left;
-} 
-
-.detail {
-    margin-left: 13%;
 }
 
 THead {
@@ -76,4 +71,8 @@ TR {
 
 .limit-title {
     margin-top: 0.5vh;
+}
+
+.align-left {
+    text-align: left;
 }

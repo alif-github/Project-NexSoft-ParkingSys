@@ -1,19 +1,7 @@
 import React, { Component } from 'react';
-import {  A,
-    Button,
+import {
     ContainerSingle,
-    Form,
-    H1,
-    H3,
-    H5,
-    Hr,
-    I,
-    Image,
-    Input,
-    Label,
-    Span,
-    TextArea,
-    ButtonAcr } from '../../atomics'
+    I} from '../../atomics'
 import './style.css'
 
 class Profile extends Component {

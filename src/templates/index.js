@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import './style.css'
-import { ContainerSingle , H3 , I , H5 , Image } from '../atomics';
-import DashBoardAdmin from '../moleculs/content-dashboard'
+import { ContainerSingle , H3 , I , H5 } from '../atomics';
 import Staff from '../moleculs/content-staff'
 import Profile from '../moleculs/profile'
 import Nav from '../moleculs/navigation'
+import Routes from '../config/routes';
+import BodyContent from '../organisms/body-content';
+import AddStaff from '../moleculs/add-staff';
 
 class HomePage extends Component {
     constructor(props) {
@@ -33,8 +35,7 @@ class HomePage extends Component {
                         </ContainerSingle>
                     </ContainerSingle>
                     <ContainerSingle className="content">
-                        {/* <DashBoardAdmin /> */}
-                        <Staff />
+                        <BodyContent/>
                     </ContainerSingle>
                 </ContainerSingle>
                 <ContainerSingle className="footer">

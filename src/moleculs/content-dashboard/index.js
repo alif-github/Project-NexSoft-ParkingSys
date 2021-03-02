@@ -1,19 +1,5 @@
 import React, { Component } from 'react';
-import {  A,
-    Button,
-    ContainerSingle,
-    Form,
-    H1,
-    H3,
-    H5,
-    Hr,
-    I,
-    Image,
-    Input,
-    Label,
-    Span,
-    TextArea,
-    ButtonAcr } from '../../atomics'
+import {ContainerSingle} from '../../atomics'
 import './style.css'
 
 class DashBoardAdmin extends Component {

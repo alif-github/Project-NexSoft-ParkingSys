@@ -44,6 +44,7 @@
 .menu-item {
     margin-bottom: 5vh;
     padding: 2vh;
+    color: black;
 }
 
 .menu-item:hover {
