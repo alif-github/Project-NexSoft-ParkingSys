@@ -16,7 +16,7 @@ class AddStaff extends Component {
         this.state = { }
         this.handleCancelAdd = () => {
             const confirmCancel = window.confirm("Are you sure to leave this changes ?")
-            if (confirmCancel) this.props.history.push('/adm-home/staff')
+            if (confirmCancel) this.props.history.push('/staff')
         }
     }
     render() { 

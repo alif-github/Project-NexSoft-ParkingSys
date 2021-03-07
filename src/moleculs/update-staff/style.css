@@ -8,9 +8,13 @@
     border-radius: 3vh;
 }
 
-.container-add-left , .container-add-right {
+.container-add-leftt , .container-add-rightt {
     float: left;
     width: 50%;
+}
+
+.container-add-rightt {
+    margin-bottom: 5vh;
 }
 
 .judul-container-add {
@@ -33,8 +37,4 @@
 
 .i-float {
     margin-right: 7.5vh;
-}
-
-.tombol-control {
-    margin-top: 4.3vh;
 }

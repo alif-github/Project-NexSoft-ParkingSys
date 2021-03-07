@@ -13,7 +13,7 @@ class Nav extends Component {
     render() { 
         return (
             <ContainerSingle className="menu-border">
-                <Link to="/adm-home" style={{textDecoration: 'none'}}>
+                <Link to="/" style={{textDecoration: 'none'}}>
                     <ContainerSingle className="menu-item">
                         <H5 className="menu-content">
                             Home
@@ -25,7 +25,7 @@ class Nav extends Component {
                         Member
                     </H5>
                 </ContainerSingle>
-                <Link to="/adm-home/staff" style={{textDecoration: 'none'}}>
+                <Link to="/staff" style={{textDecoration: 'none'}}>
                     <ContainerSingle className="menu-item">
                         <H5 className="menu-content">
                             Staff

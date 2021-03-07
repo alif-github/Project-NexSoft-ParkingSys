@@ -6,9 +6,9 @@ class Input extends Component {
         this.state = {  }
     }
     render() { 
-        const { type , className , id , value, placeholder } = this.props
+        const { type , className , id , value, placeholder, name, onChange } = this.props
         return ( 
-            <input type={type} className={className} id={id} value={value} placeholder={placeholder} />
+            <input type={type} className={className} id={id} value={value} placeholder={placeholder} name={name} onChange={onChange} />
          );
     }
 }

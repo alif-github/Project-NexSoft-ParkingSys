@@ -6,9 +6,9 @@ class A extends Component {
         this.state = {  }
     }
     render() { 
-        const { href , className , children , onClick } = this.props
+        const { href , style, className , children , onClick } = this.props
         return ( 
-            <a href={href} className={className} onClick={onClick}>{children}</a>
+            <a href={href} style={style} className={className} onClick={onClick}>{children}</a>
          );
     }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
+import { Redirect } from 'react-router-dom';
 import {
     ContainerSingle,
     Span,
@@ -60,6 +61,10 @@ class Staff extends Component {
 
     render() {
         const classes = () => this.props.useStyles();
+        console.log("props login : ", this.props.isLogin);
+        if(this.props.isLogin === false) {
+            return this.props.history.push('/')
+        }
         return (
             <ContainerSingle>
                 <ContainerSingle className="panel-control">
@@ -77,7 +82,7 @@ class Staff extends Component {
                         <input className="form-control form-control-sm form-opt" type="text" placeholder="Find.." aria-label=".form-control-sm example" />
                     </ContainerSingle>
                     <ContainerSingle className="panel-control-add">
-                        <Button className="btn btn-success btn-add" onClick={() => this.props.history.push('/adm-home/staff/add')}>
+                        <Button className="btn btn-success btn-add" onClick={() => this.props.history.push('/staff/add')}>
                             <Span><I className="fa fa-plus fa-icon" aria-hidden="true"></I></Span>
                                 Add Staff
                         </Button>
@@ -108,7 +113,7 @@ class Staff extends Component {
                                             <ContainerSingle className="detail" onClick={() => this.props.addDummy(this.state.dummy,idx)}>
                                                 <ModalDetailStaff />
                                             </ContainerSingle>
-                                            <Button className="btn btn-warning" onClick={() => this.props.history.push('/adm-home/staff/update/'+el.id)}>
+                                            <Button className="btn btn-warning" onClick={() => this.props.history.push('/staff/update/'+el.id)}>
                                                 <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
                                                 Edit
                                             </Button>
@@ -145,7 +150,7 @@ class Staff extends Component {
 }
 
 const mapStateToProps = state => ({
-
+    isLogin: state.auth.isLogin
 })
 
 const mapDispatchToProps = dispatch => {

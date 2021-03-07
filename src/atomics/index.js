@@ -23,6 +23,7 @@ import SelectSm from './atomics-component/select'
 import Option from './atomics-component/option'
 import ButtonModal from './atomics-component/button-modal'
 import ContainerModal from './atomics-component/div-modal'
+import InputDisabled from './atomics-component/input-disabled'
 
 export {
     A,
@@ -49,5 +50,6 @@ export {
     SelectSm,
     Option,
     ButtonModal,
-    ContainerModal
+    ContainerModal,
+    InputDisabled
  }

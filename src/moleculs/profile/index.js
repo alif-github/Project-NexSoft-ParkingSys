@@ -3,6 +3,7 @@ import {
     ContainerSingle,
     I} from '../../atomics'
 import './style.css'
+import { connect } from 'react-redux'
 
 class Profile extends Component {
     constructor(props) {
@@ -20,12 +21,20 @@ class Profile extends Component {
                         Welcome,
                     </ContainerSingle>
                     <ContainerSingle>
-                        Alif Yudha Syahputra
+                        {this.props.user.namaUser}
                     </ContainerSingle>
                 </ContainerSingle>
             </ContainerSingle>
          );
     }
 }
+
+const mapStateToProps = state => ({
+    user: state.auth.user
+})
+
+const mapDispatchToProps = dispatch => {
+    return {}
+}
  
-export default Profile;
+export default connect(mapStateToProps , mapDispatchToProps)(Profile);

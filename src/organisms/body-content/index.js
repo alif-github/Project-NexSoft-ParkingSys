@@ -13,10 +13,10 @@ class BodyContent extends Component {
     render() { 
         return ( 
             <Switch>
-                <Route exact path="/adm-home" component={props => <DashBoardAdmin {...props} />}/>
-                <Route path="/adm-home/staff/add" component={props => <AddStaff {...props} />}/>
-                <Route path="/adm-home/staff/update/:id" component={props => <UpdateStaff {...props} />}/>
-                <Route path="/adm-home/staff" component={props => <Staff {...props} />}/>
+                {/* <Route exact path="/" component={props => <DashBoardAdmin {...props} />}/>
+                <Route path="/staff/add" component={props => <AddStaff {...props} />}/> */}
+                {/* <Route path="/staff/update/:id" component={(props) => <Staff {...props} comp={<UpdateStaff/>} />}/> */}
+                {/* <Route path="/staff" component={props => <Staff {...props} />}/> */}
             </Switch>
          );
     }
