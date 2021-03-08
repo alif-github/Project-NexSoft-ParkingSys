@@ -1,10 +1,12 @@
 let defaultLoginState = {
     isLogin: false,
     username:"",
-    user: {}
+    user: {},
+    isPasswordDefault: false
 }
 
 const auth = (state = defaultLoginState, action) => {
+    console.log("isi reducer: ", state);
     switch (action.type) {
         case "LOGIN_SUCCESS":
             return {
@@ -18,6 +20,16 @@ const auth = (state = defaultLoginState, action) => {
                 isLogin: false,
                 username:"",
                 user: {}
+            }
+        case "PASSWORD_DEFAULT":
+            return {
+                ...state,
+                isPasswordDefault: true
+            }
+        case "PASSWORD_STATUS":
+            return {
+                ...state,
+                isPasswordDefault: false
             }
         case "ADD_USER":
             return {

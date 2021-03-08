@@ -28,7 +28,7 @@ const Routes = (props) => {
                 <Switch>
                     <Route exact path="/" component={(props) => <Login {...props}/>} />
                     <Route path="/register" component={Register} />
-                    <Route path="/change-password" component={ChangePassword} />
+                    <Route path="/change-password" component={(props) => <ChangePassword {...props}/>} />
                     <Route path="/500-internal-server-error" component={InternalServerError} />
                     <Route path="/staff/update/:id" exact component={(props) => <HomePage {...props} comp={<UpdateStaff {...props}/>}/>}/>
                     <Route path="/staff" exact component={(props) => <HomePage {...props} comp={<Staff {...props}/>}/>}/>

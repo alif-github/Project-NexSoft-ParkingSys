@@ -1,44 +1,259 @@
 import React, { Component } from 'react';
 import { 
-    A,
-    Button,
     ContainerSingle,
     H3,
     H5,
-    I,
     Image,
+    A,
+    Span } from '../../atomics/index'
+import {
+    Grid,
+    Paper,
+    Avatar,
+    TextField,
+    IconButton,
     Input,
-    Label,
-    TextArea } from '../../atomics/index'
+    InputLabel,
+    InputAdornment,
+    FormControl,
+    Button,
+    FormHelperText
+} from '@material-ui/core'
+import {
+    PersonAdd as PersonAddIcon, 
+    Visibility, 
+    VisibilityOff 
+} from '@material-ui/icons';
+import Swal from 'sweetalert2'
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import './style.css'
 
 class Register extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            type1: 'password',
-            type2: 'password',
-            array: []
+        this.state = {
+            showPassword: false,
+            showPasswordConfirm: false, 
+            name: '',
+            username: '',
+            email: '',
+            address: '',
+            password: '',
+            passwordConfirm: '',
+            errorEmail: false,
+            errorPassword: false,
+            errorPasswordConfirm: false,
+            helperTextEmail: ' ',
+            helperTextPassword: ' ',
+            helperTextPasswordConfirm: ' ',
         }
-        
-        this.handleEye1 = () => {
-            // --------------------------------------------------------------
-            // for changing type of password (type or text when icon clicked)
-            if (this.state.type1 === 'password') this.setState({type1: 'text'})
-            else this.setState({type1: 'password'})
-            // --------------------------------------------------------------
+        this.handleSetValue = (event) => {
+            this.setState({ 
+                ...this.state, 
+                [event.target.name]: event.target.value,
+            },() => this.handleCheckErrorPatern(event.target.name));
+        };
+        this.handleCheckErrorPatern = name => {
+            if (name === 'email') {
+                let emailPattern = /[\w-\.]+@([\w-]+\.)+[\w-]{0,}$/;
+                let validationEmail = emailPattern.test(this.state.email)
+                if (!validationEmail && this.state.email !== '') {
+                    this.setState({
+                        ...this.state,
+                        errorEmail: true,
+                        helperTextEmail: 'email must include @ and .'
+                    })
+                } else {
+                    this.setState({
+                        ...this.state,
+                        errorEmail: false,
+                        helperTextEmail: ' '
+                    })
+                }
+            } else if (name === 'password') {
+                let passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,8}$/;
+                let validationPassword = passwordPattern.test(this.state.password)
+                if (!validationPassword && this.state.password !== '') {
+                    this.setState({
+                        ...this.state,
+                        errorPassword: true,
+                        helperTextPassword: 'password minimal 6-8 character minimal 1 Uppercase font, Lowercase font, and number'
+                    })
+                } else {
+                    this.setState({
+                        ...this.state,
+                        errorPassword: false,
+                        helperTextPassword: ' '
+                    })
+                }
+            } else if (name === 'passwordConfirm') {
+                let passwordConfirmPattern = this.state.passwordConfirm;
+                let passwordPatternTest = this.state.password;
+                if (passwordConfirmPattern !== passwordPatternTest && this.state.passwordConfirm !== '') {
+                    this.setState({
+                        ...this.state,
+                        errorPasswordConfirm: true,
+                        helperTextPasswordConfirm: 'password must be same above, check your input'
+                    })
+                } else {
+                    this.setState({
+                        ...this.state,
+                        errorPasswordConfirm: false,
+                        helperTextPasswordConfirm: ' '
+                    })
+                }
+            }
         }
-        
-        this.handleEye2 = () => {
-            // --------------------------------------------------------------
-            // for changing type of password (type or text when icon clicked)
-            if (this.state.type2 === 'password') this.setState({type2: 'text'})
-            else this.setState({type2: 'password'})
-            // --------------------------------------------------------------
+        this.handleClickShowPassword = () => {
+            this.setState({ ...this.state, showPassword: !this.state.showPassword });
+        };
+        this.handleClickShowPasswordConfirm = () => {
+            this.setState({ ...this.state, showPasswordConfirm: !this.state.showPasswordConfirm });
+        };
+        this.handleMouseDownPassword = (event) => {
+            event.preventDefault();
+        };
+        this.handleMouseDownPasswordConfirm = (event) => {
+            event.preventDefault();
+        };
+        this.handleFetchingCreateUserAPI = () => {
+            const {errorEmail,errorPassword,errorPasswordConfirm} = this.state
+            const {name,username,address,email,password} = this.state
+            
+            if (
+                errorEmail === true || 
+                errorPassword === true || 
+                errorPasswordConfirm === true ||
+                name === '' ||
+                username === '' ||
+                address === '') {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Please check your form',
+                    icon: 'error',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
+            } else {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                //method to request API
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        namaUser: '' + name +'',
+                        email: '' + email + '',
+                        username: '' + username + '',
+                        password: '' + password + '',
+                        alamat: '' + address + ''
+                    })
+                };
+                //fetching data to url API Back-End
+                fetch("http://localhost:8080/parkir/create-user/", requestOptions)
+                    .then((response) => {
+                        return response.json()
+                    })
+                    .then(
+                        (result) => {
+                            //do what you want with the response here
+                            if (result.errors) {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Please check your form',
+                                    icon: 'error',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    showConfirmButton: false,
+                                })
+                            } else if (result.errorMessage) {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: result.errorMessage,
+                                    icon: 'error',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    showConfirmButton: false,
+                                })
+                            } else {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: result.successMessage,
+                                })
+                                this.props.history.push('/')
+                            }
+                        },
+                        // Note: it's important to handle errors here
+                        // instead of a catch() block so that we don't swallow
+                        // exceptions from actual bugs in components.
+                        (error) => {
+                            // this.props.history.push('/500-internal-server-error')
+                        }
+                    )
+            }   
         }
     }
 
-    render() { 
+    render() {
+        const useStyles = makeStyles((theme) => ({
+            root: {
+                '& > *': {
+                  margin: theme.spacing(1),
+                  width: '25ch',
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                },
+            },
+            container: {
+                flexGrow: 1
+            },
+            margin: {
+                margin: theme.spacing(1),
+            },
+            withoutLabel: {
+                marginTop: theme.spacing(3),
+            },
+            textField: {
+                width: '25ch',
+            },
+        }));
+        const inputStyle = {
+            marginTop: '5px',
+            marginBottom: '5px'
+        }
+        const paperStyle = {
+            padding: 20,
+            height: '111vh',
+            width: 380,
+            margin: '20px auto',
+            borderRadius: '2vh'
+        }
+        const avatarStyle = {
+            backgroundColor: '#fcb134'
+        }
+        const titleLoginStyle = {
+            marginBottom: '10px',
+            marginTop: '10px'
+        }
+        const buttonStyle = {
+            width: '25ch',
+            marginTop: '20px',
+            marginBottom: '10px'
+        } 
+        
+        // errors[0].defaultMessage username harus diisi
+
         return ( 
             <>
 
@@ -65,71 +280,125 @@ class Register extends Component {
 
                 {/* Login/Regis */}
                 <ContainerSingle className="container-registration">
-                    <ContainerSingle className="title-container-regis">
-                        <H3 className="title-registration">Create Account</H3>
-                    </ContainerSingle>
-                    <ContainerSingle className="box-form">
-                        <Label htmlFor="exampleFormControlInput1" className="form-label">
-                            Name :
-                        </Label>
-                        <Input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Input your name"/>
-                    </ContainerSingle>
-                    <ContainerSingle className="box-form">
-                        <Label htmlFor="exampleFormControlInput1" className="form-label">
-                            Username :
-                        </Label>
-                        <Input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Input your username"/>
-                    </ContainerSingle>
-                    <ContainerSingle className="box-form">
-                        <Label htmlFor="exampleFormControlInput1" className="form-label">
-                            E-mail :
-                        </Label>
-                        <Input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Input your email"/>
-                    </ContainerSingle>
-                    <ContainerSingle className="box-form">
-                        <Label htmlFor="exampleFormControlInput1" className="form-label">
-                            Address :
-                        </Label>
-                        <TextArea className="form-control" placeholder="Input your address" id="floatingTextarea"></TextArea>
-                    </ContainerSingle>
-                    <ContainerSingle className="box-form">
-                        <Label htmlFor="exampleFormControlInput2" className="form-label">
-                            New Password :
-                        </Label>
-                        <ContainerSingle className="left-box">
-                            <Input type={this.state.type1} className="form-control" id="exampleFormControlInput2"/>
-                        </ContainerSingle>
-                        <ContainerSingle className="right-box">
-                            <I 
-                                className={this.state.type1 === 'text' ? 'far fa-eye icon' : 'far fa-eye-slash icon'}
-                                id="togglePassword"
-                                onClick={this.handleEye1}
-                            ></I>
-                        </ContainerSingle>
-                    </ContainerSingle>
-                    <ContainerSingle className="box-form">
-                        <Label htmlFor="exampleFormControlInput2" className="form-label">
-                            Confirm Password :
-                        </Label>
-                        <ContainerSingle className="left-box">
-                            <Input type={this.state.type2} className="form-control" id="exampleFormControlInput2"/>
-                        </ContainerSingle>
-                        <ContainerSingle className="right-box">
-                            <I 
-                                className={this.state.type2 === 'text' ? 'far fa-eye icon' : 'far fa-eye-slash icon'}
-                                id="togglePassword"
-                                onClick={this.handleEye2}
-                            ></I>
-                        </ContainerSingle>
-                    </ContainerSingle>
-                    <ContainerSingle className="box-form">
-                        <Button className="btn btn-success btn-register">
-                            Register
-                        </Button>
-                    </ContainerSingle>
-                    <ContainerSingle className="box-form">
-                        <A onClick={() => this.props.history.push('/')} className="link-to-login">Back to login</A>
-                    </ContainerSingle>
+                    <Grid>
+                        <Paper elevation={10} style={paperStyle}>
+                            <Grid align='center'>
+                                <Avatar style={avatarStyle}><PersonAddIcon/></Avatar>
+                                <H5 style={titleLoginStyle}>Create An Account</H5>
+                            </Grid>
+                            <form className={useStyles.root} noValidate autoComplete="off">
+                                <TextField
+                                    style={inputStyle}
+                                    id="standard-basic" 
+                                    label="Full Name"
+                                    name="name"
+                                    onChange={this.handleSetValue}
+                                    fullWidth
+                                    required
+                                    helperText=" "
+                                />
+                                <TextField
+                                    style={inputStyle}
+                                    id="standard-basic" 
+                                    label="Username"
+                                    name="username"
+                                    onChange={this.handleSetValue}
+                                    fullWidth
+                                    required
+                                    helperText=" "
+                                />
+                                <TextField
+                                    error={this.state.errorEmail === true}
+                                    style={inputStyle}
+                                    id="standard-basic" 
+                                    label="Email"
+                                    name="email"
+                                    onChange={this.handleSetValue}
+                                    fullWidth
+                                    required
+                                    helperText={this.state.helperTextEmail}
+                                />
+                                <TextField
+                                    id="standard-multiline-static"
+                                    label="Address"
+                                    multiline
+                                    fullWidth
+                                    required
+                                    name="address"
+                                    onChange={this.handleSetValue}
+                                    rows={4}
+                                    helperText=" "
+                                />
+                            </form>
+                            <FormControl 
+                                error={this.state.errorPassword === true} 
+                                fullWidth 
+                                style={inputStyle} 
+                                className={clsx(useStyles.margin, useStyles.textField)}>
+                                <InputLabel required htmlFor="standard-adornment-password">Password</InputLabel>
+                                <Input
+                                    id="standard-adornment-password"
+                                    type={this.state.showPassword ? 'text' : 'password'}
+                                    value={this.state.password}
+                                    name="password"
+                                    onChange={this.handleSetValue}
+                                    endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={this.handleClickShowPassword}
+                                        onMouseDown={this.handleMouseDownPassword}
+                                        >
+                                        {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                    }
+                                />
+                            <FormHelperText id="component-error-text">{this.state.helperTextPassword}</FormHelperText>
+                            </FormControl>
+                            <FormControl 
+                                error={this.state.errorPasswordConfirm === true}
+                                fullWidth 
+                                style={inputStyle} 
+                                className={clsx(useStyles.margin, useStyles.textField)}>
+                                <InputLabel required htmlFor="standard-adornment-password">Confirmation Password</InputLabel>
+                                <Input
+                                    id="standard-adornment-password"
+                                    type={this.state.showPasswordConfirm ? 'text' : 'password'}
+                                    value={this.state.passwordConfirm}
+                                    name="passwordConfirm"
+                                    onChange={this.handleSetValue}
+                                    endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={this.handleClickShowPasswordConfirm}
+                                        onMouseDown={this.handleMouseDownPasswordConfirm}
+                                        >
+                                        {this.state.showPasswordConfirm ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                    }
+                                />
+                            <FormHelperText id="component-error-text">{this.state.helperTextPasswordConfirm}</FormHelperText>
+                            </FormControl>
+                            <center>
+                            <Button 
+                                style={buttonStyle}
+                                onClick={() => this.handleFetchingCreateUserAPI()} 
+                                variant="contained" 
+                                color="primary">
+                                Register
+                            </Button>
+                            </center>
+                            <center>
+                            <A 
+                                className='linkStyle' 
+                                onClick={() => this.props.history.push("/")}>
+                                <Span className="span-registered">Back to login</Span>
+                            </A></center>
+                        </Paper>
+                    </Grid>
                 </ContainerSingle>
             </>
          );

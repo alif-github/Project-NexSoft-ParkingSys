@@ -19,6 +19,7 @@ import {
     LockOutlined as LockOutlinedIcon, 
     Visibility, 
     VisibilityOff } from '@material-ui/icons';
+import Swal from 'sweetalert2'
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { connect } from 'react-redux'
@@ -42,6 +43,17 @@ class Login extends Component {
         };
         this.handleFetchingAPILogin = () => {
             const { username , password } = this.state
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
 
             if (username.length <= 0 && password.length <= 0) {
                 alert('Fill Username And Password')
@@ -55,17 +67,31 @@ class Login extends Component {
                     .then((response) => {
                         return response.json()
                     })
-                    .then(
-                        (result) => {
+                    .then((result) => {
+                            const {username} = this.state
                             //do what you want with the response here
                             if (result.successMessage === "Login Success") {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: result.successMessage+', Hi '+username+'!',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    showConfirmButton: false,
+                                })
+                                //get collect data user
+                                this.handleFetchingUserData(username);
                                 this.props.changeStatusLogin(username)
-                                alert(result.successMessage);
                             } else if (result.errorMessage === "Unable Login, Please check your username and password"){
-                                alert(result.errorMessage);
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: result.errorMessage
+                                })
+                            } else if (result.errorMessage === "Password Default") {
+                                this.handleFetchingUserData(username);
+                                this.props.changeStatusDefaultPassword()
+                                this.props.history.push('/change-password')
                             }
-                            //get collect data user
-                            this.handleFetchingUserData(username);
                         },
                         // Note: it's important to handle errors here
                         // instead of a catch() block so that we don't swallow
@@ -89,9 +115,7 @@ class Login extends Component {
                 .then(
                     (result) => {
                         //do what you want with the response here
-                        if (result.errorMessage) {
-                            alert(result.errorMessage);
-                        } else {
+                        if (!result.errorMessage) {
                             this.props.addUser(result)
                         }
                     },
@@ -106,7 +130,7 @@ class Login extends Component {
     }
 
     render() {
-        console.log("lihat props: ",this.props.history);
+        console.log("cek di login :",this.props.isPasswordDefault);
         const useStyles = makeStyles((theme) => ({
             root: {
               '& > *': {
@@ -192,7 +216,7 @@ class Login extends Component {
                                     </IconButton>
                                 </InputAdornment>
                                 }
-                        />
+                            />
                         <FormHelperText id="component-error-text"></FormHelperText>
                         </FormControl>
                         <center>
@@ -218,13 +242,15 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-    isLogin: state.auth.isLogin
+    isLogin: state.auth.isLogin,
+    isPasswordDefault: state.auth.isPasswordDefault
 })
 
 const mapDispatchToProps = dispatch => {
     return {
         changeStatusLogin: (username) => dispatch({ type: 'LOGIN_SUCCESS' , payload: {username} }),
-        addUser: user => dispatch({ type: 'ADD_USER', payload: {user} })
+        addUser: user => dispatch({ type: 'ADD_USER', payload: {user} }),
+        changeStatusDefaultPassword: () => dispatch({ type: 'PASSWORD_DEFAULT'})
     }
 }
  
