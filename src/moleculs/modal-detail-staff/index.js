@@ -21,7 +21,7 @@ class ModalDetailStaff extends Component {
         return ( 
             <>
                 {/* <!-- Button trigger modal --> */}
-                <ButtonModal type="button" className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <ButtonModal type="button" className="btn btn-secondary btn-modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <Span><I className="fa fa-info fa-icon" aria-hidden="true"></I></Span>
                     Detail
                 </ButtonModal>
@@ -38,35 +38,35 @@ class ModalDetailStaff extends Component {
                             <Table className="table table-striped">
                                 <TRow className="align-left">
                                     <TD>ID</TD>
-                                    <TD>:   {this.props.dummy[this.props.index].id}</TD>
+                                    <TD>:   {this.props.staff.idUser}</TD>
                                 </TRow>
                                 <TRow className="align-left">
                                     <TD>Name</TD>
-                                    <TD>:   {this.props.dummy[this.props.index].name}</TD>
+                                    <TD>:   {this.props.staff.namaUser}</TD>
                                 </TRow>
                                 <TRow className="align-left">
                                     <TD>Username</TD>
-                                    <TD>:   {this.props.dummy[this.props.index].username}</TD>
+                                    <TD>:   {this.props.staff.username}</TD>
                                 </TRow>
                                 <TRow className="align-left">
                                     <TD>E-mail</TD>
-                                    <TD>:   {this.props.dummy[this.props.index].email}</TD>
+                                    <TD>:   {this.props.staff.email}</TD>
                                 </TRow>
                                 <TRow className="align-left">
                                     <TD>Address</TD>
-                                    <TD>:   {this.props.dummy[this.props.index].address}</TD>
+                                    <TD>:   {this.props.staff.alamat}</TD>
                                 </TRow>
                                 <TRow className="align-left">
                                     <TD>Status</TD>
-                                    <TD>:   {this.props.dummy[this.props.index].status}</TD>
+                                    <TD>:   {this.props.staff.status === true ? "Active" : "Non-Active"}</TD>
                                 </TRow>
                                 <TRow className="align-left">
                                     <TD>Register Date</TD>
-                                    <TD>:   {this.props.dummy[this.props.index].regisdate}</TD>
+                                    <TD>:   {this.props.staff.tglRegister}</TD>
                                 </TRow>
                                 <TRow className="align-left">
                                     <TD>Posisi</TD>
-                                    <TD>:   {this.props.dummy[this.props.index].posisi}</TD>
+                                    <TD>:   {this.props.staff.posisi}</TD>
                                 </TRow>
                             </Table>
                         </ContainerModal>
@@ -85,8 +85,7 @@ class ModalDetailStaff extends Component {
 }
 
 const mapStateToProps = state => ({
-    dummy: state.staffColReducer.staff,
-    index: state.staffColReducer.index
+    staff: state.staffColReducer.staff
 })
 
 const mapDispatchToProps = dispatch => {

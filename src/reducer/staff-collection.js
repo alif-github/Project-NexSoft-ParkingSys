@@ -1,6 +1,5 @@
 let initialUserState = {
-    staff: [],
-    index: -1
+    staff: {}
 }
 
 //manipulate the state
@@ -9,10 +8,8 @@ const staffColReducer = (state = initialUserState , action) => {
         case 'ADD_DATASTAFF':
             return ({
                 ...initialUserState,
-                staff: action.payload.user,
-                index: action.payload.idx
+                staff: action.payload.user
             })
-    
         default:
             return state;
     }

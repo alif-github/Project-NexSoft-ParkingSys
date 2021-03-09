@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 import './style.css'
 import { ContainerSingle , H3 , I , H5 } from '../atomics';
-import Staff from '../moleculs/content-staff'
 import Profile from '../moleculs/profile'
 import Nav from '../moleculs/navigation'
-import Routes from '../config/routes';
-import AddStaff from '../moleculs/add-staff';
 import { Redirect } from 'react-router-dom';
 
 class HomePage extends Component {

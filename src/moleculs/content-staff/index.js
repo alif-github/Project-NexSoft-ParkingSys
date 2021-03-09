@@ -18,6 +18,7 @@ import {
     CircularProgress,
     Typography
 } from '@material-ui/core'
+import Swal from 'sweetalert2'
 import { makeStyles } from '@material-ui/core'
 import { Pagination } from '@material-ui/lab'
 import './style.css'
@@ -28,7 +29,7 @@ class Staff extends Component {
         this.state = {
             error: null,
             isLoaded: false,
-            countData: "", 
+            countData: 0, 
             page: 1,
             limit: 5,
             userData: []
@@ -101,6 +102,100 @@ class Staff extends Component {
             },() => this.refreshUserData())
         }
         //---------------------------------------------------------------------------------------------------------------------
+        this.handleDeleteUserAPI = (idUser,namaUser) => {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+            //method to request API
+            const requestOptionsDelete = {
+                method: 'DELETE'
+            };
+            fetch("http://localhost:8080/parkir/user/delete/?id="+idUser+"",requestOptionsDelete)
+                .then((response) => {
+                    return response.json()
+                })
+                .then(
+                    (result) => {
+                        //do what you want with the response here
+                        if (result.successMessage) {
+                            swalWithBootstrapButtons.fire(
+                                'Deleted!',
+                                ''+namaUser+' has been deleted.',
+                                'success'
+                            )
+                            this.refreshUserData()
+                        } else if (result.errorMessage) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: result.errorMessage
+                            })
+                        }
+                    },
+                    // Note: it's important to handle errors here
+                    // instead of a catch() block so that we don't swallow
+                    // exceptions from actual bugs in components.
+                    (error) => {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Check Your Connection!'
+                        })
+                    }
+                )
+        }
+
+        this.handleDeleteUserConfirm = (idUser,namaUser) => {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+              })
+              
+              swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+              })
+              .then((result) => {
+                if (result.isConfirmed) {
+                  //-------------------------------
+                  //menuju delete API
+                  //-------------------------------
+                  this.handleDeleteUserAPI(idUser,namaUser);
+                  //-------------------------------
+                } else if (
+                  /* Read more about handling dismissals below */
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                  )
+                }
+              })
+        }
     }
 
     //---------------------------------------------------------------------------------------------------------------------
@@ -272,18 +367,17 @@ class Staff extends Component {
                                             <TD>{el.username}</TD>
                                             <TD>{el.status === false ? "Non-active":"Active"}</TD>
                                             <TD>{el.posisi}</TD>
-                                            <TD>
-                                                <ContainerSingle className="detail" onClick={() => this.props.addDummy(this.state.dummy,idx)}>
-                                                    {/* <ModalDetailStaff /> */}
-                                                </ContainerSingle>
+                                            <TD><center>
+                                                <ModalDetailStaff onClick={() => this.props.addDummy(this.state.userData[idx])}/>
                                                 <Button className="btn btn-warning" onClick={() => this.props.history.push('/staff/update/'+el.id)}>
                                                     <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
                                                     Edit
                                                 </Button>
-                                                <Button className="btn btn-danger">
+                                                <Button className="btn btn-danger" onClick={() => this.handleDeleteUserConfirm(el.idUser,el.namaUser)}>
                                                     <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
                                                     Delete
                                                 </Button>
+                                                </center>
                                             </TD>
                                         </TRow>
                                     )
@@ -323,7 +417,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        addDummy: (user,idx) => dispatch({ type: 'ADD_DATASTAFF' , payload: {user,idx} })
+        addDummy: (user) => dispatch({ type: 'ADD_DATASTAFF' , payload: {user} })
     }
 }
 //---------------------------------------------------------------------------------------------------------------------

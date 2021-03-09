@@ -3,7 +3,7 @@
     margin-right: 2%;
     height: min-content;
     font-size: small;
-    float: left;
+    /* float: left; */
 } 
 
 .detail {

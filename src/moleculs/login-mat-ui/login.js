@@ -130,7 +130,6 @@ class Login extends Component {
     }
 
     render() {
-        console.log("history saat ini: ", this.props.history.location.pathname);
         const useStyles = makeStyles((theme) => ({
             root: {
               '& > *': {
