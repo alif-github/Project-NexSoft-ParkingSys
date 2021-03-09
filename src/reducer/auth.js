@@ -6,7 +6,6 @@ let defaultLoginState = {
 }
 
 const auth = (state = defaultLoginState, action) => {
-    console.log("isi reducer: ", state);
     switch (action.type) {
         case "LOGIN_SUCCESS":
             return {

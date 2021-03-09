@@ -130,7 +130,7 @@ class Login extends Component {
     }
 
     render() {
-        console.log("cek di login :",this.props.isPasswordDefault);
+        console.log("history saat ini: ", this.props.history.location.pathname);
         const useStyles = makeStyles((theme) => ({
             root: {
               '& > *': {

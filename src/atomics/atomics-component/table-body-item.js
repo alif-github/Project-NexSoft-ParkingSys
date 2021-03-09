@@ -6,9 +6,9 @@ class TD extends Component {
         this.state = {  }
     }
     render() { 
-        const { children } = this.props
+        const { colSpan , children } = this.props
         return ( 
-            <td>{children}</td>
+            <td colSpan={colSpan}>{children}</td>
          );
     }
 }

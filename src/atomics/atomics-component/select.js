@@ -6,9 +6,9 @@ class SelectSm extends Component {
         this.state = {  }
     }
     render() { 
-        const { className , children } = this.props
+        const { className , onClick , onChange , children } = this.props
         return ( 
-            <select className={className} aria-label=".form-select-sm example">{children}</select>
+            <select className={className} aria-label=".form-select-sm example" onClick={onClick} onChange={onChange}>{children}</select>
          );
     }
 }

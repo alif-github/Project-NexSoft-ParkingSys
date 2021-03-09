@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router , Switch , Route } from 'react-router-dom'
 import { ChangePassword, HomePage, InternalServerError, Register } from '../../organisms/login'
 import Login from '../../moleculs/login-mat-ui/login'
