@@ -32,6 +32,8 @@ class Staff extends Component {
             countData: 0, 
             page: 1,
             limit: 5,
+            toogleFind: "ID",
+            findById: "",
             userData: []
         }
         //---------------------------------------------------------------------------------------------------------------------
@@ -64,7 +66,7 @@ class Staff extends Component {
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"",requestOptionsPage)
+            fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"&username=&status=&idUser=",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -99,6 +101,14 @@ class Staff extends Component {
             this.setState({
                 limit: el.target.value,
                 page: 1
+            },() => this.refreshUserData())
+        }
+        //---------------------------------------------------------------------------------------------------------------------
+        // handle toogle find
+        //---------------------------------------------------------------------------------------------------------------------
+        this.handleFindBy = el => {
+            this.setState({
+                toogleFind: el.target.value
             },() => this.refreshUserData())
         }
         //---------------------------------------------------------------------------------------------------------------------
@@ -196,6 +206,92 @@ class Staff extends Component {
                 }
               })
         }
+        //---------------------------------------------------------------------------------------------------------------------
+        //Get API for Get by idUser
+        //---------------------------------------------------------------------------------------------------------------------
+        //method to request API
+        this.handleShowUserBy = el => {
+            const findUserValue = el.target.value;
+            
+            const requestOptionsIdUser = {
+                method: 'GET'
+            };
+            const requestOptionsUsername = {
+                method: 'GET'
+            };
+
+            if (this.state.toogleFind === "ID") {
+                console.log("isi value:",findUserValue);
+                console.log("masuk ke id");
+                if (findUserValue === "") {
+                    this.refreshUserData();
+                } else {
+                    fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"&username=&status=&idUser="+findUserValue+"",requestOptionsIdUser)
+                        .then((response) => {
+                            return response.json()
+                        })
+                        .then(
+                            (result) => {
+                                console.log("result:",result)
+    
+                                //do what you want with the response here
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        isLoaded: true,
+                                        userData: []
+                                    });
+                                } else {
+                                    this.setState({
+                                        isLoaded: true,
+                                        userData: result
+                                    });
+                                }
+                            },
+                            (error) => {
+                                this.setState({
+                                    isLoaded: false,
+                                    error
+                                });
+                            }
+                        )
+                }
+            } else if (this.state.toogleFind === "Username") {
+                if (findUserValue === "") {
+                    this.refreshUserData();
+                } else {
+                    fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"&username="+findUserValue+"&status=&idUser=",requestOptionsUsername)
+                        .then((response) => {
+                            return response.json()
+                        })
+                        .then(
+                            (result) => {
+    
+                                //do what you want with the response here
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        isLoaded: true,
+                                        userData: []
+                                    });
+                                } else {
+                                    this.setState({
+                                        isLoaded: true,
+                                        userData: result
+                                    });
+                                }
+                            },
+                            // Note: it's important to handle errors here
+                            // instead of a catch() block so that we don't swallow
+                            // exceptions from actual bugs in components.
+                            (error) => {
+                                this.setState({
+                                    isLoaded: false,
+                                    error
+                                });
+                            }
+                        )
+                }
+            }
+        }
     }
 
     //---------------------------------------------------------------------------------------------------------------------
@@ -209,7 +305,7 @@ class Staff extends Component {
         const requestOptionsCount = {
             method: 'GET'
         };
-        fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"",requestOptionsPage)
+        fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"&username=&status=&idUser=",requestOptionsPage)
             .then((response) => {
                 return response.json()
             })
@@ -242,15 +338,15 @@ class Staff extends Component {
                         countData: Math.ceil(result/this.state.limit)
                     });
                 },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
                 (error) => {}
             )
     }
     //---------------------------------------------------------------------------------------------------------------------
 
     render() {
+        console.log("Find By: ", this.state.toogleFind);
+        console.log("User data: ", this.state.userData);
+
         const useStyles = makeStyles((theme) => ({
             root: {
               display: 'flex',
@@ -261,6 +357,7 @@ class Staff extends Component {
           }));
         
         const {error , isLoaded} = this.state
+
         if(this.props.isLogin === false) {
             return this.props.history.push('/')
         }
@@ -330,15 +427,18 @@ class Staff extends Component {
                             Find By :
                         </ContainerSingle>
                         <ContainerSingle className="panel-control-selectby"> 
-                            <SelectSm className="form-select form-select-sm select-opt">
-                                <Option value="1">ID</Option>
-                                <Option value="2">Username</Option>
-                                <Option value="3">Status</Option>
+                            <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindBy}>
+                                <Option value="ID">ID</Option>
+                                <Option value="Username">Username</Option>
+                                <Option value="Status">Status</Option>
                             </SelectSm>
                         </ContainerSingle>
-                        <ContainerSingle className="panel-control-inputby">
-                            <input className="form-control form-control-sm form-opt" type="text" placeholder="Find.." aria-label=".form-control-sm example" />
-                        </ContainerSingle>
+                        <div className="panel-control-inputby input-group mb-3">
+                            <input type="text" className="form-control form-control-sm form-opt" onChange={el => this.handleShowUserBy(el)} placeholder="Find..." aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                            <button className="btn btn-outline-secondary" type="button" id="button-addon2">
+                                <Span><I className="fa fa-search fa-icon" aria-hidden="true"></I></Span>
+                            </button>
+                        </div>
                         <ContainerSingle className="panel-control-add">
                             <Button className="btn btn-success btn-add" onClick={() => this.props.history.push('/staff/add')}>
                                 <Span><I className="fa fa-plus fa-icon" aria-hidden="true"></I></Span>
@@ -367,17 +467,57 @@ class Staff extends Component {
                                             <TD>{el.username}</TD>
                                             <TD>{el.status === false ? "Non-active":"Active"}</TD>
                                             <TD>{el.posisi}</TD>
-                                            <TD><center>
-                                                <ModalDetailStaff onClick={() => this.props.addDummy(this.state.userData[idx])}/>
-                                                <Button className="btn btn-warning" onClick={() => this.props.history.push('/staff/update/'+el.id)}>
-                                                    <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
-                                                    Edit
-                                                </Button>
-                                                <Button className="btn btn-danger" onClick={() => this.handleDeleteUserConfirm(el.idUser,el.namaUser)}>
-                                                    <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
-                                                    Delete
-                                                </Button>
-                                                </center>
+                                            <TD>
+                                                {   
+                                                    el.posisi !== "Admin" ?
+                                                    <center>
+                                                    <div className="container-action-button">
+                                                        <div onClick={() => this.props.addDummy(this.state.userData[idx])}>
+                                                            <ModalDetailStaff />
+                                                        </div>
+                                                        <div>
+                                                            <Button className="btn btn-warning" 
+                                                                onClick={() => {this.props.history.push('/staff/update/'+el.idUser);this.props.addDummy(this.state.userData[idx])}}>
+                                                                <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
+                                                                Edit
+                                                            </Button>
+                                                        </div>
+                                                        {
+                                                            el.posisi !== "Admin" && 
+                                                            <div>
+                                                                <Button className="btn btn-danger" onClick={() => this.handleDeleteUserConfirm(el.idUser,el.namaUser)}>
+                                                                    <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
+                                                                    Delete
+                                                                </Button>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                    </center>
+                                                    :
+                                                    <center>
+                                                    <div className="container-action-button-staff">
+                                                        <div onClick={() => this.props.addDummy(this.state.userData[idx])}>
+                                                            <ModalDetailStaff />
+                                                        </div>
+                                                        <div>
+                                                            <Button className="btn btn-warning" 
+                                                                onClick={() => {this.props.history.push('/staff/update/'+el.idUser);this.props.addDummy(this.state.userData[idx])}}>
+                                                                <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
+                                                                Edit
+                                                            </Button>
+                                                        </div>
+                                                        {
+                                                            el.posisi !== "Admin" && 
+                                                            <div>
+                                                                <Button className="btn btn-danger" onClick={() => this.handleDeleteUserConfirm(el.idUser,el.namaUser)}>
+                                                                    <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
+                                                                    Delete
+                                                                </Button>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                    </center>
+                                                }
                                             </TD>
                                         </TRow>
                                     )

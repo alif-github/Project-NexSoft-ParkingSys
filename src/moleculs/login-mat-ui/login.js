@@ -78,6 +78,10 @@ class Login extends Component {
                                     timer: 2000,
                                     timerProgressBar: true,
                                     showConfirmButton: false,
+                                    imageUrl: 'https://seekvectorlogo.com/wp-content/uploads/2018/03/secure-parking-vector-logo.png',
+                                    imageWidth: 400,
+                                    imageHeight: 200,
+                                    imageAlt: 'Custom image',
                                 })
                                 //get collect data user
                                 this.handleFetchingUserData(username);

@@ -4,12 +4,30 @@ import './style.css'
 import { ContainerSingle , H3 , I , H5 } from '../atomics';
 import Profile from '../moleculs/profile'
 import Nav from '../moleculs/navigation'
+import Swal from 'sweetalert2'
 import { Redirect } from 'react-router-dom';
 
 class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {  }
+        this.handleLogout = () => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure want to logout ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+              })
+              .then((result) => {
+                if (result.isConfirmed) {
+                    this.props.changeStatusLogout();
+                    this.props.history.push("/");
+                }
+              })
+        }
     }
 
     render() {
@@ -22,7 +40,7 @@ class HomePage extends Component {
                     <H3>
                         Secure Parking Integrated System
                     </H3>
-                    <ContainerSingle className="power-off" onClick={() => {this.props.changeStatusLogout(); this.props.history.push("/")}}>
+                    <ContainerSingle className="power-off" onClick={() => this.handleLogout()}>
                         <I className="fa fa-power-off logout-icon" aria-hidden="true"></I>
                         <H5 className="logout">
                               Logout

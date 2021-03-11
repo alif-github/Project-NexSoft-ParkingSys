@@ -31,7 +31,7 @@ class ModalDetailStaff extends Component {
                     <ContainerModal className="modal-dialog">
                         <ContainerModal className="modal-content">
                         <ContainerModal className="modal-header">
-                            <H5 className="modal-title" id="exampleModalLabel">Staff Detail Information</H5>
+                            <H5 className="modal-title" id="exampleModalLabel">Detail Information</H5>
                             <ButtonModal type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></ButtonModal>
                         </ContainerModal>
                         <ContainerModal className="modal-body">

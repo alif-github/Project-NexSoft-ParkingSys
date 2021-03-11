@@ -69,3 +69,11 @@ TR {
 .align-left {
     text-align: left;
 }
+
+.btn-modall {
+    padding: 0;
+}
+
+.btn-detail {
+    padding: 0%;
+}

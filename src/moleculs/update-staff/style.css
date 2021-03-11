@@ -20,7 +20,7 @@
 .judul-container-add {
     width: 100%;
     text-align: center;
-    padding: 1%;
+    padding: 0.2%;
     background-color: #fcb134;
     border-radius: 2vh 2vh 0vh 0vh;
     margin-bottom: 2%;
@@ -37,4 +37,9 @@
 
 .i-float {
     margin-right: 7.5vh;
+}
+
+.control-2 {
+    margin: 50px;
+    margin-right: auto;
 }

@@ -1,10 +1,10 @@
 .container-add {
     width: 100%;
     border: 1px solid white;
-    padding: 2%;
+    padding: 0.5%;
     box-sizing: border-box;
     height: 100%;
-    box-shadow: 4px 4px 15px rgba(25,24,24,0.6);
+    box-shadow: 4px 4px 15px rgba(131, 127, 127, 0.6);
     border-radius: 3vh;
 }
 
@@ -16,7 +16,7 @@
 .judul-container-add {
     width: 100%;
     text-align: center;
-    padding: 1%;
+    padding: 0.2%;
     background-color: #fcb134;
     border-radius: 2vh 2vh 0vh 0vh;
     margin-bottom: 2%;
@@ -33,6 +33,8 @@
 
 .i-float {
     margin-right: 7.5vh;
+    margin-inline-end: auto;
+    margin-inline-start: auto;
 }
 
 .container-add-right {
@@ -45,5 +47,5 @@
 }
 
 .tombol-control {
-    margin-top: 4.3vh;
+    margin-top: 0.7vh;
 }

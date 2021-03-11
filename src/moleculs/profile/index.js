@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     ContainerSingle,
     I} from '../../atomics'
-import './style.css'
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid , Paper } from '@material-ui/core';
 import { connect } from 'react-redux'
 
 class Profile extends Component {
@@ -10,20 +11,34 @@ class Profile extends Component {
         super(props);
         this.state = {  }
     }
-    render() { 
+    render() {
+        const useStyles = makeStyles((theme) => ({
+            root: {
+              flexGrow: 1,
+            },
+            paper: {
+              padding: theme.spacing(2),
+              textAlign: 'center',
+              color: theme.palette.text.secondary,
+            },
+        })); 
         return ( 
-            <ContainerSingle className="container-profile">
-                <ContainerSingle className="container-profile-kiri">
-                    <I className="fa fa-user-circle user-icon" aria-hidden="true"></I>
-                </ContainerSingle>
-                <ContainerSingle className="container-profile-kanan">
-                    <ContainerSingle>
-                        Welcome,
-                    </ContainerSingle>
-                    <ContainerSingle>
-                        {this.props.user.namaUser}
-                    </ContainerSingle>
-                </ContainerSingle>
+            <ContainerSingle className={useStyles.root}>
+                <Grid container spacing={3}>
+                    <Grid item xs={3}>
+                        <Paper className={useStyles.paper}>
+                            <center><I className="fa fa-user-circle user-icon" aria-hidden="true"></I></center>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <Grid item xs={12}>
+                            Welcome,
+                        </Grid>
+                        <Grid item xs={12}>
+                            {this.props.user.namaUser}
+                        </Grid>
+                    </Grid>
+                </Grid>
             </ContainerSingle>
          );
     }
