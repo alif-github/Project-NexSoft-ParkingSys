@@ -14,13 +14,16 @@ public interface UserServices {
     //Read the Data------------------------------------------
 
     //Read All Data With Paggination
-    List<User> findAllUserPagging(int page , int limit);
+    List<User> findAllUserPagging(int page , int limit , String idUser, String username, String status);
 
     //Read the Data by id
-    User findByIdUser(String idUser);
+    List<User> findByIdUser(String idUser);
 
     //Read the Data by Username
     User findByUsername(String username);
+
+    //Read Data List by Username
+    List<User> findListByUsername(String username);
 
     //Read the Data by Name
     User findByName(String name);
@@ -44,5 +47,5 @@ public interface UserServices {
 
     //is User Exist
     //to check is user data exist or not
-    boolean isUserExist(User user);
+    boolean isNameExist(User user);
 }

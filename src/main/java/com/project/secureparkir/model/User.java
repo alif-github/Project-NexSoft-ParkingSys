@@ -1,5 +1,7 @@
 package com.project.secureparkir.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.validation.constraints.*;
 
 public class User {
@@ -36,6 +38,8 @@ public class User {
 
     private int idPosisi;
 
+    private String posisi;
+
     public User(String idUser, String namaUser, String email, String username,
                 String password, String alamat, Boolean status, String tglRegister, int idPosisi) {
         this.idUser = idUser;
@@ -47,6 +51,24 @@ public class User {
         this.status = status;
         this.tglRegister = tglRegister;
         this.idPosisi = idPosisi;
+    }
+
+    public User(String idUser, String namaUser, String email, String username,
+                String password, String alamat, Boolean status, String tglRegister, int idPosisi, String posisi) {
+        this.idUser = idUser;
+        this.namaUser = namaUser;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.alamat = alamat;
+        this.status = status;
+        this.tglRegister = tglRegister;
+        this.idPosisi = idPosisi;
+        this.posisi = posisi;
+    }
+
+    public User() {
+
     }
 
     public String getIdUser() {
@@ -83,6 +105,14 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getPosisi() {
+        return posisi;
+    }
+
+    public void setPosisi(String posisi) {
+        this.posisi = posisi;
     }
 
     public void setPassword(String password) {
@@ -132,6 +162,8 @@ public class User {
                 ", alamat='" + alamat + '\'' +
                 ", status=" + status +
                 ", tglRegister='" + tglRegister + '\'' +
+                ", idPosisi=" + idPosisi +
+                ", posisi=" + posisi +
                 '}';
     }
 }

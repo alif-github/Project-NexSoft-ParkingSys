@@ -29,13 +29,25 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public List<User> findAllUserPagging(int page, int limit) {
-        return null;
+    public List<User> findAllUserPagging(int page, int limit, String idUser, String username, String status) {
+        List<User> userList;
+        try {
+            userList = userRepository.findAllUserPagging(page, limit, idUser, username, status);
+        } catch (Exception e) {
+            userList = null;
+        }
+        return userList;
     }
 
     @Override
-    public User findByIdUser(String idUser) {
-        return null;
+    public List<User> findByIdUser(String idUser) {
+        List<User> user;
+        try {
+            user = userRepository.findByIdUser(idUser);
+        } catch (Exception e) {
+            user = null;
+        }
+        return user;
     }
 
     @Override
@@ -43,6 +55,17 @@ public class UserServicesImpl implements UserServices {
         User user;
         try {
             user = userRepository.findByUsername(username);
+        } catch (Exception e) {
+            user = null;
+        }
+        return user;
+    }
+
+    @Override
+    public List<User> findListByUsername(String username) {
+        List<User> user;
+        try {
+            user = userRepository.findListByUsername(username);
         } catch (Exception e) {
             user = null;
         }
@@ -67,7 +90,9 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public void updateByIdUser(String idUser, User user) {
-
+        synchronized (this) {
+            userRepository.updateByIdUser(idUser, user);
+        }
     }
 
     @Override
@@ -81,16 +106,19 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public void deleteUserById(String idUser) {
-
+        synchronized (this) {
+            userRepository.deleteUserById(idUser);
+        }
     }
 
     @Override
     public int countingUsersRows() {
-        return 0;
+        int count = userRepository.countingUsersRows();
+        return count;
     }
 
     @Override
-    public boolean isUserExist(User user) {
+    public boolean isNameExist(User user) {
         return findByName(user.getNamaUser()) != null;
     }
 }

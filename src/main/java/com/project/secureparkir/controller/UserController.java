@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -31,19 +32,36 @@ public class UserController {
     public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
         logger.info("Create data user");
 
-        if (userServices.isUserExist(user)) {
+        if (userServices.isNameExist(user)) {
             logger.error("user exist, you can't create the data");
-            return new ResponseEntity<>(new CustomErrorType("Name : " + user.getNamaUser() + " had been usage!"),
-                    HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new CustomErrorType("Name "+user.getNamaUser()+" had been usage"), HttpStatus.CONFLICT);
         } else {
             if (userServices.findByUsername(user.getUsername()) == null) {
                 userServices.saveUser(user); //save user
-                User userAfterSave = userServices.findByIdUser(user.getIdUser()); //showing user after save
                 return new ResponseEntity<>(new CustomSuccessType("Register Succes"), HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<>(new CustomErrorType("Username had been usage!"),
-                        HttpStatus.CONFLICT);
+                return new ResponseEntity<>(new CustomErrorType("Username had been usage!"), HttpStatus.CONFLICT);
             }
+        }
+    }
+
+    //Show Data with pagging
+    @GetMapping("/show-user/page/")
+    public ResponseEntity<?> showUserPagging(
+            @RequestParam("page") int page,
+            @RequestParam("limit") int limit,
+            @RequestParam("idUser") String idUser,
+            @RequestParam("username") String username,
+            @RequestParam("status") String status) {
+
+        logger.info("Showing User ...");
+        List<User> userList = userServices.findAllUserPagging(page, limit, idUser, username, status);
+
+        if (userList == null) {
+            logger.error("Unable to show User, because empty on Database");
+            return new ResponseEntity<>(new CustomErrorType("Data not found"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(userList, HttpStatus.OK);
         }
     }
 
@@ -56,6 +74,34 @@ public class UserController {
         if (user == null) {
             logger.error("user cannot found, you can't show the data");
             return new ResponseEntity<>(new CustomErrorType("Unable to show username " + username + " , because not found"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+    }
+
+    //Show User Data
+    @GetMapping("/show-user/list/")
+    public ResponseEntity<?> showListUser(@RequestParam("username") String username) {
+        logger.info("Show data user");
+
+        List<User> user = userServices.findListByUsername(username);
+        if (user == null) {
+            logger.error("user cannot found, you can't show the data");
+            return new ResponseEntity<>(new CustomErrorType("Unable to show username " + username + " , because not found"), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+    }
+
+    //Show User Data
+    @GetMapping("/show-user/id/")
+    public ResponseEntity<?> showSingleUserById(@RequestParam("id") String idUser) {
+        logger.info("Show data user");
+
+        List<User> user = userServices.findByIdUser(idUser);
+        if (user == null) {
+            logger.error("user cannot found, you can't show the data");
+            return new ResponseEntity<>(new CustomErrorType("Unable to show idUser " + idUser + " , because not found"), HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
@@ -114,23 +160,76 @@ public class UserController {
         }
     }
 
-    //Cek password isDefault?
-    @GetMapping("/cek-default-password/")
-    public ResponseEntity<?> isDefaultPassword(@RequestParam("username") String username) {
-        User isUsernameExist = userServices.findByUsername(username);
-        if (isUsernameExist == null) {
-            logger.error("User not found");
-            return new ResponseEntity<>(new CustomErrorType("User not found"), HttpStatus.NOT_FOUND);
-        } else {
-            String getPasswordDb = isUsernameExist.getPassword();
+    //Show Count Data
+    @GetMapping("/user/count/")
+    public ResponseEntity<?> countUser() {
+        logger.info("Showing Provider ...");
+        int usersRows = userServices.countingUsersRows();
 
-            //Check password
-            Boolean isPassword = encoder.matches("User1234", getPasswordDb);
-            if (isPassword) {
-                return new ResponseEntity<>(new CustomSuccessType("Detected Default Password"), HttpStatus.OK);
+        return new ResponseEntity<>(usersRows, HttpStatus.OK);
+    }
+
+    //Delete Data By Id
+    @DeleteMapping("/user/delete/")
+    public ResponseEntity<?> deleteSingleUserById(@RequestParam("id") String idUser) {
+        logger.info("Delete User");
+
+        List<User> findingId = userServices.findByIdUser(idUser);
+
+        if (findingId == null) {
+            logger.error("Unable to deleting that User, User not found");
+            return new ResponseEntity<>(new CustomErrorType("Unable to deleting that user , because not found"), HttpStatus.NOT_FOUND);
+        } else {
+            userServices.deleteUserById(idUser);
+            return new ResponseEntity<>(new CustomSuccessType("Id user ("+idUser+") deleted!"), HttpStatus.OK);
+        }
+    }
+
+    //Update Data By Id
+    @PutMapping("/user/update/")
+    public ResponseEntity<?> updateSingleUserById(@RequestParam("id") String idUser, @RequestBody User user) {
+        logger.info("Update User");
+
+        List<User> userList = userServices.findByIdUser(idUser);
+        User isUsernameExist = userServices.findByUsername(user.getUsername());
+
+        if (userList == null) {
+            logger.error("user cannot found, you can't show the data");
+            return new ResponseEntity<>(new CustomErrorType("Unable to update user , because not found"), HttpStatus.NOT_FOUND);
+        } else {
+            if (isUsernameExist == null) {
+                userServices.updateByIdUser(idUser, user);
+                return new ResponseEntity<>(new CustomSuccessType("Success updating "+user.getNamaUser()+""), HttpStatus.OK);
+            } else if (isUsernameExist.getUsername().equalsIgnoreCase(user.getUsername())) {
+                if (isUsernameExist.getIdUser().equalsIgnoreCase(user.getIdUser())) {
+                    userServices.updateByIdUser(idUser, user);
+                    return new ResponseEntity<>(new CustomSuccessType("Success updating "+user.getNamaUser()+""), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(new CustomErrorType("Unable to update user , because username "+user.getUsername()+" had been usage"), HttpStatus.CONFLICT);
+                }
             } else {
-                return new ResponseEntity<>(new CustomErrorType("Undetected Default Password"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new CustomErrorType("Unable to update user , because username "+user.getUsername()+" had been usage"), HttpStatus.CONFLICT);
             }
         }
     }
+
+//    //Cek password isDefault?
+//    @GetMapping("/cek-default-password/")
+//    public ResponseEntity<?> isDefaultPassword(@RequestParam("username") String username) {
+//        User isUsernameExist = userServices.findByUsername(username);
+//        if (isUsernameExist == null) {
+//            logger.error("User not found");
+//            return new ResponseEntity<>(new CustomErrorType("User not found"), HttpStatus.NOT_FOUND);
+//        } else {
+//            String getPasswordDb = isUsernameExist.getPassword();
+//
+//            //Check password
+//            Boolean isPassword = encoder.matches("User1234", getPasswordDb);
+//            if (isPassword) {
+//                return new ResponseEntity<>(new CustomSuccessType("Detected Default Password"), HttpStatus.OK);
+//            } else {
+//                return new ResponseEntity<>(new CustomErrorType("Undetected Default Password"), HttpStatus.BAD_REQUEST);
+//            }
+//        }
+//    }
 }
