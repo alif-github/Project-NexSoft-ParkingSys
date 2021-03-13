@@ -3,6 +3,7 @@ package com.project.secureparkir.service;
 import com.project.secureparkir.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserServices {
 
@@ -48,4 +49,9 @@ public interface UserServices {
     //is User Exist
     //to check is user data exist or not
     boolean isNameExist(User user);
+
+    //Test (Take it or leave it)
+    List<User> readDataByQuery(Map <Object, Object> params);
+
+    int countAllDataByQuery(Map <Object, Object> params);
 }

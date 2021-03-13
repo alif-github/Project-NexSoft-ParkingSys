@@ -331,4 +331,32 @@ public class UserRepositoryImpl implements UserRepository {
                 sql, Integer.class);
         return result;
     }
+
+    @Override
+    public List<User> readDataByQuery(String query, String pagging) {
+        List<User> userList;
+        userList = databases.query("select * from user u inner join posisi p on u.idPosisi = p.idPosisi "+query+" order by posisi , namaUser ASC "+pagging+"",
+                (rs, i) ->
+                    new User(
+                            rs.getString("idUser"),
+                            rs.getString("namaUser"),
+                            rs.getString("email"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("alamat"),
+                            rs.getBoolean("status"),
+                            rs.getString("tglRegister"),
+                            rs.getInt("idPosisi"),
+                            rs.getString("posisi")
+                    ));
+        return userList;
+    }
+
+    @Override
+    public int countAllDataByQuery(String query) {
+        String sql = "SELECT COUNT(namaUser) as count FROM user " + query;
+        int countUser = databases.queryForObject(
+                sql, Integer.class);
+        return countUser;
+    }
 }

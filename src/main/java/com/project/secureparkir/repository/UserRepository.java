@@ -47,4 +47,9 @@ public interface UserRepository {
 
     //API for Pagination
     int countingUsersRows();
+
+    //Test Tambahan (take it or leave it)
+    List<User> readDataByQuery(String query, String pagging);
+
+    int countAllDataByQuery(String query);
 }

@@ -7,7 +7,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("userService")
 public class UserServicesImpl implements UserServices {
@@ -120,5 +122,55 @@ public class UserServicesImpl implements UserServices {
     @Override
     public boolean isNameExist(User user) {
         return findByName(user.getNamaUser()) != null;
+    }
+
+    @Override
+    public List<User> readDataByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+            String pagging = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+            ArrayList<String> pageQuery = new ArrayList<>();
+
+            if (params.containsKey("idUser") && !String.valueOf(params.get("idUser")).isBlank())
+                whereQuery.add("idUser LIKE '%"+params.get("idUser")+"%'");
+            if (params.containsKey("username") && !String.valueOf(params.get("username")).isBlank())
+                whereQuery.add("username LIKE '%"+params.get("username")+"%'");
+            if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
+                whereQuery.add("status="+params.get("status")+"");
+            if (params.containsKey("limit") && !String.valueOf(params.get("limit")).isBlank())
+                pageQuery.add(" LIMIT "+params.get("limit"));
+            if (params.containsKey("offset") && !String.valueOf(params.get("offset")).isBlank())
+                pageQuery.add(" OFFSET "+params.get("offset"));
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+            if (!pageQuery.isEmpty()) {
+                pagging += String.join(" ", pageQuery);
+            }
+            return userRepository.readDataByQuery(query,pagging);
+        }
+    }
+
+    @Override
+    public int countAllDataByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idUser") && !String.valueOf(params.get("idUser")).isBlank())
+                whereQuery.add("idUser LIKE '%"+params.get("idUser")+"%'");
+            if (params.containsKey("username") && !String.valueOf(params.get("username")).isBlank())
+                whereQuery.add("username LIKE '%"+params.get("username")+"%'");
+            if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
+                whereQuery.add("status="+params.get("status")+"");
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return userRepository.countAllDataByQuery(query);
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.project.secureparkir.util.CustomSuccessType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,7 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -147,16 +151,16 @@ public class UserController {
             logger.error("User not found");
             return new ResponseEntity<>(new CustomErrorType("User not found"), HttpStatus.NOT_FOUND);
         } else {
-            String getPasswordDb = isUsernameExist.getPassword();
-
-            //Check password
-            Boolean isPassword = encoder.matches("User1234", getPasswordDb);
-            if (isPassword) {
+//            String getPasswordDb = isUsernameExist.getPassword();
+//
+//            //Check password
+//            Boolean isPassword = encoder.matches("User1234", getPasswordDb);
+//            if (isPassword) {
                 userServices.changePassword(username, user);
                 return new ResponseEntity<>(new CustomSuccessType("Success Change Password"), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new CustomErrorType("Unable Change Password"), HttpStatus.BAD_REQUEST);
-            }
+//            } else {
+//                return new ResponseEntity<>(new CustomErrorType("Unable Change Password"), HttpStatus.BAD_REQUEST);
+//            }
         }
     }
 
@@ -213,23 +217,21 @@ public class UserController {
         }
     }
 
-//    //Cek password isDefault?
-//    @GetMapping("/cek-default-password/")
-//    public ResponseEntity<?> isDefaultPassword(@RequestParam("username") String username) {
-//        User isUsernameExist = userServices.findByUsername(username);
-//        if (isUsernameExist == null) {
-//            logger.error("User not found");
-//            return new ResponseEntity<>(new CustomErrorType("User not found"), HttpStatus.NOT_FOUND);
-//        } else {
-//            String getPasswordDb = isUsernameExist.getPassword();
-//
-//            //Check password
-//            Boolean isPassword = encoder.matches("User1234", getPasswordDb);
-//            if (isPassword) {
-//                return new ResponseEntity<>(new CustomSuccessType("Detected Default Password"), HttpStatus.OK);
-//            } else {
-//                return new ResponseEntity<>(new CustomErrorType("Undetected Default Password"), HttpStatus.BAD_REQUEST);
-//            }
-//        }
-//    }
+    //Cek coba
+    @GetMapping("/user/")
+    public ResponseEntity<?> getData (@RequestParam Map<Object, Object> params) {
+        List<User> userList;
+        Map<String, Object> output = new HashMap<>();
+
+        try {
+            userList = userServices.readDataByQuery(params);
+            output.put("jumlah", userServices.countAllDataByQuery(params));
+            output.put("data", userList);
+            return new ResponseEntity<>(output, HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
+        }
+    }
+
+
 }
