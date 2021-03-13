@@ -31,7 +31,18 @@ class Login extends Component {
             showPassword: false,
             username: '',
             password: ''
-         }
+        }
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
         this.handleSetValue = (event) => {
             this.setState({ ...this.state, [event.target.name]: event.target.value });
         };
@@ -43,57 +54,36 @@ class Login extends Component {
         };
         this.handleFetchingAPILogin = () => {
             const { username , password } = this.state
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top',
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
+            //method to request API
+            const requestOptions = {
+                method: 'GET'
+            };
 
-            if (username.length <= 0 && password.length <= 0) {
-                alert('Fill Username And Password')
+            if (username.length <= 0 || password.length <= 0) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Full Fill The Form',
+                    icon: 'error',
+                    showConfirmButton: true,
+                })
             } else {
-                //method to request API
-                const requestOptions = {
-                    method: 'GET'
-                };
                 //fetching data to url API Back-End
                 fetch("http://localhost:8080/parkir/auth/?username="+ username +"&password="+ password +"", requestOptions)
                     .then((response) => {
                         return response.json()
                     })
                     .then((result) => {
-                            const {username} = this.state
                             //do what you want with the response here
-                            if (result.successMessage === "Login Success") {
-                                Swal.fire({
-                                    title: 'Success!',
-                                    text: result.successMessage+', Hi '+username+'!',
-                                    icon: 'success',
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    showConfirmButton: false,
-                                    imageUrl: 'https://seekvectorlogo.com/wp-content/uploads/2018/03/secure-parking-vector-logo.png',
-                                    imageWidth: 400,
-                                    imageHeight: 200,
-                                    imageAlt: 'Custom image',
-                                })
-                                //get collect data user
-                                this.handleFetchingUserData(username);
-                                this.props.changeStatusLogin(username)
+                            if (result.successMessage) {
+                                this.handleFetchingUserData(result.successMessage);
                             } else if (result.errorMessage === "Unable Login, Please check your username and password"){
                                 Toast.fire({
                                     icon: 'error',
                                     title: result.errorMessage
                                 })
                             } else if (result.errorMessage === "Password Default") {
-                                this.handleFetchingUserData(username);
                                 this.props.changeStatusDefaultPassword()
+                                this.props.addUsername(username)
                                 this.props.history.push('/change-password')
                             }
                         },
@@ -106,7 +96,8 @@ class Login extends Component {
                     )
             }
         };
-        this.handleFetchingUserData = username => {
+        this.handleFetchingUserData = messagelogin => {
+            const {username} = this.state
             //method to request API
             const requestOptions = {
                 method: 'GET'
@@ -119,8 +110,34 @@ class Login extends Component {
                 .then(
                     (result) => {
                         //do what you want with the response here
-                        if (!result.errorMessage) {
+                        if ((!result.errorMessage && result.posisi === "Admin") || (!result.errorMessage && result.posisi === "Staff" && result.status === true)) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: messagelogin+', Hi '+username+'!',
+                                icon: 'success',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                                imageUrl: 'https://seekvectorlogo.com/wp-content/uploads/2018/03/secure-parking-vector-logo.png',
+                                imageWidth: 400,
+                                imageHeight: 200,
+                                imageAlt: 'Custom image',
+                            })
                             this.props.addUser(result)
+                            this.props.changeStatusLogin(username);
+                        } else if (result.errorMessage) {
+                            console.log("Masuk ke error message");
+                            Toast.fire({
+                                icon: 'error',
+                                title: result.errorMessage
+                            })
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Call Admin for turning the active status',
+                                icon: 'error',
+                                showConfirmButton: true,
+                            })
                         }
                     },
                     // Note: it's important to handle errors here
@@ -194,6 +211,7 @@ class Login extends Component {
                                 id="standard-basic" 
                                 label="Username"
                                 name="username"
+                                defaultValue={this.state.username}
                                 onChange={this.handleSetValue}
                                 fullWidth
                                 required
@@ -253,6 +271,7 @@ const mapDispatchToProps = dispatch => {
     return {
         changeStatusLogin: (username) => dispatch({ type: 'LOGIN_SUCCESS' , payload: {username} }),
         addUser: user => dispatch({ type: 'ADD_USER', payload: {user} }),
+        addUsername: username => dispatch({ type: 'ADD_USERNAME', payload: {username}}),
         changeStatusDefaultPassword: () => dispatch({ type: 'PASSWORD_DEFAULT'})
     }
 }

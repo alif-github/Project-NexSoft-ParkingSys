@@ -142,6 +142,7 @@ class ChangePassword extends Component {
                         (result) => {
                             //do what you want with the response here
                             if (result.errorMessage) {
+                                console.log("Masuk error message");
                                 Swal.fire({
                                     title: 'Error!',
                                     text: result.errorMessage,
@@ -169,7 +170,8 @@ class ChangePassword extends Component {
         };
     }
 
-    render() { 
+    render() {
+        console.log("Username yang didapat:", this.props.usernameData); 
         const useStyles = makeStyles((theme) => ({
             root: {
               '& > *': {
@@ -329,7 +331,7 @@ class ChangePassword extends Component {
 
 const mapStateToProps = state => ({
     isPasswordDefault: state.auth.isPasswordDefault,
-    usernameData: state.auth.user.username
+    usernameData: state.auth.username
 })
 
 const mapDispatchToProps = dispatch => {

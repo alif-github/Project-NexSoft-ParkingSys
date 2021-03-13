@@ -1,8 +1,9 @@
 let defaultLoginState = {
     isLogin: false,
+    isPasswordDefault: false,
     username:"",
     user: {},
-    isPasswordDefault: false
+    
 }
 
 const auth = (state = defaultLoginState, action) => {
@@ -34,6 +35,11 @@ const auth = (state = defaultLoginState, action) => {
             return {
                 ...state,
                 user: action.payload.user
+            }
+        case "ADD_USERNAME":
+            return {
+                ...state,
+                username: action.payload.username
             }
         default:
             return state

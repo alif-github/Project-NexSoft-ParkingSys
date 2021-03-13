@@ -75,6 +75,10 @@ TD {
     float: left;
 }
 
+.bawah-kanan {
+    margin-top: 20px;
+}
+
 .limit-title, .limit-select {
     float: right;
     margin-right: 5vh;
@@ -102,4 +106,12 @@ TD {
 .panel-control-search {
     width: fit-content;
     text-align: center;
+}
+
+.page {
+    position: fixed;
+    bottom: 40px;
+    width: 76%;
+    padding: 1.2vh;
+    background-color: #f2f2f2;
 }

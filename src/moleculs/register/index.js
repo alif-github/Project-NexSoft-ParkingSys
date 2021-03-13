@@ -234,9 +234,9 @@ class Register extends Component {
         }
         const paperStyle = {
             padding: 20,
-            height: '111vh',
-            width: 380,
-            margin: '20px auto',
+            height: '90vh',
+            width: 600,
+            margin: '30px auto',
             borderRadius: '2vh'
         }
         const avatarStyle = {
@@ -248,11 +248,9 @@ class Register extends Component {
         }
         const buttonStyle = {
             width: '25ch',
-            marginTop: '20px',
+            marginTop: '40px',
             marginBottom: '10px'
-        } 
-        
-        // errors[0].defaultMessage username harus diisi
+        }
 
         return ( 
             <>
@@ -297,27 +295,33 @@ class Register extends Component {
                                     required
                                     helperText=" "
                                 />
-                                <TextField
-                                    style={inputStyle}
-                                    id="standard-basic" 
-                                    label="Username"
-                                    name="username"
-                                    onChange={this.handleSetValue}
-                                    fullWidth
-                                    required
-                                    helperText=" "
-                                />
-                                <TextField
-                                    error={this.state.errorEmail === true}
-                                    style={inputStyle}
-                                    id="standard-basic" 
-                                    label="Email"
-                                    name="email"
-                                    onChange={this.handleSetValue}
-                                    fullWidth
-                                    required
-                                    helperText={this.state.helperTextEmail}
-                                />
+                                <Grid container spacing={3}>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            style={inputStyle}
+                                            id="standard-basic" 
+                                            label="Username"
+                                            name="username"
+                                            onChange={this.handleSetValue}
+                                            fullWidth
+                                            required
+                                            helperText=" "
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            error={this.state.errorEmail === true}
+                                            style={inputStyle}
+                                            id="standard-basic" 
+                                            label="Email"
+                                            name="email"
+                                            onChange={this.handleSetValue}
+                                            fullWidth
+                                            required
+                                            helperText={this.state.helperTextEmail}
+                                        />
+                                    </Grid>
+                                </Grid>
                                 <TextField
                                     id="standard-multiline-static"
                                     label="Address"
@@ -330,58 +334,64 @@ class Register extends Component {
                                     helperText=" "
                                 />
                             </form>
-                            <FormControl 
-                                error={this.state.errorPassword === true} 
-                                fullWidth 
-                                style={inputStyle} 
-                                className={clsx(useStyles.margin, useStyles.textField)}>
-                                <InputLabel required htmlFor="standard-adornment-password">Password</InputLabel>
-                                <Input
-                                    id="standard-adornment-password"
-                                    type={this.state.showPassword ? 'text' : 'password'}
-                                    value={this.state.password}
-                                    name="password"
-                                    onChange={this.handleSetValue}
-                                    endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={this.handleClickShowPassword}
-                                        onMouseDown={this.handleMouseDownPassword}
-                                        >
-                                        {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                    }
-                                />
-                            <FormHelperText id="component-error-text">{this.state.helperTextPassword}</FormHelperText>
-                            </FormControl>
-                            <FormControl 
-                                error={this.state.errorPasswordConfirm === true}
-                                fullWidth 
-                                style={inputStyle} 
-                                className={clsx(useStyles.margin, useStyles.textField)}>
-                                <InputLabel required htmlFor="standard-adornment-password">Confirmation Password</InputLabel>
-                                <Input
-                                    id="standard-adornment-password"
-                                    type={this.state.showPasswordConfirm ? 'text' : 'password'}
-                                    value={this.state.passwordConfirm}
-                                    name="passwordConfirm"
-                                    onChange={this.handleSetValue}
-                                    endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={this.handleClickShowPasswordConfirm}
-                                        onMouseDown={this.handleMouseDownPasswordConfirm}
-                                        >
-                                        {this.state.showPasswordConfirm ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                    }
-                                />
-                            <FormHelperText id="component-error-text">{this.state.helperTextPasswordConfirm}</FormHelperText>
-                            </FormControl>
+                            <Grid container spacing={3}>
+                                <Grid item xs={6}>
+                                    <FormControl 
+                                        error={this.state.errorPassword === true} 
+                                        fullWidth 
+                                        style={inputStyle} 
+                                        className={clsx(useStyles.margin, useStyles.textField)}>
+                                        <InputLabel required htmlFor="standard-adornment-password">Password</InputLabel>
+                                        <Input
+                                            id="standard-adornment-password"
+                                            type={this.state.showPassword ? 'text' : 'password'}
+                                            value={this.state.password}
+                                            name="password"
+                                            onChange={this.handleSetValue}
+                                            endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPassword}
+                                                onMouseDown={this.handleMouseDownPassword}
+                                                >
+                                                {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                            }
+                                        />
+                                    <FormHelperText id="component-error-text">{this.state.helperTextPassword}</FormHelperText>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FormControl 
+                                        error={this.state.errorPasswordConfirm === true}
+                                        fullWidth 
+                                        style={inputStyle} 
+                                        className={clsx(useStyles.margin, useStyles.textField)}>
+                                        <InputLabel required htmlFor="standard-adornment-password">Confirmation Password</InputLabel>
+                                        <Input
+                                            id="standard-adornment-password"
+                                            type={this.state.showPasswordConfirm ? 'text' : 'password'}
+                                            value={this.state.passwordConfirm}
+                                            name="passwordConfirm"
+                                            onChange={this.handleSetValue}
+                                            endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPasswordConfirm}
+                                                onMouseDown={this.handleMouseDownPasswordConfirm}
+                                                >
+                                                {this.state.showPasswordConfirm ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                            }
+                                        />
+                                    <FormHelperText id="component-error-text">{this.state.helperTextPasswordConfirm}</FormHelperText>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
                             <center>
                             <Button 
                                 style={buttonStyle}

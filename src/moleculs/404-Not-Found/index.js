@@ -5,21 +5,26 @@ import {
 import './style.css'
 
 class Page404 extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {}
+    }
     render() { 
+        console.log("History saat ini:", this.props.history)
         return ( 
             <ContainerSingle className="body-500">
                 <ContainerSingle className="content-body-500">
                     <ContainerSingle className="content-body body-1">
-                        500
+                        404
                     </ContainerSingle>
                     <ContainerSingle className="content-body body-2">
-                        Opps.. Internal Server Error
+                        Opps.. What are you looking for?
                     </ContainerSingle>
                     <ContainerSingle className="content-body body-3">
-                        Please Check Your Connection and Reload The Page
+                        This page not found
                     </ContainerSingle>
                     <ContainerSingle className="buttonbody" onClick={() => this.props.history.push('/')}>
-                        Back To Login
+                        Back
                     </ContainerSingle>
                 </ContainerSingle>
             </ContainerSingle>

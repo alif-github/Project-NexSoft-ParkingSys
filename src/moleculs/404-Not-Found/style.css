@@ -1,0 +1,61 @@
+.body-500 {
+    height: 100vh;
+    background-color: black;
+    color: #fcb134;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-body-500 {
+    border: 2px solid #fcb134;
+    width: 50%;
+    padding: 3%;
+    border-radius: 5vh;
+}
+
+.content-body {
+    text-align: center;
+}
+
+.body-1 {
+    font-size: 20vh;
+}
+
+.body-2 {
+    font-size: 5vh;
+}
+
+.body-3 {
+    font-size: 3vh;
+}
+
+.buttonbody {
+    width: 30%;
+    height: 10vh;
+    background-color: #fcb134;
+    color: black;
+    font-size: x-large;
+    text-align: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: 10vh;
+    padding: 2vh;
+    border-radius: 2vh;
+}
+
+.buttonbody:hover {
+    width: 30%;
+    height: 10vh;
+    background-color: #fcb134;
+    color: white;
+    font-size: x-large;
+    text-align: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: 10vh;
+    padding: 2vh;
+    border-radius: 2vh;
+    cursor: pointer;
+    background-color: #a57625;
+}

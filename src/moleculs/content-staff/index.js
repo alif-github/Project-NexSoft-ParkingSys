@@ -29,44 +29,49 @@ class Staff extends Component {
         this.state = {
             error: null,
             isLoaded: false,
+            isHandleFind: false,
+            userInputFind: "",
             countData: 0, 
             page: 1,
+            offset: 0,
             limit: 5,
             toogleFind: "ID",
             findById: "",
+            inputFind: "", 
             userData: []
         }
+        this.handleSetValue = el => {
+            if (el.target.value === '') {
+                this.setState({
+                    inputFind: el.target.value
+                },() => this.handleShowUserBy())
+            } else {
+                this.setState({
+                    inputFind: el.target.value,
+                })
+            }
+        }
+        this.handleClickedFind = () => {
+            if (this.state.page !== 1) {
+                this.setState({
+                    page: 1
+                },() => this.handleShowUserBy())
+            } else {
+                this.handleShowUserBy()
+            }
+        }
+
         //---------------------------------------------------------------------------------------------------------------------
         //When data must be refresh, this is the solutions
         //---------------------------------------------------------------------------------------------------------------------
-        this.refreshCountData = () => {
-            const requestOptionsCount = {
-                method: 'GET'
-            };
-            fetch("http://localhost:8080/parkir/user/count/",requestOptionsCount)
-                .then((response) => {
-                    return response.json()
-                })
-                .then(
-                    (result) => {
-                        //do what you want with the response here
-                        this.setState({
-                            countData: Math.ceil(result/this.state.limit)
-                        });
-                    },
-                    // Note: it's important to handle errors here
-                    // instead of a catch() block so that we don't swallow
-                    // exceptions from actual bugs in components.
-                    (error) => {}
-                )
-        }
-        //---------------------------------------------------------------------------------------------------------------------
         this.refreshUserData = () => {
+            const {page,limit} = this.state;
+            let start = (page - 1)*limit;
             //method to request API
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"&username=&status=&idUser=",requestOptionsPage)
+            fetch("http://localhost:8080/parkir/user/?idUser=&username=&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -75,8 +80,9 @@ class Staff extends Component {
                         //do what you want with the response here
                         this.setState({
                         isLoaded: true,
-                        userData: result
-                        },() => this.refreshCountData());
+                        userData: result.data,
+                        countData: Math.ceil(result.jumlah/this.state.limit)
+                        });
                     },
                     // Note: it's important to handle errors here
                     // instead of a catch() block so that we don't swallow
@@ -95,13 +101,13 @@ class Staff extends Component {
         this.handleChangePage = (event, value) => {
             this.setState({
                 page: value
-            },() => this.refreshUserData())
-          };
+            },() => this.handleShowUserBy())
+        };
         this.handleLimit = el => {
             this.setState({
                 limit: el.target.value,
                 page: 1
-            },() => this.refreshUserData())
+            },() => this.handleShowUserBy())
         }
         //---------------------------------------------------------------------------------------------------------------------
         // handle toogle find
@@ -109,7 +115,7 @@ class Staff extends Component {
         this.handleFindBy = el => {
             this.setState({
                 toogleFind: el.target.value
-            },() => this.refreshUserData())
+            })
         }
         //---------------------------------------------------------------------------------------------------------------------
         this.handleDeleteUserAPI = (idUser,namaUser) => {
@@ -210,43 +216,36 @@ class Staff extends Component {
         //Get API for Get by idUser
         //---------------------------------------------------------------------------------------------------------------------
         //method to request API
-        this.handleShowUserBy = el => {
-            const findUserValue = el.target.value;
-            
-            const requestOptionsIdUser = {
-                method: 'GET'
-            };
-            const requestOptionsUsername = {
-                method: 'GET'
-            };
 
+        this.handleShowUserBy = () => {
+            const findUserValue = this.state.inputFind;
+            
             if (this.state.toogleFind === "ID") {
-                console.log("isi value:",findUserValue);
-                console.log("masuk ke id");
                 if (findUserValue === "") {
                     this.refreshUserData();
                 } else {
-                    fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"&username=&status=&idUser="+findUserValue+"",requestOptionsIdUser)
+                    const {page,limit} = this.state;
+                    let start = (page - 1)*limit;
+                    //method to request API
+                    const requestOptionsPage = {
+                        method: 'GET'
+                    };
+                    fetch("http://localhost:8080/parkir/user/?idUser="+findUserValue+"&username=&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
                         .then(
                             (result) => {
-                                console.log("result:",result)
-    
                                 //do what you want with the response here
-                                if (result.errorMessage) {
-                                    this.setState({
-                                        isLoaded: true,
-                                        userData: []
-                                    });
-                                } else {
-                                    this.setState({
-                                        isLoaded: true,
-                                        userData: result
-                                    });
-                                }
+                                this.setState({
+                                isLoaded: true,
+                                userData: result.data,
+                                countData: Math.ceil(result.jumlah/this.state.limit)
+                                });
                             },
+                            // Note: it's important to handle errors here
+                            // instead of a catch() block so that we don't swallow
+                            // exceptions from actual bugs in components.
                             (error) => {
                                 this.setState({
                                     isLoaded: false,
@@ -259,25 +258,24 @@ class Staff extends Component {
                 if (findUserValue === "") {
                     this.refreshUserData();
                 } else {
-                    fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"&username="+findUserValue+"&status=&idUser=",requestOptionsUsername)
+                    const {page,limit} = this.state;
+                    let start = (page - 1)*limit;
+                    //method to request API
+                    const requestOptionsPage = {
+                        method: 'GET'
+                    };
+                    fetch("http://localhost:8080/parkir/user/?idUser=&username="+findUserValue+"&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
                         .then(
                             (result) => {
-    
                                 //do what you want with the response here
-                                if (result.errorMessage) {
-                                    this.setState({
-                                        isLoaded: true,
-                                        userData: []
-                                    });
-                                } else {
-                                    this.setState({
-                                        isLoaded: true,
-                                        userData: result
-                                    });
-                                }
+                                this.setState({
+                                isLoaded: true,
+                                userData: result.data,
+                                countData: Math.ceil(result.jumlah/this.state.limit)
+                                });
                             },
                             // Note: it's important to handle errors here
                             // instead of a catch() block so that we don't swallow
@@ -302,10 +300,7 @@ class Staff extends Component {
         const requestOptionsPage = {
             method: 'GET'
         };
-        const requestOptionsCount = {
-            method: 'GET'
-        };
-        fetch("http://localhost:8080/parkir/show-user/page/?page="+this.state.page+"&limit="+this.state.limit+"&username=&status=&idUser=",requestOptionsPage)
+        fetch("http://localhost:8080/parkir/user/?idUser=&username=&status=&limit="+this.state.limit+"&offset="+this.state.offset+"",requestOptionsPage)
             .then((response) => {
                 return response.json()
             })
@@ -314,7 +309,8 @@ class Staff extends Component {
                     //do what you want with the response here
                     this.setState({
                       isLoaded: true,
-                      userData: result
+                      userData: result.data,
+                      countData: Math.ceil(result.jumlah/this.state.limit)
                     });
                 },
                 // Note: it's important to handle errors here
@@ -327,25 +323,11 @@ class Staff extends Component {
                     });
                 }
             )
-        fetch("http://localhost:8080/parkir/user/count/",requestOptionsCount)
-            .then((response) => {
-                return response.json()
-            })
-            .then(
-                (result) => {
-                    //do what you want with the response here
-                    this.setState({
-                        countData: Math.ceil(result/this.state.limit)
-                    });
-                },
-                (error) => {}
-            )
     }
     //---------------------------------------------------------------------------------------------------------------------
 
     render() {
-        console.log("Find By: ", this.state.toogleFind);
-        console.log("User data: ", this.state.userData);
+        console.log("inputFind:", this.state.inputFind);
 
         const useStyles = makeStyles((theme) => ({
             root: {
@@ -434,8 +416,8 @@ class Staff extends Component {
                             </SelectSm>
                         </ContainerSingle>
                         <div className="panel-control-inputby input-group mb-3">
-                            <input type="text" className="form-control form-control-sm form-opt" onChange={el => this.handleShowUserBy(el)} placeholder="Find..." aria-label="Recipient's username" aria-describedby="button-addon2"/>
-                            <button className="btn btn-outline-secondary" type="button" id="button-addon2">
+                            <input type="text" className="form-control form-control-sm form-opt" onChange={el => this.handleSetValue(el)} placeholder="Find..." aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                            <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => this.handleClickedFind()}>
                                 <Span><I className="fa fa-search fa-icon" aria-hidden="true"></I></Span>
                             </button>
                         </div>
@@ -446,6 +428,7 @@ class Staff extends Component {
                             </Button>
                         </ContainerSingle>
                     </ContainerSingle>
+                    <ContainerSingle className="table-scrolling">
                     <Table className="table table-striped table-hover position-table">
                         <THead>
                             <TRow>
@@ -525,7 +508,8 @@ class Staff extends Component {
                             }
                         </TBody>
                     </Table>
-                    <ContainerSingle>
+                    </ContainerSingle>
+                    <ContainerSingle className="page">
                         <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
                             <Typography>Page: {this.state.page}</Typography>
                             <Pagination count={this.state.countData} page={this.state.page} onChange={this.handleChangePage} />

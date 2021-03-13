@@ -1,4 +1,4 @@
-.header {
+.header-staff {
     width: 100%;
     border: 1px #191818 solid;
     height: 10vh;
@@ -14,8 +14,8 @@
     height: 85vh;
 }
 
-.navigation {
-    width: 20%;
+.navigation-staff {
+    width: 15%;
     border: 1px #fcb134 solid;
     height: 85vh;
     float: left;
@@ -55,8 +55,8 @@
     cursor: pointer;
 }
 
-.content {
-    width: 80%;
+.content-staff {
+    width: 85%;
     height: 85vh;
     float: left;
     padding: 2%;
