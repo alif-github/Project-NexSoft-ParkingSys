@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserRepository {
 
-    //CRUD Maintanance, relation to databases!
+    //CRUD Maintenance, relation to databases!
 
     //findLastIdUser
     User findLastIdUser();
@@ -15,9 +15,6 @@ public interface UserRepository {
     void saveUser(User user);
 
     //Read the Data------------------------------------------
-
-    //Read All Data With Paggination
-    List<User> findAllUserPagging(int page , int limit , String idUser, String username, String status);
 
     //Read the Data by id
     List<User> findByIdUser(String idUser);
@@ -31,9 +28,6 @@ public interface UserRepository {
     //Read the Data by Username
     User findByName(String name);
 
-    //Read the Data by status
-    List<User> findByStatusUser(String status);
-
     //Update the Data----------------------------------------
     void updateByIdUser(String idUser, User user);
 
@@ -44,9 +38,6 @@ public interface UserRepository {
 
     //Delete the Data (1 Data) by id
     void deleteUserById(String idUser);
-
-    //API for Pagination
-    int countingUsersRows();
 
     //Test Tambahan (take it or leave it)
     List<User> readDataByQuery(String query, String pagging);

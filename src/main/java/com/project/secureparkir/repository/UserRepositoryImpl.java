@@ -74,144 +74,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findAllUserPagging(int page, int limit, String idUser, String username, String status) {
-
-        List<User> userList;
-
-        if (idUser != "") {
-            String sql = "SELECT COUNT(namaUser) as count FROM user where idUser like ?";
-            int numberPages;
-            numberPages = databases.query(sql,
-                    new Object[]{"%"+idUser+"%"},
-                    (rs, rowNum) -> rs.getInt("count")).get(0);
-
-            //validate data page
-            if (page < 1) {
-                page = 1;
-            }
-            if (page > numberPages) {
-                page = numberPages;
-            }
-
-            int start = (page - 1) * limit;
-
-            userList = databases.query("select * from user u inner join posisi p on u.idPosisi = p.idPosisi and u.idUser like ? order by posisi , namaUser ASC limit "+start+","+limit+";",
-                    new Object[]{"%"+idUser+"%"},
-                    (rs, rowNum) ->
-                            new User(
-                                    rs.getString("idUser"),
-                                    rs.getString("namaUser"),
-                                    rs.getString("email"),
-                                    rs.getString("username"),
-                                    rs.getString("password"),
-                                    rs.getString("alamat"),
-                                    rs.getBoolean("status"),
-                                    rs.getString("tglRegister"),
-                                    rs.getInt("idPosisi"),
-                                    rs.getString("posisi")
-                            ));
-            return userList;
-        } else if (username != "") {
-            String sql = "SELECT COUNT(namaUser) as count FROM user where username like ?";
-            int numberPages;
-            numberPages = databases.query(sql,
-                    new Object[]{"%"+username+"%"},
-                    (rs, rowNum) -> rs.getInt("count")).get(0);
-
-            //validate data page
-            if (page < 1) {
-                page = 1;
-            }
-            if (page > numberPages) {
-                page = numberPages;
-            }
-
-            int start = (page - 1) * limit;
-
-            userList = databases.query("select * from user u inner join posisi p on u.idPosisi = p.idPosisi and u.username like ? order by posisi , namaUser ASC limit "+start+","+limit+";",
-                    new Object[]{"%"+username+"%"},
-                    (rs, rowNum) ->
-                            new User(
-                                    rs.getString("idUser"),
-                                    rs.getString("namaUser"),
-                                    rs.getString("email"),
-                                    rs.getString("username"),
-                                    rs.getString("password"),
-                                    rs.getString("alamat"),
-                                    rs.getBoolean("status"),
-                                    rs.getString("tglRegister"),
-                                    rs.getInt("idPosisi"),
-                                    rs.getString("posisi")
-                            ));
-            return userList;
-        } else if (status != "") {
-            String sql = "SELECT COUNT(namaUser) as count FROM user where status like ?";
-            int numberPages;
-            numberPages = databases.query(sql,
-                    new Object[]{"%"+status+"%"},
-                    (rs, rowNum) -> rs.getInt("count")).get(0);
-
-            //validate data page
-            if (page < 1) {
-                page = 1;
-            }
-            if (page > numberPages) {
-                page = numberPages;
-            }
-
-            int start = (page - 1) * limit;
-
-            userList = databases.query("select * from user u inner join posisi p on u.idPosisi = p.idPosisi and u.status like ? order by posisi , namaUser ASC limit "+start+","+limit+";",
-                    new Object[]{"%"+status+"%"},
-                    (rs, rowNum) ->
-                            new User(
-                                    rs.getString("idUser"),
-                                    rs.getString("namaUser"),
-                                    rs.getString("email"),
-                                    rs.getString("username"),
-                                    rs.getString("password"),
-                                    rs.getString("alamat"),
-                                    rs.getBoolean("status"),
-                                    rs.getString("tglRegister"),
-                                    rs.getInt("idPosisi"),
-                                    rs.getString("posisi")
-                            ));
-            return userList;
-        } else {
-            String sql = "SELECT COUNT(namaUser) as count FROM user";
-            int numberPages;
-            numberPages = databases.query(sql,
-                    (rs, rowNum) -> rs.getInt("count")).get(0);
-
-            //validate data page
-            if (page < 1) {
-                page = 1;
-            }
-            if (page > numberPages) {
-                page = numberPages;
-            }
-
-            int start = (page - 1) * limit;
-
-            userList = databases.query("select * from user u inner join posisi p on u.idPosisi = p.idPosisi order by posisi , namaUser ASC limit "+start+","+limit+";",
-                    (rs, rowNum) ->
-                            new User(
-                                    rs.getString("idUser"),
-                                    rs.getString("namaUser"),
-                                    rs.getString("email"),
-                                    rs.getString("username"),
-                                    rs.getString("password"),
-                                    rs.getString("alamat"),
-                                    rs.getBoolean("status"),
-                                    rs.getString("tglRegister"),
-                                    rs.getInt("idPosisi"),
-                                    rs.getString("posisi")
-                            ));
-            return userList;
-        }
-    }
-
-    @Override
     public List<User> findByIdUser(String idUser) {
         String sql = "select * from user u inner join posisi p on u.idPosisi = p.idPosisi where u.idUser LIKE ?;";
         return databases.query(sql,
@@ -291,11 +153,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findByStatusUser(String status) {
-        return null;
-    }
-
-    @Override
     public void updateByIdUser(String idUser, User user) {
         String sqlUpdate = "UPDATE user SET idUser = ?, namaUser = ?, email = ?, username = ?, password = ?, alamat = ?, status = ?, tglRegister = ?, idPosisi = ? " +
                 "WHERE idUser = ?";
@@ -322,14 +179,6 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteUserById(String idUser) {
         String sqlDelete = "DELETE FROM user WHERE idUser ='" + idUser + "'";
         databases.execute(sqlDelete);
-    }
-
-    @Override
-    public int countingUsersRows() {
-        String sql = "SELECT COUNT(namaUser) as count FROM user";
-        int result = databases.queryForObject(
-                sql, Integer.class);
-        return result;
     }
 
     @Override

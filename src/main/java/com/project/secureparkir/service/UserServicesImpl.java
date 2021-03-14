@@ -31,17 +31,6 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public List<User> findAllUserPagging(int page, int limit, String idUser, String username, String status) {
-        List<User> userList;
-        try {
-            userList = userRepository.findAllUserPagging(page, limit, idUser, username, status);
-        } catch (Exception e) {
-            userList = null;
-        }
-        return userList;
-    }
-
-    @Override
     public List<User> findByIdUser(String idUser) {
         List<User> user;
         try {
@@ -86,11 +75,6 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public List<User> findByStatusUser(String status) {
-        return null;
-    }
-
-    @Override
     public void updateByIdUser(String idUser, User user) {
         synchronized (this) {
             userRepository.updateByIdUser(idUser, user);
@@ -111,12 +95,6 @@ public class UserServicesImpl implements UserServices {
         synchronized (this) {
             userRepository.deleteUserById(idUser);
         }
-    }
-
-    @Override
-    public int countingUsersRows() {
-        int count = userRepository.countingUsersRows();
-        return count;
     }
 
     @Override

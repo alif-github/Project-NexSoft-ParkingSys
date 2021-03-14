@@ -14,9 +14,6 @@ public interface UserServices {
 
     //Read the Data------------------------------------------
 
-    //Read All Data With Paggination
-    List<User> findAllUserPagging(int page , int limit , String idUser, String username, String status);
-
     //Read the Data by id
     List<User> findByIdUser(String idUser);
 
@@ -29,9 +26,6 @@ public interface UserServices {
     //Read the Data by Name
     User findByName(String name);
 
-    //Read the Data by status
-    List<User> findByStatusUser(String status);
-
     //Update the Data----------------------------------------
     void updateByIdUser(String idUser, User user);
 
@@ -42,9 +36,6 @@ public interface UserServices {
 
     //Delete the Data (1 Data) by id
     void deleteUserById(String idUser);
-
-    //API for Pagination
-    int countingUsersRows();
 
     //is User Exist
     //to check is user data exist or not

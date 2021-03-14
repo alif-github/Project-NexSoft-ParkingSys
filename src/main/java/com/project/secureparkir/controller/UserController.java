@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class UserController {
     @Autowired
     UserServices userServices;
 
-    //Create User Data
+    //Create User Data-ok
     @PostMapping("/create-user/")
     public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
         logger.info("Create data user");
@@ -49,27 +48,7 @@ public class UserController {
         }
     }
 
-    //Show Data with pagging
-    @GetMapping("/show-user/page/")
-    public ResponseEntity<?> showUserPagging(
-            @RequestParam("page") int page,
-            @RequestParam("limit") int limit,
-            @RequestParam("idUser") String idUser,
-            @RequestParam("username") String username,
-            @RequestParam("status") String status) {
-
-        logger.info("Showing User ...");
-        List<User> userList = userServices.findAllUserPagging(page, limit, idUser, username, status);
-
-        if (userList == null) {
-            logger.error("Unable to show User, because empty on Database");
-            return new ResponseEntity<>(new CustomErrorType("Data not found"), HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(userList, HttpStatus.OK);
-        }
-    }
-
-    //Show User Data
+    //Show User Data-ok
     @GetMapping("/show-user/")
     public ResponseEntity<?> showSingleUserWithDataLogin(@RequestParam("username") String username) {
         logger.info("Show data user");
@@ -111,7 +90,7 @@ public class UserController {
         }
     }
 
-    //Authenticator Login
+    //Authenticator Login-ok
     @GetMapping("/auth/")
     public ResponseEntity<?> authUser(@RequestParam("username") String username, @RequestParam("password") String password) {
         logger.info("check login");
@@ -141,7 +120,7 @@ public class UserController {
         }
     }
 
-    //Change Password Default
+    //Change Password Default-ok
     @PutMapping("/change-password/")
     public ResponseEntity<?> changePassword(@RequestParam("username") String username, @RequestBody User user) {
         logger.info("Change Password User");
@@ -151,29 +130,12 @@ public class UserController {
             logger.error("User not found");
             return new ResponseEntity<>(new CustomErrorType("User not found"), HttpStatus.NOT_FOUND);
         } else {
-//            String getPasswordDb = isUsernameExist.getPassword();
-//
-//            //Check password
-//            Boolean isPassword = encoder.matches("User1234", getPasswordDb);
-//            if (isPassword) {
-                userServices.changePassword(username, user);
-                return new ResponseEntity<>(new CustomSuccessType("Success Change Password"), HttpStatus.OK);
-//            } else {
-//                return new ResponseEntity<>(new CustomErrorType("Unable Change Password"), HttpStatus.BAD_REQUEST);
-//            }
+            userServices.changePassword(username, user);
+            return new ResponseEntity<>(new CustomSuccessType("Success Change Password"), HttpStatus.OK);
         }
     }
 
-    //Show Count Data
-    @GetMapping("/user/count/")
-    public ResponseEntity<?> countUser() {
-        logger.info("Showing Provider ...");
-        int usersRows = userServices.countingUsersRows();
-
-        return new ResponseEntity<>(usersRows, HttpStatus.OK);
-    }
-
-    //Delete Data By Id
+    //Delete Data By Id-ok
     @DeleteMapping("/user/delete/")
     public ResponseEntity<?> deleteSingleUserById(@RequestParam("id") String idUser) {
         logger.info("Delete User");
@@ -189,7 +151,7 @@ public class UserController {
         }
     }
 
-    //Update Data By Id
+    //Update Data By Id-ok
     @PutMapping("/user/update/")
     public ResponseEntity<?> updateSingleUserById(@RequestParam("id") String idUser, @RequestBody User user) {
         logger.info("Update User");
@@ -217,7 +179,7 @@ public class UserController {
         }
     }
 
-    //Cek coba
+    //Cek coba-ok
     @GetMapping("/user/")
     public ResponseEntity<?> getData (@RequestParam Map<Object, Object> params) {
         List<User> userList;
