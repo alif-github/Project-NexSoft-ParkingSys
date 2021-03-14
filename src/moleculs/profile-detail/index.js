@@ -17,6 +17,8 @@ class ProfileDet extends Component {
             disabled: true, 
             errorEmail: false,
             helperTextEmail: ' ',
+            errorName: false,
+            helperTextName: ' ',
             idUser: idUser,
             namaUser: namaUser,
             username: username,
@@ -49,6 +51,7 @@ class ProfileDet extends Component {
             if (name === 'email') {
                 let emailPattern = /[\w-\.]+@([\w-]+\.)+[\w-]{0,}$/;
                 let validationEmail = emailPattern.test(this.state.email)
+
                 if (!validationEmail && this.state.email !== '') {
                     this.setState({
                         ...this.state,
@@ -62,12 +65,35 @@ class ProfileDet extends Component {
                         helperTextEmail: ' '
                     })
                 }
-            } 
+            } else if (name === 'namaUser') {
+                let namePattern = /^[a-zA-Z\s\.]*$/;
+                let validationName = namePattern.test(this.state.namaUser)
+
+                if (!validationName && this.state.namaUser !== '') {
+                    this.setState({
+                        ...this.state,
+                        errorName: true,
+                        helperTextName: 'unable input number character or special character'
+                    })
+                } else {
+                    this.setState({
+                        ...this.state,
+                        errorName: false,
+                        helperTextName: ' '
+                    })
+                }
+            }
         }
         this.handleFetchingUpdateUserAPI = () => {
-            const {errorEmail} = this.state
+            const {errorEmail , errorName} = this.state
             const {idUser, namaUser, username, email, address, status, password, tglRegister, idPosisi} = this.state
-            if (errorEmail === true) {
+            if (
+                errorEmail === true ||
+                errorName === true ||
+                namaUser === '' ||
+                username === '' ||
+                address === '' ||
+                email === '') {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Please check your form',
@@ -199,6 +225,7 @@ class ProfileDet extends Component {
                                         helperText=" "
                                     />
                                     <TextField
+                                        error={this.state.errorName === true}
                                         style={inputStyle} 
                                         label="Full Name"
                                         name="namaUser"
@@ -206,7 +233,7 @@ class ProfileDet extends Component {
                                         disabled={this.state.disabled}
                                         onChange={this.handleSetValue}
                                         fullWidth
-                                        helperText=" "
+                                        helperText={this.state.helperTextName}
                                     />
                                     <TextField
                                         style={inputStyle} 

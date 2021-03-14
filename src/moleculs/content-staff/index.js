@@ -288,6 +288,50 @@ class Staff extends Component {
                             }
                         )
                 }
+            } else if (this.state.toogleFind === "Status") {
+                if (findUserValue === "") {
+                    this.refreshUserData();
+                } else {
+                    let findUserValueNew;
+                    const {page,limit} = this.state;
+                    let start = (page - 1)*limit;
+                    //method to request API
+                    const requestOptionsPage = {
+                        method: 'GET'
+                    };
+                    
+                    if (findUserValue === 'Active') {
+                        findUserValueNew = 1
+                    } else if (findUserValue === 'Non-Active') {
+                        findUserValueNew = 0 
+                    } else {
+                        findUserValueNew = 0
+                    }
+                    
+                    fetch("http://localhost:8080/parkir/user/?idUser=&username=&status="+findUserValueNew+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                        .then((response) => {
+                            return response.json()
+                        })
+                        .then(
+                            (result) => {
+                                //do what you want with the response here
+                                this.setState({
+                                isLoaded: true,
+                                userData: result.data,
+                                countData: Math.ceil(result.jumlah/this.state.limit)
+                                });
+                            },
+                            // Note: it's important to handle errors here
+                            // instead of a catch() block so that we don't swallow
+                            // exceptions from actual bugs in components.
+                            (error) => {
+                                this.setState({
+                                    isLoaded: false,
+                                    error
+                                });
+                            }
+                        )
+                }
             }
         }
     }
@@ -327,7 +371,6 @@ class Staff extends Component {
     //---------------------------------------------------------------------------------------------------------------------
 
     render() {
-        console.log("inputFind:", this.state.inputFind);
 
         const useStyles = makeStyles((theme) => ({
             root: {
@@ -341,7 +384,7 @@ class Staff extends Component {
         const {error , isLoaded} = this.state
 
         if(this.props.isLogin === false) {
-            return this.props.history.push('/')
+            return this.props.history.push('')
         }
 
         // When Error

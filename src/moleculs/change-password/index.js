@@ -98,7 +98,7 @@ class ChangePassword extends Component {
         };
         this.handleBackToLogin = () => {
             this.props.changeStatusDefaultPassword()
-            this.props.history.push('/')
+            this.props.history.push('')
         };
         this.handleChangePasswordAPI = () => {
             
@@ -142,7 +142,6 @@ class ChangePassword extends Component {
                         (result) => {
                             //do what you want with the response here
                             if (result.errorMessage) {
-                                console.log("Masuk error message");
                                 Swal.fire({
                                     title: 'Error!',
                                     text: result.errorMessage,
@@ -156,22 +155,20 @@ class ChangePassword extends Component {
                                     icon: 'success',
                                     title: result.successMessage,
                                 })
-                                this.props.history.push('/')
+                                this.props.history.push('')
                             }
                         },
                         // Note: it's important to handle errors here
                         // instead of a catch() block so that we don't swallow
                         // exceptions from actual bugs in components.
                         (error) => {
-                            // this.props.history.push('/500-internal-server-error')
                         }
                     )
             }
         };
     }
 
-    render() {
-        console.log("Username yang didapat:", this.props.usernameData); 
+    render() { 
         const useStyles = makeStyles((theme) => ({
             root: {
               '& > *': {
@@ -219,7 +216,7 @@ class ChangePassword extends Component {
         }
 
         if (!this.props.isPasswordDefault){
-            this.props.history.push('/')
+            this.props.history.push('')
         }
         return ( 
             <>

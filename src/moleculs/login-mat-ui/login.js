@@ -126,7 +126,6 @@ class Login extends Component {
                             this.props.addUser(result)
                             this.props.changeStatusLogin(username);
                         } else if (result.errorMessage) {
-                            console.log("Masuk ke error message");
                             Toast.fire({
                                 icon: 'error',
                                 title: result.errorMessage

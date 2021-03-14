@@ -24,7 +24,7 @@ class HomePage extends Component {
               .then((result) => {
                 if (result.isConfirmed) {
                     this.props.changeStatusLogout();
-                    this.props.history.push("/");
+                    this.props.history.push("");
                 }
               })
         }
@@ -32,7 +32,7 @@ class HomePage extends Component {
 
     render() {
         if(this.props.isLogin === false) {
-            return <Redirect to="/" />
+            return <Redirect to="" />
         }
         return ( 
             <ContainerSingle>

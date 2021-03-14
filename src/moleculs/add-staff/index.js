@@ -25,6 +25,8 @@ class AddStaff extends Component {
             address: '',
             errorEmail: false,
             helperTextEmail: ' ',
+            errorName: false,
+            helperTextName: ' ',
          }
         this.handleCancelAdd = () => {
             const { name , username , email , address } = this.state
@@ -54,6 +56,7 @@ class AddStaff extends Component {
             if (name === 'email') {
                 let emailPattern = /[\w-\.]+@([\w-]+\.)+[\w-]{0,}$/;
                 let validationEmail = emailPattern.test(this.state.email)
+
                 if (!validationEmail && this.state.email !== '') {
                     this.setState({
                         ...this.state,
@@ -67,17 +70,36 @@ class AddStaff extends Component {
                         helperTextEmail: ' '
                     })
                 }
-            } 
+            } else if (name === 'name') {
+                let namePattern = /^[a-zA-Z\s\.]*$/;
+                let validationName = namePattern.test(this.state.name)
+
+                if (!validationName && this.state.name !== '') {
+                    this.setState({
+                        ...this.state,
+                        errorName: true,
+                        helperTextName: 'unable input number character or special character'
+                    })
+                } else {
+                    this.setState({
+                        ...this.state,
+                        errorName: false,
+                        helperTextName: ' '
+                    })
+                }
+            }
         }
         this.handleFetchingCreateUserAPI = () => {
-            const {errorEmail} = this.state
+            const {errorEmail , errorName} = this.state
             const {name,username,address,email} = this.state
 
             if (
                 errorEmail === true ||
+                errorName === true ||
                 name === '' ||
                 username === '' ||
-                address === '') {
+                address === '' ||
+                email === '') {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Please check your form',
@@ -202,6 +224,7 @@ class AddStaff extends Component {
                         <Paper elevation={0} style={paperStyle}>
                             <form className={useStyles.root} noValidate autoComplete="off">
                                 <TextField
+                                    error={this.state.errorName === true}
                                     style={inputStyle}
                                     label="Full Name"
                                     name="name"
@@ -209,7 +232,7 @@ class AddStaff extends Component {
                                     onChange={this.handleSetValue}
                                     fullWidth
                                     required
-                                    helperText=" "
+                                    helperText={this.state.helperTextName}
                                 />
                                 <TextField
                                     style={inputStyle} 

@@ -191,7 +191,7 @@ class Register extends Component {
                                     icon: 'success',
                                     title: result.successMessage,
                                 })
-                                this.props.history.push('/')
+                                this.props.history.push('')
                             }
                         },
                         // Note: it's important to handle errors here
@@ -404,7 +404,7 @@ class Register extends Component {
                             <center>
                             <A 
                                 className='linkStyle' 
-                                onClick={() => this.props.history.push("/")}>
+                                onClick={() => this.props.history.push("")}>
                                 <Span className="span-registered">Back to login</Span>
                             </A></center>
                         </Paper>
