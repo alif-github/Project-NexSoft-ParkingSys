@@ -6,9 +6,9 @@ class THead extends Component {
         this.state = {  }
     }
     render() { 
-        const { children } = this.props
+        const { className , children } = this.props
         return ( 
-            <thead>
+            <thead className={className}>
                 {children}
             </thead>
          );

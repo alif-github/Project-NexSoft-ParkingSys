@@ -1,0 +1,55 @@
+.container-add {
+    width: 100%;
+    border: 1px solid white;
+    padding: 0.5%;
+    box-sizing: border-box;
+    height: 100%;
+    box-shadow: 4px 4px 15px rgba(131, 127, 127, 0.6);
+    border-radius: 3vh;
+}
+
+.container-add-left , .container-add-right {
+    float: left;
+    width: 50%;
+}
+
+.judul-container-add {
+    width: 100%;
+    text-align: center;
+    padding: 0.2%;
+    background-color: #fcb134;
+    border-radius: 2vh 2vh 0vh 0vh;
+    margin-bottom: 2%;
+}
+
+.input-control {
+    margin-bottom: 3%;
+    width: 100%;
+}
+
+.btn-float {
+    float: right;
+}
+
+.i-float {
+    margin-right: 7.5vh;
+    margin-inline-end: auto;
+    margin-inline-start: auto;
+}
+
+.container-add-right-member {
+    height: 60vh;
+    border-radius: 0vh 0vh 2vh 0vh;
+}
+
+.tombol-control-1 {
+    margin-top: 5vh;
+}
+
+.photos-right {
+    width: 50vh;
+}
+
+.lorem-ipsum {
+    text-align: justify;
+}

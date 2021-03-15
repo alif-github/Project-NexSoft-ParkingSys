@@ -20,11 +20,13 @@ class Nav extends Component {
                         </H5>
                     </ContainerSingle>
                 </Link>
-                <ContainerSingle className="menu-item">
-                    <H5 className="menu-content">
-                        Member
-                    </H5>
-                </ContainerSingle>
+                <Link to="/member" style={{textDecoration: 'none'}}>
+                    <ContainerSingle className="menu-item">
+                        <H5 className="menu-content">
+                            Member
+                        </H5>
+                    </ContainerSingle>
+                </Link>
                 <Link to="/staff" style={{textDecoration: 'none'}}>
                     <ContainerSingle className="menu-item">
                         <H5 className="menu-content">

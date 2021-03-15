@@ -1,0 +1,117 @@
+.btn {
+    margin-left: 2%;
+    margin-right: 2%;
+    height: min-content;
+    font-size: small;
+    /* float: left; */
+    display: flex;
+    flex-direction: row;
+} 
+
+.detail {
+    margin-left: 13%;
+}
+
+.head-member {
+    background-color: #198754;
+    color: white;
+}
+
+TH , TR {
+    text-align: center;
+}
+
+TR {
+    font-size: small;
+    padding: 1vh;
+}
+
+TD {
+    vertical-align: middle;
+}
+
+.fa-icon {
+    margin-right: 1vh;
+}
+
+.panel-control {
+    width: 100%;
+    margin-bottom: 1vh;
+}
+
+.panel-control-findby , .panel-control-selectby , .panel-control-inputby, .panel-control-search {
+    float: left;
+    width: 20%;
+    padding: 0.5vh;
+    box-sizing: border-box;
+}
+
+.panel-control-findby {
+    width: 7%;
+    margin-top: 0.4vh;
+}
+
+.panel-control-selectby {
+    width: 15%;
+    margin-bottom: 1vh;
+}
+
+.panel-control-inputby {
+    width: 45%;
+    margin-bottom: 1vh;
+}
+
+.panel-control-add {
+    float: right;
+    width: 20%;
+}
+
+.btn-add {
+    float: right;
+}
+
+.bawah-kiri, .bawah-kanan {
+    width: 50%;
+    float: left;
+}
+
+.bawah-kanan {
+    margin-top: 20px;
+}
+
+.limit-title, .limit-select {
+    float: right;
+    margin-right: 5vh;
+}
+
+.limit-title {
+    margin-top: 0.5vh;
+}
+
+.container-action-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    place-content: space-evenly;
+}
+
+.container-action-button-staff {
+    display: flex;
+    flex-direction: row;
+    margin-left: 38px;
+    margin-right: 38px;
+    justify-content: space-between;
+}
+
+.panel-control-search {
+    width: fit-content;
+    text-align: center;
+}
+
+.page {
+    position: fixed;
+    bottom: 40px;
+    width: 76%;
+    padding: 1.2vh;
+    background-color: #f2f2f2;
+}

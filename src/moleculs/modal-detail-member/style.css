@@ -1,0 +1,83 @@
+THead {
+    background-color: black;
+    color: white;
+}
+
+TH , TR {
+    text-align: center;
+}
+
+TR {
+    font-size: small;
+    padding: 1vh;
+}
+
+.fa-icon {
+    margin-right: 1vh;
+}
+
+.panel-control {
+    width: 100%;
+    margin-bottom: 1vh;
+}
+
+.panel-control-findby , .panel-control-selectby , .panel-control-inputby {
+    float: left;
+    width: 20%;
+    padding: 0.5vh;
+    box-sizing: border-box;
+}
+
+.panel-control-findby {
+    width: 7%;
+    margin-top: 0.4vh;
+}
+
+.panel-control-selectby {
+    width: 15%;
+    margin-bottom: 1vh;
+}
+
+.panel-control-inputby {
+    width: 45%;
+    margin-bottom: 1vh;
+}
+
+.panel-control-add {
+    float: right;
+    width: 20%;
+}
+
+.btn-add {
+    float: right;
+}
+
+.bawah-kiri, .bawah-kanan {
+    width: 50%;
+    float: left;
+}
+
+.limit-title, .limit-select {
+    float: right;
+    margin-right: 5vh;
+}
+
+.limit-title {
+    margin-top: 0.5vh;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.btn-modall {
+    padding: 0;
+}
+
+.btn-detail {
+    padding: 0%;
+}
+
+.photos-jenis {
+    width: 40vh;
+}

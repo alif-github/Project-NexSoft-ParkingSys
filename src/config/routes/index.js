@@ -6,8 +6,10 @@ import { connect } from "react-redux"
 
 import DashBoardAdmin from '../../moleculs/content-dashboard'
 import Staff from '../../moleculs/content-staff'
+import Member from '../../moleculs/content-member'
 import UpdateStaff from '../../moleculs/update-staff';
 import AddStaff from '../../moleculs/add-staff'
+import AddMember from '../../moleculs/add-member'
 
 import Page404 from "../../moleculs/404-Not-Found";
 import ProfileDet from "../../moleculs/profile-detail"
@@ -25,6 +27,8 @@ const Routes = (props) => {
                     <Route path="/staff" exact component={(props) => <HomePage {...props} comp={<Staff {...props}/>}/>}/>
                     <Route path="/profile/change-password" exact component={(props) => <HomePage {...props} comp={<ChangePasswordProfile {...props}/>}/>}/>
                     <Route path="/profile" exact component={(props) => <HomePage {...props} comp={<ProfileDet {...props}/>}/>}/>
+                    <Route path="/member/add" exact component={(props) => <HomePage {...props} comp={<AddMember {...props}/>}/>}/>
+                    <Route path="/member" exact component={(props) => <HomePage {...props} comp={<Member {...props}/>}/>}/>
                     <Route component={Page404}></Route>
                 </Switch> 
             </Router>

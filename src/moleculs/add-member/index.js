@@ -4,33 +4,38 @@ import {
     Button,
     H5,
     I,
-    Span, } from '../../atomics'
+    Span,
+    Image, } from '../../atomics'
 import {
     Grid,
     Paper,
     TextField,
+    FormControl,
+    MenuItem,
+    InputLabel,
+    Select
 } from '@material-ui/core'
 import Swal from 'sweetalert2'
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from "react-redux"
 import './style.css'
 
-class AddStaff extends Component {
+class AddMember extends Component {
     constructor(props) {
         super(props);
         this.state = { 
             name: '',
-            username: '',
-            email: '',
-            address: '',
-            errorEmail: false,
-            helperTextEmail: ' ',
+            noPol: '',
+            createdBy: this.props.userOn,
+            type: '1',
             errorName: false,
             helperTextName: ' ',
+            errorNoPol: false,
+            helperTextNoPol: ' '
          }
         this.handleCancelAdd = () => {
-            const { name , username , email , address } = this.state
-            if (name !== '' || username !== '' || email !== '' || address !== '') {
+            const { name , noPol , createdBy , type } = this.state
+            if (name !== '' || noPol !== '') {
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "Are you sure to leave this changes ?",
@@ -41,10 +46,10 @@ class AddStaff extends Component {
                     confirmButtonText: 'Yes!'
                   }).then((result) => {
                     if (result.isConfirmed) {
-                        this.props.history.push('/staff')
+                        this.props.history.push('/member')
                     }
                   })   
-            } else this.props.history.push('/staff')
+            } else this.props.history.push('/member')
         }
         this.handleSetValue = (event) => {
             this.setState({ 
@@ -53,21 +58,21 @@ class AddStaff extends Component {
             },() => this.handleCheckErrorPatern(event.target.name));
         };
         this.handleCheckErrorPatern = name => {
-            if (name === 'email') {
-                let emailPattern = /[\w-\.]+@([\w-]+\.)+[\w-]{0,}$/;
-                let validationEmail = emailPattern.test(this.state.email)
+            if (name === 'noPol') {
+                let noPolPattern = /^([A-Z]{1,2})(\s|-)*([1-9][0-9]{0,3})(\s|-)*([A-Z]{0,3}|[1-9][0-9]{1,2})$/;
+                let validationNoPol = noPolPattern.test(this.state.noPol)
 
-                if (!validationEmail && this.state.email !== '') {
+                if (!validationNoPol && this.state.noPol !== '') {
                     this.setState({
                         ...this.state,
-                        errorEmail: true,
-                        helperTextEmail: 'email must include @ and .'
+                        errorNoPol: true,
+                        helperTextNoPol: 'unable because wrong format, ex: B 8888 ABC'
                     })
                 } else {
                     this.setState({
                         ...this.state,
-                        errorEmail: false,
-                        helperTextEmail: ' '
+                        errorNoPol: false,
+                        helperTextNoPol: ' '
                     })
                 }
             } else if (name === 'name') {
@@ -90,16 +95,16 @@ class AddStaff extends Component {
             }
         }
         this.handleFetchingCreateUserAPI = () => {
-            const {errorEmail , errorName} = this.state
-            const {name,username,address,email} = this.state
+            const {errorNoPol , errorName} = this.state
+            const { name , noPol , createdBy , type } = this.state
 
             if (
-                errorEmail === true ||
+                errorNoPol === true ||
                 errorName === true ||
                 name === '' ||
-                username === '' ||
-                address === '' ||
-                email === '') {
+                noPol === '' ||
+                createdBy === '' ||
+                type === '') {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Please check your form',
@@ -114,15 +119,14 @@ class AddStaff extends Component {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        namaUser: '' + name +'',
-                        email: '' + email + '',
-                        username: '' + username + '',
-                        password: 'User1234',
-                        alamat: '' + address + ''
+                        namaMember:''+name+'',
+                        noPol:''+noPol+'',
+                        idJenis:''+parseInt(type)+'',
+                        dibuatOleh:''+createdBy+''
                     })
                 };
                 //fetching data to url API Back-End
-                fetch("http://localhost:8080/parkir/create-user/", requestOptions)
+                fetch("http://localhost:8080/member/create-member/", requestOptions)
                     .then((response) => {
                         return response.json()
                     })
@@ -168,9 +172,8 @@ class AddStaff extends Component {
                     .then(
                         this.setState({
                             name: '',
-                            username: '',
-                            email: '',
-                            address: ''
+                            noPol: '',
+                            type: '1'
                         })
                     )
             }
@@ -199,6 +202,10 @@ class AddStaff extends Component {
             withoutLabel: {
                 marginTop: theme.spacing(3),
             },
+            formControl: {
+                margin: theme.spacing(1),
+                minWidth: 120
+            },
             textField: {
                 width: '25ch',
             },
@@ -212,12 +219,12 @@ class AddStaff extends Component {
             height: '50vh',
             width: 380,
             margin: '0px auto',
-            borderRadius: '2vh'
+            borderRadius: '1vh'
         } 
         return ( 
             <ContainerSingle className="container-add">
                 <ContainerSingle className="judul-container-add">
-                    <H5>Input New Staff</H5>
+                    <H5>Input New Member</H5>
                 </ContainerSingle>
                 <ContainerSingle className="container-add-left mbt-content">
                     <Grid>
@@ -235,40 +242,44 @@ class AddStaff extends Component {
                                     helperText={this.state.helperTextName}
                                 />
                                 <TextField
-                                    style={inputStyle} 
-                                    label="Username"
-                                    name="username"
-                                    value={this.state.username}
+                                    error={this.state.errorNoPol === true}
+                                    style={inputStyle}
+                                    label="Police Number"
+                                    name="noPol"
+                                    value={this.state.noPol}
                                     onChange={this.handleSetValue}
+                                    fullWidth
+                                    required
+                                    helperText={this.state.helperTextNoPol}
+                                />
+                                <TextField
+                                    style={inputStyle} 
+                                    label="Created By"
+                                    name="createdBy"
+                                    value={this.state.createdBy}
+                                    onChange={this.handleSetValue}
+                                    disabled
                                     fullWidth
                                     required
                                     helperText=" "
                                 />
-                                <TextField
-                                    error={this.state.errorEmail === true}
-                                    style={inputStyle} 
-                                    label="Email"
-                                    name="email"
-                                    value={this.state.email}
-                                    onChange={this.handleSetValue}
-                                    fullWidth
-                                    required
-                                    helperText={this.state.helperTextEmail}
-                                />
-                                <TextField
-                                    id="standard-multiline-static"
-                                    label="Address"
-                                    multiline
-                                    fullWidth
-                                    required
-                                    name="address"
-                                    value={this.state.address}
-                                    onChange={this.handleSetValue}
-                                    rows={4}
-                                    helperText=" "
-                                />
+                                <FormControl fullWidth className={useStyles.formControl}>
+                                    <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        name="status"
+                                        defaultValue={this.state.type}
+                                        onChange={this.handleSetValue}
+                                        required
+                                        helperText=" "
+                                        >
+                                        <MenuItem value='1'>Motorcycle</MenuItem>
+                                        <MenuItem value='2'>Car</MenuItem>
+                                    </Select>
+                                </FormControl>
                             </form>
-                            <ContainerSingle className="tombol-control">
+                            <ContainerSingle className="tombol-control-1">
                                 <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingCreateUserAPI()}>
                                     <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
                                     Save Changes
@@ -281,7 +292,17 @@ class AddStaff extends Component {
                         </Paper>
                     </Grid>
                 </ContainerSingle>
-                <ContainerSingle className="container-add-right">
+                <ContainerSingle className="container-add-right-member">
+                    <ContainerSingle>
+                        <center>
+                            <Image className="photos-right" src="https://seekvectorlogo.com/wp-content/uploads/2018/03/secure-parking-vector-logo.png"/>
+                        </center>
+                    </ContainerSingle>
+                    <ContainerSingle className="lorem-ipsum">
+                        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, 
+                        making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, 
+                        consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.
+                    </ContainerSingle>
                 </ContainerSingle>
             </ContainerSingle>
          );
@@ -289,11 +310,12 @@ class AddStaff extends Component {
 }
 
 const mapStateToProps = state => ({
-    isLogin: state.auth.isLogin
+    isLogin: state.auth.isLogin,
+    userOn: state.auth.user.namaUser
 })
 
 const mapDispatchToProps = dispatch => {
     return {}
 }
  
-export default connect(mapStateToProps , mapDispatchToProps)(AddStaff);
+export default connect(mapStateToProps , mapDispatchToProps)(AddMember);
