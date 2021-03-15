@@ -8,52 +8,44 @@ public class Member {
 
     private String idMember;
 
-//    @Pattern(regexp = "^[a-zA-Z\\s\\.]*$",
-//            message = "Don't input number in name field")
-//    @NotNull(message = "name member must be fill in")
-//    @NotEmpty(message = "name member must be fill in")
+    @Pattern(regexp = "^[a-zA-Z\\s\\.]*$",
+            message = "Don't input number in name field")
+    @NotNull(message = "name member must be fill in")
+    @NotEmpty(message = "name member must be fill in")
     private String namaMember;
 
-//    @NotNull(message = "date must be fill in")
-//    @NotEmpty(message = "date must be fill in")
     private String tglRegister;
 
-//    @NotNull(message = "status must be fill in")
-//    @NotEmpty(message = "status must be fill in")
     private Boolean status;
 
-//    @Pattern(regexp = "/^([A-Z]{1,3})(\\s|-)*([1-9][0-9]{0,3})(\\s|-)*([A-Z]{0,3}|[1-9][0-9]{1,2})$/i",
-//            message = "Not police number format, please check again.")
-//    @NotNull(message = "Police number must be fill in")
-//    @NotEmpty(message = "Police number must be fill in")
+    @Pattern(regexp = "^([A-Z]{1,2})(\\s|-)*([1-9][0-9]{0,3})(\\s|-)*([A-Z]{0,3}|[1-9][0-9]{1,2})$",
+            message = "Not police number format, please check again.")
+    @NotNull(message = "Police number must be fill in")
+    @NotEmpty(message = "Police number must be fill in")
     private String noPol;
 
-//    @NotNull(message = "type must be fill in")
-//    @NotEmpty(message = "type number must be fill in")
     private int idJenis;
 
-//    @Pattern(regexp = "^[a-zA-Z\\s\\.]*$",
-//            message = "Don't input number in name field")
-//    @NotNull(message = "name must be fill in")
-//    @NotEmpty(message = "name must be fill in")
+    @Pattern(regexp = "^[a-zA-Z\\s\\.]*$",
+            message = "Don't input number in name field")
+    @NotNull(message = "name must be fill in")
+    @NotEmpty(message = "name must be fill in")
     private String dibuatOleh;
 
-//    @Pattern(regexp = "^[a-zA-Z\\s\\.]*$",
-//            message = "Don't input number in name field")
-//    @NotNull(message = "name must be fill in")
-//    @NotEmpty(message = "name must be fill in")
+    @Pattern(regexp = "^[a-zA-Z\\s\\-\\.]*$",
+            message = "Don't input number in name field")
     private String dieditOleh;
 
-//    @NotNull(message = "date must be fill in")
-//    @NotEmpty(message = "date must be fill in")
     private String tglEdit;
+
+    private double biayaMember;
 
     private String jenis;
 
     private double value;
 
     public Member(String idMember, String namaMember, String tglRegister, Boolean status, String noPol,
-                  int idJenis, String dibuatOleh, String dieditOleh, String tglEdit) {
+                  int idJenis, String dibuatOleh, String dieditOleh, String tglEdit, double biayaMember) {
         this.idMember = idMember;
         this.namaMember = namaMember;
         this.tglRegister = tglRegister;
@@ -63,10 +55,11 @@ public class Member {
         this.dibuatOleh = dibuatOleh;
         this.dieditOleh = dieditOleh;
         this.tglEdit = tglEdit;
+        this.biayaMember = biayaMember;
     }
 
     public Member(String idMember, String namaMember, String tglRegister, Boolean status, String noPol,
-                  int idJenis, String dibuatOleh, String dieditOleh, String tglEdit, String jenis, double value) {
+                  int idJenis, String dibuatOleh, String dieditOleh, String tglEdit, double biayaMember, String jenis, double value) {
         this.idMember = idMember;
         this.namaMember = namaMember;
         this.tglRegister = tglRegister;
@@ -76,6 +69,7 @@ public class Member {
         this.dibuatOleh = dibuatOleh;
         this.dieditOleh = dieditOleh;
         this.tglEdit = tglEdit;
+        this.biayaMember = biayaMember;
         this.jenis = jenis;
         this.value = value;
     }
@@ -144,6 +138,14 @@ public class Member {
         return dieditOleh;
     }
 
+    public double getBiayaMember() {
+        return biayaMember;
+    }
+
+    public void setBiayaMember(double biayaMember) {
+        this.biayaMember = biayaMember;
+    }
+
     public void setDieditOleh(String dieditOleh) {
         this.dieditOleh = dieditOleh;
     }
@@ -184,6 +186,7 @@ public class Member {
                 ", dibuatOleh='" + dibuatOleh + '\'' +
                 ", dieditOleh='" + dieditOleh + '\'' +
                 ", tglEdit='" + tglEdit + '\'' +
+                ", biayaMember=" + biayaMember +
                 ", jenis='" + jenis + '\'' +
                 ", value=" + value +
                 '}';

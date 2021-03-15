@@ -179,7 +179,7 @@ public class UserController {
         }
     }
 
-    //Cek coba-ok
+    //Read Data By User-ok
     @GetMapping("/user/")
     public ResponseEntity<?> getData (@RequestParam Map<Object, Object> params) {
         List<User> userList;
@@ -194,6 +194,4 @@ public class UserController {
             return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
         }
     }
-
-
 }

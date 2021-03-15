@@ -5,7 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
+import java.util.List;
 
 @Repository("memberRepository")
 public class MemberRepositoryImpl implements MemberRepository {
@@ -21,7 +25,7 @@ public class MemberRepositoryImpl implements MemberRepository {
                     new Member(
                             rs.getString("idMember"),
                             null,null,null,null,
-                            0,null,null,null
+                            0,null,null,null,0
                     ));
     }
 
@@ -57,11 +61,23 @@ public class MemberRepositoryImpl implements MemberRepository {
         //-------------------------------------------------------------------------------------------------
         member.setIdMember(newID);
         member.setStatus(true); //when first time made in, status automatic true(active)
-        member.setTglRegister(String.valueOf(new Date())); //date automatic generate today date and current time
+//        member.setTglRegister(String.valueOf(new Date())); //date automatic generate today date and current time
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-YY");
+        member.setTglRegister(dtf.format(date));
+
+        //Biaya Member ---> motor : 60000 ; mobil : 120000
+
+        if (member.getIdJenis() == 1) member.setBiayaMember(60000);
+        else if (member.getIdJenis() == 2) member.setBiayaMember(120000);
+
+        //Set awal member daftar
+        member.setDieditOleh("-");
+        member.setTglEdit("-");
         //-------------------------------------------------------------------------------------------------
 
         String sql = "INSERT INTO member(idMember,namaMember,noPol," +
-                "idJenis,tglRegister,status,dibuatOleh,dieditOleh,tglEdit) VALUES(?,?,?,?,?,?,?,?,?)";
+                "idJenis,tglRegister,status,dibuatOleh,dieditOleh,tglEdit,biayaMember) VALUES(?,?,?,?,?,?,?,?,?,?)";
         databases.update(sql,
                 member.getIdMember(),
                 member.getNamaMember(),
@@ -71,7 +87,8 @@ public class MemberRepositoryImpl implements MemberRepository {
                 member.getStatus(),
                 member.getDibuatOleh(),
                 member.getDieditOleh(),
-                member.getTglEdit());
+                member.getTglEdit(),
+                member.getBiayaMember());
     }
 
     @Override
@@ -89,8 +106,61 @@ public class MemberRepositoryImpl implements MemberRepository {
                                 resultSet.getString("dibuatOleh"),
                                 resultSet.getString("dieditOleh"),
                                 resultSet.getString("tglEdit"),
+                                resultSet.getDouble("biayaMember"),
                                 resultSet.getString("jenis"),
                                 resultSet.getDouble("value")
                         )));
+    }
+
+    @Override
+    public Member findByNoPlat(String noPlat) {
+        String sql = "select * from member m inner join jeniskendaraan j on m.idJenis = j.idJenis and m.noPol = '"+noPlat+"'";
+        return databases.queryForObject(sql,
+                ((resultSet, i) ->
+                        new Member(
+                                resultSet.getString("idMember"),
+                                resultSet.getString("namaMember"),
+                                resultSet.getString("tglRegister"),
+                                resultSet.getBoolean("status"),
+                                resultSet.getString("noPol"),
+                                resultSet.getInt("idJenis"),
+                                resultSet.getString("dibuatOleh"),
+                                resultSet.getString("dieditOleh"),
+                                resultSet.getString("tglEdit"),
+                                resultSet.getDouble("biayaMember"),
+                                resultSet.getString("jenis"),
+                                resultSet.getDouble("value")
+                        )));
+    }
+
+    @Override
+    public List<Member> readDataByQuery(String query, String pagging) {
+        //id, nama, noPlat, status
+        List<Member> memberList;
+        memberList = databases.query("select * from member m inner join jeniskendaraan j on m.idJenis = j.idJenis "+query+" "+pagging+"",
+                (resultSet, i) ->
+                        new Member(
+                                resultSet.getString("idMember"),
+                                resultSet.getString("namaMember"),
+                                resultSet.getString("tglRegister"),
+                                resultSet.getBoolean("status"),
+                                resultSet.getString("noPol"),
+                                resultSet.getInt("idJenis"),
+                                resultSet.getString("dibuatOleh"),
+                                resultSet.getString("dieditOleh"),
+                                resultSet.getString("tglEdit"),
+                                resultSet.getDouble("biayaMember"),
+                                resultSet.getString("jenis"),
+                                resultSet.getDouble("value")
+                        ));
+        return memberList;
+    }
+
+    @Override
+    public int countAllDataByQuery(String query) {
+        String sql = "SELECT COUNT(namaMember) as count FROM member " + query;
+        int countMember = databases.queryForObject(
+                sql, Integer.class);
+        return countMember;
     }
 }
