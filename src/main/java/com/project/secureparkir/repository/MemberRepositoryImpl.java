@@ -216,10 +216,10 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public double sumAllData(String date) {
-        String sql = "SELECT SUM (biayaMember) as total FROM member WHERE tglRegister ='" + date + "'";
+    public double sumAllData(String query) {
+        String sql = "select sum(biayaMember) as biayaTotal from member "+query+"";
         double sumTotal = databases.queryForObject(
-                sql, Integer.class);
+                sql, Double.class);
         return sumTotal;
     }
 }

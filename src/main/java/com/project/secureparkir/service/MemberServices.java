@@ -34,7 +34,7 @@ public interface MemberServices {
     void deleteMemberById(String idMember);
 
     //Sum money income from member
-    double sumAllData(String date);
+    double sumAllData(Map <Object, Object> params);
 
     //is Member Exist
     //to check is member data exist or not

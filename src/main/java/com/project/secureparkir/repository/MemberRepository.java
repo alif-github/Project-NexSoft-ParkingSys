@@ -36,5 +36,5 @@ public interface MemberRepository {
     int countAllDataByQuery(String query);
 
     //Sum money income from member
-    double sumAllData(String date);
+    double sumAllData(String query);
 }

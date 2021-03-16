@@ -125,8 +125,22 @@ public class MemberServicesImpl implements MemberServices {
     }
 
     @Override
-    public double sumAllData(String date) {
-        return 0;
+    public double sumAllData(Map <Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("tglRegister") && !String.valueOf(params.get("tglRegister")).isBlank())
+                whereQuery.add("tglRegister= '"+params.get("tglRegister")+"'");
+            if (params.containsKey("dibuatOleh") && !String.valueOf(params.get("dibuatOleh")).isBlank())
+                whereQuery.add("dibuatOleh= '"+params.get("dibuatOleh")+"'");
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return memberRepository.sumAllData(query);
+        }
     }
 
     @Override

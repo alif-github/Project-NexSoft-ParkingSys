@@ -93,4 +93,18 @@ public class MemberController {
             return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
         }
     }
+
+    //Sum income from member
+    @GetMapping("/income/")
+    public ResponseEntity<?> sumIncome (@RequestParam Map<Object, Object> params) {
+        logger.info("Date sum income");
+        Map<String, Object> output = new HashMap<>();
+
+        try {
+            output.put("income", memberServices.sumAllData(params));
+            return new ResponseEntity<>(output, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
+        }
+    }
 }
