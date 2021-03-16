@@ -142,7 +142,7 @@ class Member extends Component {
             const requestOptionsDelete = {
                 method: 'DELETE'
             };
-            fetch("http://localhost:8080/parkir/user/delete/?id="+idMember+"",requestOptionsDelete)
+            fetch("http://localhost:8080/member/delete/?id="+idMember+"",requestOptionsDelete)
                 .then((response) => {
                     return response.json()
                 })
@@ -541,7 +541,7 @@ class Member extends Component {
                                                         </div>
                                                         <div>
                                                             <Button className="btn btn-warning" 
-                                                                onClick={() => {this.props.history.push('/staff/update/'+el.idUser);this.props.addDummy(this.state.memberData[idx])}}>
+                                                                onClick={() => {this.props.history.push('/member/update/'+el.idMember);this.props.addDummy(this.state.memberData[idx])}}>
                                                                 <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
                                                                 Edit
                                                             </Button>

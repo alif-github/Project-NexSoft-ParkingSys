@@ -8,6 +8,7 @@ import DashBoardAdmin from '../../moleculs/content-dashboard'
 import Staff from '../../moleculs/content-staff'
 import Member from '../../moleculs/content-member'
 import UpdateStaff from '../../moleculs/update-staff';
+import UpdateMember from '../../moleculs/update-member';
 import AddStaff from '../../moleculs/add-staff'
 import AddMember from '../../moleculs/add-member'
 
@@ -28,6 +29,7 @@ const Routes = (props) => {
                     <Route path="/profile/change-password" exact component={(props) => <HomePage {...props} comp={<ChangePasswordProfile {...props}/>}/>}/>
                     <Route path="/profile" exact component={(props) => <HomePage {...props} comp={<ProfileDet {...props}/>}/>}/>
                     <Route path="/member/add" exact component={(props) => <HomePage {...props} comp={<AddMember {...props}/>}/>}/>
+                    <Route path="/member/update/:id" exact component={(props) => <HomePage {...props} comp={<UpdateMember {...props}/>}/>}/>
                     <Route path="/member" exact component={(props) => <HomePage {...props} comp={<Member {...props}/>}/>}/>
                     <Route component={Page404}></Route>
                 </Switch> 

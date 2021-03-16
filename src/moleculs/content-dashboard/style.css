@@ -74,3 +74,11 @@
     font-size: x-large;
     font-weight: 500;
 }
+
+.content-dashboard {
+    margin-top: 5vh;
+    width: 50%;
+    display: float;
+    float: left;
+    /* border: 1px solid black; */
+}
