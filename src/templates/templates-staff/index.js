@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 import './style.css'
 import { ContainerSingle , H3 , I , H5 } from '../../atomics';
-import Profile from '../../moleculs/profile'
-import Nav from '../../moleculs/navigation'
+import NavStaff from '../../moleculs/navigation-staff'
 import Swal from 'sweetalert2'
 import { Redirect } from 'react-router-dom';
+import ProfileStaff from '../../moleculs/profile-staff';
 
 class HomePageStaff extends Component {
     constructor(props) {
@@ -49,19 +49,16 @@ class HomePageStaff extends Component {
                 </ContainerSingle>
                 <ContainerSingle className="body">
                     <ContainerSingle className="navigation-staff">
-                        {/* <Profile /> */}
-                        alsask
+                        <ProfileStaff />
                         <ContainerSingle className="menu">
-                            akjsak
-                            {/* <Nav /> */}
+                            <NavStaff />
                         </ContainerSingle>
                     </ContainerSingle>
                     <ContainerSingle className="content-staff">
-                        {/* {this.props.comp} */}
-                        ....
+                        {this.props.comp}
                     </ContainerSingle>
                 </ContainerSingle>
-                <ContainerSingle className="footer">
+                <ContainerSingle className="footer-staff">
                     Copyright 2021. Alif Yudha Syahputra
                 </ContainerSingle>
             </ContainerSingle>

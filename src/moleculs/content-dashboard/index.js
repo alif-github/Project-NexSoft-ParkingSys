@@ -1,4 +1,4 @@
-import React, { Fragment, Component, useState } from "react";
+import React, { Component } from "react";
 import {ContainerSingle} from '../../atomics'
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -11,13 +11,88 @@ class DashBoardAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            chooseDate: null
+            chooseDate: null,
+            parkingIn: 240,
+            parkingOut: 238,
+            incomeMemberReal: 0,
+            incomeTicketReal: 1500000,
          }
         this.handleDateChange = (date) => {
+            let current_datetime = new Date(date)
+            let yearTwoDigit = current_datetime.getFullYear().toString().substr(2,2);
+            let monthTwoDigit = ("0" + (current_datetime.getMonth() + 1)).slice(-2)
+            let dateTwoDigit = ("0" + current_datetime.getDate()).slice(-2)
+            let formatted_date = monthTwoDigit + "-" + dateTwoDigit + "-" + yearTwoDigit
             this.setState({
-                chooseDate: new Date(date)
-            })
+                chooseDate: formatted_date
+            },() => this.refreshIncomeMember())
         }
+        this.totalIncome = nilaiUang => {
+            var bilangan = nilaiUang;
+
+            var	number_string = ''+bilangan+'',
+                sisa 	= number_string.length % 3,
+                rupiah 	= number_string.substr(0, sisa),
+                ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+                    
+            if (ribuan) {
+                var separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            return rupiah;
+        }
+        this.refreshIncomeMember = () => {
+            const {chooseDate} = this.state
+            console.log(chooseDate)
+            //method to request API
+            const requestOptionsPage = {
+                method: 'GET'
+            };
+            fetch("http://localhost:8080/member/income/?tglRegister="+chooseDate+"&dibuatOleh=",requestOptionsPage)
+                .then((response) => {
+                    return response.json()
+                })
+                .then(
+                    (result) => {
+                        console.log("uji hasil sum:",result.income)
+                        this.setState({
+                        incomeMemberReal: result.income
+                        });
+                    },
+                    // Note: it's important to handle errors here
+                    // instead of a catch() block so that we don't swallow
+                    // exceptions from actual bugs in components.
+                    (error) => {}
+                )
+        }
+    }
+
+    componentDidMount() {
+        let current_datetime = new Date()
+        let yearTwoDigit = current_datetime.getFullYear().toString().substr(2,2);
+        let monthTwoDigit = ("0" + (current_datetime.getMonth() + 1)).slice(-2)
+        let dateTwoDigit = ("0" + current_datetime.getDate()).slice(-2)
+        let formatted_date = monthTwoDigit + "-" + dateTwoDigit + "-" + yearTwoDigit
+        console.log("uji tanggal:",formatted_date)
+        //method to request API
+        const requestOptionsPage = {
+            method: 'GET'
+        };
+        fetch("http://localhost:8080/member/income/?tglRegister="+formatted_date+"&dibuatOleh=",requestOptionsPage)
+            .then((response) => {
+                return response.json()
+            })
+            .then(
+                (result) => {
+                    this.setState({
+                    incomeMemberReal: result.income
+                    });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {}
+            )
     }
 
     render() {
@@ -34,21 +109,32 @@ class DashBoardAdmin extends Component {
         }));
         const paperStyle = {
             padding: 10,
-            height: '15vh',
+            height: '13vh',
             width: '100%',
             margin: '0px auto',
             borderRadius: '1vh',
             backgroundColor: '#ede6e6',
-            border: '1px solid black'
+            border: '1px solid #fcb134'
         }
         const paperDateStyle = {
-            padding: 8,
+            padding: 15,
             textAlign: 'center',
-            height: '8vh',
+            height: '11vh',
             width: '100%',
             margin: '0px auto',
             borderRadius: '1vh 1vh 0 0',
             backgroundColor: '#fcb134',
+            border: '1px solid #fcb134'
+        } 
+        const paperTitleStyle = {
+            padding: 2,
+            textAlign: 'center',
+            height: '5vh',
+            width: '100%',
+            margin: '0px auto',
+            borderRadius: '1vh 1vh 0 0',
+            backgroundColor: 'black',
+            color: 'white',
             border: '1px solid #fcb134'
         } 
         const gridJudulStyle = {
@@ -92,6 +178,11 @@ class DashBoardAdmin extends Component {
                 <ContainerSingle className="content-dashboard">
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
+                            <Paper elevation={3} style={paperTitleStyle}>
+                                Data Monitoring (Today)
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12}>
                             <Paper elevation={3} style={paperDateStyle}>
                                 <ThemeProvider theme={theme}>
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -102,7 +193,8 @@ class DashBoardAdmin extends Component {
                                             placeholder='Pick date for filtering'
                                             onChange={date => this.handleDateChange(date)}
                                             maxDate={new Date()}
-                                            format="MM-dd-yyyy"
+                                            minDate={new Date("03-16-2021")}
+                                            format="MM-dd-yy"
                                         />
                                     </MuiPickersUtilsProvider>
                                 </ThemeProvider>
@@ -114,7 +206,7 @@ class DashBoardAdmin extends Component {
                                     Parking In
                                 </Grid>
                                 <Grid item xs={12} style={gridIsiStyle}>
-                                    Ini isi
+                                    {this.state.parkingIn}
                                 </Grid>
                             </Paper>
                         </Grid>
@@ -124,7 +216,7 @@ class DashBoardAdmin extends Component {
                                     Parking Out
                                 </Grid>
                                 <Grid item xs={12} style={gridIsiStyle}>
-                                    Ini isi
+                                    {this.state.parkingOut}
                                 </Grid>
                             </Paper>
                         </Grid>
@@ -134,7 +226,7 @@ class DashBoardAdmin extends Component {
                                     Member Income
                                 </Grid>
                                 <Grid item xs={12} style={gridIsiStyle}>
-                                    Ini isi
+                                    Rp. {this.totalIncome(this.state.incomeMemberReal)},-
                                 </Grid>
                             </Paper>
                         </Grid>
@@ -144,65 +236,27 @@ class DashBoardAdmin extends Component {
                                     Ticket Income
                                 </Grid>
                                 <Grid item xs={12} style={gridIsiStyle}>
-                                    Rp. 1.500.000,-
+                                    Rp. {this.totalIncome(this.state.incomeTicketReal)},-
                                 </Grid>
                             </Paper>
                         </Grid>
                         <Grid item xs={12}>
                             <Paper elevation={3} style={paperStyle}>
                                 <Grid item xs={12} style={gridJudulStyle}>
-                                    Total Income
+                                    Total income
                                 </Grid>
                                 <Grid item xs={12} style={gridIsiStyle}>
-                                    Ini isi
+                                    Rp. {
+                                        this.totalIncome(this.state.incomeMemberReal+this.state.incomeTicketReal)
+                                    },-
                                 </Grid>
                             </Paper>
                         </Grid>
                     </Grid>
-                    {/* <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <Paper className={useStyles.paper}>
-                                xs=12
-                            </Paper>
-                        </Grid>
-                    </Grid> */}
                 </ContainerSingle>
-                {/* <ContainerSingle className="div-atas">
-                    <ContainerSingle className="div-atas-1">
-                        <ContainerSingle className="judul-div-atas-1 judul-item">
-                            Amount Paid
-                        </ContainerSingle>
-                        <ContainerSingle className="content-div-atas-1 content-item">
-                            Rp. 12.000.000,-
-                        </ContainerSingle>
-                    </ContainerSingle>
-                    <ContainerSingle className="div-atas-2">
-                        <ContainerSingle className="judul-div-atas-2 judul-item">
-                            Report Date
-                        </ContainerSingle>
-                        <ContainerSingle className="content-div-atas-2 content-item">
-                            2021/03/01
-                        </ContainerSingle>
-                    </ContainerSingle>
+                <ContainerSingle className="content-dashboard-right">
+                    
                 </ContainerSingle>
-                <ContainerSingle className="div-bawah">
-                    <ContainerSingle className="div-bawah-1">
-                        <ContainerSingle className="judul-div-bawah-1 judul-item">
-                            Parking-IN
-                        </ContainerSingle>
-                        <ContainerSingle className="content-div-bawah-1 content-item">
-                            25
-                        </ContainerSingle>
-                    </ContainerSingle>
-                    <ContainerSingle className="div-bawah-2">
-                        <ContainerSingle className="judul-div-bawah-2 judul-item">
-                            Parking-OUT
-                        </ContainerSingle>
-                        <ContainerSingle className="content-div-bawah-2 content-item">
-                            24
-                        </ContainerSingle>
-                    </ContainerSingle>
-                </ContainerSingle> */}
             </ContainerSingle>
          );
     }

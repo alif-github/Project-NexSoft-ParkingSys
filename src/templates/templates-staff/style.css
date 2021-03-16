@@ -1,8 +1,8 @@
 .header-staff {
     width: 100%;
-    border: 1px #191818 solid;
+    border: 1px #0b4a1c solid;
     height: 10vh;
-    background-color: #191818;
+    background-color: #0b4a1c;
     color: white;
     padding-left: 2%;
     padding-top: 1%;
@@ -41,14 +41,14 @@
     text-align: center;
 }
 
-.menu-item {
+.menu-item-staff {
     margin-bottom: 5vh;
     padding: 2vh;
     color: black;
 }
 
-.menu-item:hover {
-    background-color: black;
+.menu-item-staff:hover {
+    background-color: #0b4a1c;
     padding: 2vh;
     border-radius: 2vh;
     color: white;
@@ -62,11 +62,11 @@
     padding: 2%;
 }
 
-.footer {
+.footer-staff {
     width: 100%;
-    border: 1px #191818 solid;
+    border: 1px #0b4a1c solid;
     height: 5vh;
-    background-color: #191818;
+    background-color: #0b4a1c;
     text-align: center;
     color: white;
     font-size: small;

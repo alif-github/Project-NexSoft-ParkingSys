@@ -39,7 +39,12 @@ const Routes = (props) => {
         return (
         <Router>
             <Switch>
-                <Route path="/" exact component={HomePageStaff}/>
+                <Route path="/" exact component={(props) => <HomePageStaff />}/>
+                <Route path="/profile/change-password" exact component={(props) => <HomePageStaff {...props} comp={<ChangePasswordProfile {...props}/>}/>}/>
+                <Route path="/profile" exact component={(props) => <HomePageStaff {...props} comp={<ProfileDet {...props}/>}/>}/>
+                <Route path="/member/add" exact component={(props) => <HomePageStaff {...props} comp={<AddMember {...props}/>}/>}/>
+                <Route path="/member/update/:id" exact component={(props) => <HomePageStaff {...props} comp={<UpdateMember {...props}/>}/>}/>
+                <Route path="/member" exact component={(props) => <HomePageStaff {...props} comp={<Member {...props}/>}/>}/>
                 <Route component={Page404}></Route>
             </Switch>
         </Router>
