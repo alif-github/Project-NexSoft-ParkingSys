@@ -18,11 +18,23 @@ public interface MemberServices {
     //Read the Data by Name
     Member findByNoPlat(String noPlat);
 
+    //Read the Data by idMember
+    Member findByIdMember(String idMember);
+
     //Read Data by query
     List<Member> readDataByQuery(Map<Object, Object> params);
 
     //Count Data by query
     int countAllDataByQuery(Map <Object, Object> params);
+
+    //Update the Data
+    void updateByIdMember(String idMember, Member member);
+
+    //Delete the Data (1 Data) by id
+    void deleteMemberById(String idMember);
+
+    //Sum money income from member
+    double sumAllData(String date);
 
     //is Member Exist
     //to check is member data exist or not

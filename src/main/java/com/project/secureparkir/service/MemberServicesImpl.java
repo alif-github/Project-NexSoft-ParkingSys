@@ -46,6 +46,17 @@ public class MemberServicesImpl implements MemberServices {
     }
 
     @Override
+    public Member findByIdMember(String idMember) {
+        Member member;
+        try {
+            member = memberRepository.findByIdMember(idMember);
+        } catch (Exception e) {
+            member = null;
+        }
+        return member;
+    }
+
+    @Override
     public List<Member> readDataByQuery(Map<Object, Object> params) {
         synchronized (this) {
             String query = "";
@@ -97,6 +108,25 @@ public class MemberServicesImpl implements MemberServices {
 
             return memberRepository.countAllDataByQuery(query);
         }
+    }
+
+    @Override
+    public void updateByIdMember(String idMember, Member member) {
+        synchronized (this) {
+            memberRepository.updateByIdMember(idMember, member);
+        }
+    }
+
+    @Override
+    public void deleteMemberById(String idMember) {
+        synchronized (this) {
+            memberRepository.deleteMemberById(idMember);
+        }
+    }
+
+    @Override
+    public double sumAllData(String date) {
+        return 0;
     }
 
     @Override
