@@ -73,7 +73,7 @@ class DashBoardAdmin extends Component {
         let monthTwoDigit = ("0" + (current_datetime.getMonth() + 1)).slice(-2)
         let dateTwoDigit = ("0" + current_datetime.getDate()).slice(-2)
         let formatted_date = monthTwoDigit + "-" + dateTwoDigit + "-" + yearTwoDigit
-        console.log("uji tanggal:",formatted_date)
+        console.log("uji tanggal:",formatted_date) //03-16-21
         //method to request API
         const requestOptionsPage = {
             method: 'GET'
@@ -179,7 +179,7 @@ class DashBoardAdmin extends Component {
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Paper elevation={3} style={paperTitleStyle}>
-                                Data Monitoring (Today)
+                                Data Monitoring
                             </Paper>
                         </Grid>
                         <Grid item xs={12}>
