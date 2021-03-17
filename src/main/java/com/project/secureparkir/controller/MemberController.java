@@ -1,7 +1,6 @@
 package com.project.secureparkir.controller;
 
 import com.project.secureparkir.model.Member;
-import com.project.secureparkir.model.User;
 import com.project.secureparkir.service.MemberServices;
 import com.project.secureparkir.util.CustomErrorType;
 import com.project.secureparkir.util.CustomSuccessType;

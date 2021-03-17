@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MemberRepository {
 
-    //CRUD Maintanance, relation to databases!
+    //CRUD Maintenance, relation to databases!
 
     //findLastIdUser
     Member findLastIdMember();
