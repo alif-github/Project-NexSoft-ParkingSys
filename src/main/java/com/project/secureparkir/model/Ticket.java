@@ -3,6 +3,7 @@ package com.project.secureparkir.model;
 import java.util.List;
 
 public class Ticket {
+    private String idData;
     private String id;
     private String noPol;
     private int idJenis;
@@ -18,9 +19,10 @@ public class Ticket {
     List<JenisKendaraan> jenisKendaraan;
 
 
-    public Ticket(String id, String noPol, int idJenis, String tglJamMasuk,
+    public Ticket(String idData, String id, String noPol, int idJenis, String tglJamMasuk,
                   String tglJamKeluar, double biayaParkir, int idDenda,
                   String namaStaff, double nominal) {
+        this.idData = idData;
         this.id = id;
         this.noPol = noPol;
         this.idJenis = idJenis;
@@ -32,9 +34,10 @@ public class Ticket {
         this.nominal = nominal;
     }
 
-    public Ticket(String id, String noPol, int idJenis, String tglJamMasuk, String tglJamKeluar,
+    public Ticket(String idData, String id, String noPol, int idJenis, String tglJamMasuk, String tglJamKeluar,
                   double biayaParkir, int idDenda, String namaStaff, double nominal,
                   List<Denda> denda, List<JenisKendaraan> jenisKendaraan) {
+        this.idData = idData;
         this.id = id;
         this.noPol = noPol;
         this.idJenis = idJenis;
@@ -50,6 +53,14 @@ public class Ticket {
 
     public Ticket() {
 
+    }
+
+    public String getIdData() {
+        return idData;
+    }
+
+    public void setIdData(String idData) {
+        this.idData = idData;
     }
 
     public String getId() {
@@ -143,7 +154,8 @@ public class Ticket {
     @Override
     public String toString() {
         return "Ticket{" +
-                "id='" + id + '\'' +
+                "idData='" + idData + '\'' +
+                ", id='" + id + '\'' +
                 ", noPol='" + noPol + '\'' +
                 ", idJenis=" + idJenis +
                 ", tglJamMasuk='" + tglJamMasuk + '\'' +

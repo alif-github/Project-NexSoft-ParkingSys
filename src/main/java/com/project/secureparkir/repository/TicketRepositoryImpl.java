@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Repository("ticketRepository")
 public class TicketRepositoryImpl implements TicketRepository {
@@ -48,6 +49,44 @@ public class TicketRepositoryImpl implements TicketRepository {
         return sb.toString();
     }
 
+    @Override
+    public Ticket findLastId() {
+        String querySql = "SELECT * FROM ticket ORDER BY tglJamMasuk DESC LIMIT 1";
+        return databases.queryForObject(querySql,
+                (rs, rowNum) ->
+                        new Ticket(
+                                rs.getString("idData"),
+                                rs.getString("id"),
+                                rs.getString("noPol"),
+                                rs.getInt("idJenis"),
+                                rs.getString("tglJamMasuk"),
+                                rs.getString("tglJamKeluar"),
+                                rs.getDouble("biayaParkir"),
+                                rs.getInt("idDenda"),
+                                rs.getString("namaStaff"),
+                                rs.getDouble("nominal")
+                        ));
+    }
+
+    @Override
+    public Ticket findLastIdForMember(String idMember) {
+        String querySql = "SELECT * FROM ticket ORDER BY tglJamMasuk DESC LIMIT 1 WHERE id=''"+idMember+"'";
+        return databases.queryForObject(querySql,
+                (rs, rowNum) ->
+                        new Ticket(
+                                rs.getString("idData"),
+                                rs.getString("id"),
+                                rs.getString("noPol"),
+                                rs.getInt("idJenis"),
+                                rs.getString("tglJamMasuk"),
+                                rs.getString("tglJamKeluar"),
+                                rs.getDouble("biayaParkir"),
+                                rs.getInt("idDenda"),
+                                rs.getString("namaStaff"),
+                                rs.getDouble("nominal")
+                        ));
+    }
+
     //Tiket masuk:::::::::::::::::::::::::::::::::::::>>>
     @Override
     public void createTicket(Boolean isMember, String idMember, Ticket ticket) {
@@ -72,7 +111,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         Timestamp ts = new Timestamp(date.getTime());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //---------------------------------------------------
-
+        ticket.setIdData(UUID.randomUUID().toString());
         ticket.setTglJamMasuk(formatter.format(ts));
         ticket.setTglJamKeluar("-");
         ticket.setBiayaParkir(0);
@@ -81,9 +120,10 @@ public class TicketRepositoryImpl implements TicketRepository {
         ticket.setIdDenda(3);
         //---------------------------------------------------
 
-        String sql = "INSERT INTO ticket(id,noPol,idJenis,tglJamMasuk,tglJamKeluar,biayaParkir,idDenda,namaStaff,nominal)" +
-                "VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO ticket(idData, id,noPol,idJenis,tglJamMasuk,tglJamKeluar,biayaParkir,idDenda,namaStaff,nominal)" +
+                "VALUES(?,?,?,?,?,?,?,?,?,?)";
         databases.update(sql,
+                ticket.getIdData(),
                 ticket.getId(),
                 ticket.getNoPol(),
                 ticket.getIdJenis(),
@@ -102,6 +142,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         ticket = databases.query(sql,
                 (rs, rowNum) ->
                 new Ticket(
+                        rs.getString("idData"),
                         rs.getString("id"),
                         rs.getString("noPol"),
                         rs.getInt("idJenis"),
@@ -114,6 +155,63 @@ public class TicketRepositoryImpl implements TicketRepository {
                         null,
                         null
                 ));
+        for (Ticket tc : ticket) {
+            String sql1 = "SELECT * FROM denda WHERE idDenda=?";
+            tc.setDenda(databases.query(sql1,
+                    preparedStatement -> preparedStatement.setInt(1,tc.getIdDenda()),
+                    (rs, rowNum) ->
+                            new Denda(
+                                    rs.getInt("idDenda"),
+                                    rs.getString("denda"),
+                                    rs.getDouble("jumlahDenda")
+                            )));
+            String sql2 = "SELECT * FROM jeniskendaraan WHERE idJenis="+tc.getIdJenis()+"";
+            tc.setJenisKendaraan(databases.query(sql2,
+                    (rs, rowNum) ->
+                            new JenisKendaraan(
+                                    rs.getInt("idJenis"),
+                                    rs.getString("jenis"),
+                                    rs.getDouble("value"),
+                                    rs.getDouble("firstValue")
+                            )));
+        }
+        return ticket;
+    }
+
+    @Override
+    public void exitTicket(Boolean isMember, String id, Ticket ticket) {
+        //keluar bisa masukin id atau masukin no plat
+        String sqlUpdateMember = "UPDATE ticket SET tglJamKeluar = ?, biayaParkir = ? WHERE idData = ?";
+        if (isMember) {
+            databases.update(sqlUpdateMember,
+                    ticket.getTglJamKeluar(),
+                    ticket.getBiayaParkir(),
+                    id);
+        } else {
+
+        }
+    }
+
+    @Override
+    public List<Ticket> readDataByQuery(String query, String pagging) {
+        List<Ticket> ticket;
+        String sql = "SELECT * FROM ticket "+query+" "+pagging+"";
+        ticket = databases.query(sql,
+                (rs, rowNum) ->
+                        new Ticket(
+                                rs.getString("idData"),
+                                rs.getString("id"),
+                                rs.getString("noPol"),
+                                rs.getInt("idJenis"),
+                                rs.getString("tglJamMasuk"),
+                                rs.getString("tglJamKeluar"),
+                                rs.getDouble("biayaParkir"),
+                                rs.getInt("idDenda"),
+                                rs.getString("namaStaff"),
+                                rs.getDouble("nominal"),
+                                null,
+                                null
+                        ));
         for (Ticket tc : ticket) {
             String sql1 = "SELECT * FROM denda WHERE idDenda=?";
             tc.setDenda(databases.query(sql1,

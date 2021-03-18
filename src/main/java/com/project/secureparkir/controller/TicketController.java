@@ -13,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -32,6 +34,8 @@ public class TicketController {
     @PostMapping("/parking-in/")
     public ResponseEntity<?> parkingIn(@RequestParam("isMember") int isMember, @RequestBody Ticket ticket) {
         logger.info("Create parking in");
+        Map<String, Object> output = new HashMap<>();
+
         Boolean isMemberTemp = null;
         if (isMember == 1) {
             isMemberTemp = true;
@@ -53,13 +57,17 @@ public class TicketController {
                     return new ResponseEntity<>(new CustomErrorType("Cannot Click Entry Twice!"), HttpStatus.BAD_REQUEST);
                 } else {
                     ticketServices.createTicket(isMemberTemp, ticket.getId(), ticket);
-                    return new ResponseEntity<>(new CustomSuccessType("Parking In Success"), HttpStatus.CREATED);
+                    output.put("id",ticketServices.findLastId().getId());
+                    output.put("message",new CustomSuccessType("Parking In Success"));
+                    return new ResponseEntity<>(output, HttpStatus.CREATED);
                 }
             }
         } else {
             //ini reguler
             ticketServices.createTicket(isMemberTemp, ticket.getId(), ticket);
-            return new ResponseEntity<>(new CustomSuccessType("Parking In Success"), HttpStatus.CREATED);
+            output.put("id",ticketServices.findLastId().getId());
+            output.put("message",new CustomSuccessType("Parking In Success"));
+            return new ResponseEntity<>(output, HttpStatus.CREATED);
         }
     }
 
@@ -71,5 +79,12 @@ public class TicketController {
         } else {
             return new ResponseEntity<>(ticketList, HttpStatus.OK);
         }
+    }
+
+    @PutMapping("/parkir-out/")
+    public ResponseEntity<?> parkingOut(@RequestParam("isMember") int isMember, @RequestBody Ticket ticket) {
+        logger.info("Update for exit");
+
+
     }
 }
