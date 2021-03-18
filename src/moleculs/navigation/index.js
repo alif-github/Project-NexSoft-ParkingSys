@@ -16,7 +16,7 @@ class Nav extends Component {
                 <Link to="/" style={{textDecoration: 'none'}}>
                     <ContainerSingle className="menu-item">
                         <H5 className="menu-content">
-                            Home
+                            Dashboard
                         </H5>
                     </ContainerSingle>
                 </Link>

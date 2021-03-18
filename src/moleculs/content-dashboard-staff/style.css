@@ -1,0 +1,16 @@
+.content-dashboard-staff {
+    margin-top: 1vh;
+    width: 30%;
+    display: float;
+    float: left;
+}
+.content-dashboard-right-staff {
+    margin-top: 1vh;
+    padding-left: 5vh;
+    width: 70%;
+    display: float;
+    float: left;
+}
+.btn-edit {
+    margin-top: 2vh;
+}

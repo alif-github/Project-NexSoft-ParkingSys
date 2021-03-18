@@ -5,6 +5,7 @@ import Login from '../../moleculs/login-mat-ui/login'
 import { connect } from "react-redux"
 
 import DashBoardAdmin from '../../moleculs/content-dashboard'
+import DashBoardStaff from '../../moleculs/content-dashboard-staff'
 import Staff from '../../moleculs/content-staff'
 import Member from '../../moleculs/content-member'
 import UpdateStaff from '../../moleculs/update-staff';
@@ -39,7 +40,7 @@ const Routes = (props) => {
         return (
         <Router>
             <Switch>
-                <Route path="/" exact component={(props) => <HomePageStaff />}/>
+                <Route path="/" exact component={(props) => <HomePageStaff {...props} comp={<DashBoardStaff/>}/>}/>
                 <Route path="/profile/change-password" exact component={(props) => <HomePageStaff {...props} comp={<ChangePasswordProfile {...props}/>}/>}/>
                 <Route path="/profile" exact component={(props) => <HomePageStaff {...props} comp={<ProfileDet {...props}/>}/>}/>
                 <Route path="/member/add" exact component={(props) => <HomePageStaff {...props} comp={<AddMember {...props}/>}/>}/>

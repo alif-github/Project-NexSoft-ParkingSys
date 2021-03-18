@@ -13,7 +13,7 @@ class NavStaff extends Component {
     render() { 
         return (
             <ContainerSingle className="menu-border">
-                <Link to="#" style={{textDecoration: 'none'}}>
+                <Link to="/" style={{textDecoration: 'none'}}>
                     <ContainerSingle className="menu-item-staff">
                         <H5 className="menu-content">
                             Dashboard
