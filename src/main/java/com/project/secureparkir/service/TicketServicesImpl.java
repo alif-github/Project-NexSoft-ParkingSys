@@ -27,10 +27,10 @@ public class TicketServicesImpl implements TicketServices {
     }
 
     @Override
-    public Ticket findLastIdForMember(String idMember) {
+    public Ticket findLastIdWithParams(String id) {
         Ticket ticket;
         try {
-            ticket = ticketRepository.findLastIdForMember(idMember);
+            ticket = ticketRepository.findLastIdWithParams(id);
         } catch (Exception e) {
             ticket = null;
         }

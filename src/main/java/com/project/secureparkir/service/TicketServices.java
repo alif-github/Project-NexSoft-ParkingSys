@@ -11,7 +11,7 @@ public interface TicketServices {
     Ticket findLastId();
 
     //findLastIdMember
-    Ticket findLastIdForMember(String idMember);
+    Ticket findLastIdWithParams(String id);
 
     //Create Ticket
     void createTicket(Boolean isMember, String idMember, Ticket ticket);

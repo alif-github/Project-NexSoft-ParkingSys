@@ -69,9 +69,10 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public Ticket findLastIdForMember(String idMember) {
-        String querySql = "SELECT * FROM ticket ORDER BY tglJamMasuk DESC LIMIT 1 WHERE id=''"+idMember+"'";
-        return databases.queryForObject(querySql,
+    public Ticket findLastIdWithParams(String id) {
+        String querySql = "SELECT * FROM ticket WHERE id='"+id+"' ORDER BY tglJamMasuk DESC LIMIT 1 ";
+        Ticket ticket;
+        ticket = databases.queryForObject(querySql,
                 (rs, rowNum) ->
                         new Ticket(
                                 rs.getString("idData"),
@@ -83,8 +84,29 @@ public class TicketRepositoryImpl implements TicketRepository {
                                 rs.getDouble("biayaParkir"),
                                 rs.getInt("idDenda"),
                                 rs.getString("namaStaff"),
-                                rs.getDouble("nominal")
+                                rs.getDouble("nominal"),
+                                null,
+                                null
                         ));
+        String sql1 = "SELECT * FROM denda WHERE idDenda=?";
+        ticket.setDenda(databases.query(sql1,
+                preparedStatement -> preparedStatement.setInt(1,ticket.getIdDenda()),
+                (rs, rowNum) ->
+                        new Denda(
+                                rs.getInt("idDenda"),
+                                rs.getString("denda"),
+                                rs.getDouble("jumlahDenda")
+                        )));
+        String sql2 = "SELECT * FROM jeniskendaraan WHERE idJenis="+ticket.getIdJenis()+"";
+        ticket.setJenisKendaraan(databases.query(sql2,
+                (rs, rowNum) ->
+                        new JenisKendaraan(
+                                rs.getInt("idJenis"),
+                                rs.getString("jenis"),
+                                rs.getDouble("value"),
+                                rs.getDouble("firstValue")
+                        )));
+        return ticket;
     }
 
     //Tiket masuk:::::::::::::::::::::::::::::::::::::>>>
@@ -181,14 +203,26 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public void exitTicket(Boolean isMember, String id, Ticket ticket) {
         //keluar bisa masukin id atau masukin no plat
-        String sqlUpdateMember = "UPDATE ticket SET tglJamKeluar = ?, biayaParkir = ? WHERE idData = ?";
+        String sqlUpdateMember = "UPDATE ticket SET tglJamKeluar = ? WHERE idData = ?";
+        String sqlUpdateReguler = "UPDATE ticket SET noPol = ? , idJenis = ? , tglJamKeluar = ? WHERE idData = ?";
+
+        //---------------------------------------------------
+        Date date = new Date();
+        Timestamp ts = new Timestamp(date.getTime());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //---------------------------------------------------
+        ticket.setTglJamKeluar(formatter.format(ts));
+
         if (isMember) {
             databases.update(sqlUpdateMember,
                     ticket.getTglJamKeluar(),
-                    ticket.getBiayaParkir(),
                     id);
         } else {
-
+            databases.update(sqlUpdateReguler,
+                    ticket.getNoPol(),
+                    ticket.getIdJenis(),
+                    ticket.getTglJamKeluar(),
+                    id);
         }
     }
 
