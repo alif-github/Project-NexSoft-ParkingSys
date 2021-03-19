@@ -88,6 +88,13 @@ H3 , .power-off {
     margin-right: 2vh;
 }
 
+.clock-panel {
+    float: right;
+    font-size: small;
+    margin-top: 1vh;
+    margin-right: 2vh;
+}
+
 .power-off:hover {
     float: right;
     font-size: small;

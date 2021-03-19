@@ -6,7 +6,7 @@ import NavStaff from '../../moleculs/navigation-staff'
 import Swal from 'sweetalert2'
 import { Redirect } from 'react-router-dom';
 import ProfileStaff from '../../moleculs/profile-staff';
-import Clock from '../../moleculs/clock-ontime';
+import ClockOnTime from '../../moleculs/clock-ontime';
 
 class HomePageStaff extends Component {
     constructor(props) {
@@ -38,17 +38,19 @@ class HomePageStaff extends Component {
         return ( 
             <ContainerSingle>
                 <ContainerSingle className="header-staff">
-                    <H3>
-                        Secure Parking Control Panel
-                    </H3>
-                    {/* <ContainerSingle>
-                        <Clock/>
-                    </ContainerSingle> */}
+                    <ContainerSingle className="title-panel">
+                        <H3>
+                            Secure Parking Control Panel
+                        </H3>
+                    </ContainerSingle>
                     <ContainerSingle className="power-off" onClick={() => this.handleLogout()}>
                         <I className="fa fa-power-off logout-icon" aria-hidden="true"></I>
                         <H5 className="logout">
                               Logout
                         </H5>
+                    </ContainerSingle>
+                    <ContainerSingle className="clock-panel">
+                        <ClockOnTime/>
                     </ContainerSingle>
                 </ContainerSingle>
                 <ContainerSingle className="body">

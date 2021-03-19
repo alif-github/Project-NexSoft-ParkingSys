@@ -1,39 +1,39 @@
 import React, { Component } from 'react';
-import { ContainerSingle } from '../../atomics';
-import moment from 'moment'
+import { ContainerSingle, H5 } from '../../atomics';
+var dateFormat = require("dateformat");
 
-class Clock extends Component {
+class ClockOnTime extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            date: null
-         }
-        this.getDateWithMoment = () => {
-            return moment().format('dddd, DD MMMM YYYY');
+        this.state = {
+            time: dateFormat(new Date())
         }
     }
-    componentDidUpdate() {
-        let counter = setInterval(timer , 1000)
-            function timer() {
-                this.setState({
-                    date: new Date()
-                })
-            }
+
+    componentDidMount() {
+        this.timerID = setInterval(() => this.tick(), 1000);
     }
-    render() {
-        console.log("render") 
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+
+    tick() {
+        var now = new Date();
+        this.setState({
+            time: dateFormat(now)
+        });
+    }
+
+    render() { 
         return ( 
             <ContainerSingle>
-                {
-                    this.getDateWithMoment()
-                }
-                | 
-                {
-                    this.state.date.toLocaleTimeString()
-                }
+                <H5>
+                    {this.state.time.toLocaleString()}
+                </H5>
             </ContainerSingle>
          );
     }
 }
  
-export default Clock;
+export default ClockOnTime;

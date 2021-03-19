@@ -154,7 +154,7 @@ class ParkingOutForm extends Component {
             }
         }
         this.handleGetDataAfterExit = () => {
-            const {idData, data} = this.state
+            const {idData} = this.state
             //method to request API
             const requestOptionsPage = {
                 method: 'GET'
@@ -179,7 +179,7 @@ class ParkingOutForm extends Component {
                 )
         }
         this.handleCalculateParkingFee = () => {
-            const {data, biayaParkir} = this.state
+            const {data} = this.state
             let tglJamMasukTemp = new Date(data.tglJamMasuk);
             let tglJamKeluarTemp = new Date(data.tglJamKeluar);
             let secondsTglJamMasukTemp = tglJamMasukTemp.getTime() / 1000;
@@ -192,16 +192,17 @@ class ParkingOutForm extends Component {
                 if (settingToMinute <= 5) {
                     //ini gratis
                 } else {
+                    console.log("dia lewat dari 5 menit");
                     //ini bayar yang awal banget
-                    let biaya = data.jenisKendaraan.firstValue
+                    let biaya = data.jenisKendaraan[0].firstValue
                     this.setState({
-                        biayaParkir: biaya
+                        biayaParkir: ""+biaya+""
                     })
                 }
             } else {
                 let settingToHoursMathCeil = Math.ceil(settingToHours) - 1;
                 this.setState({
-                    biayaParkir: (settingToHoursMathCeil * data.jenisKendaraan.value) + (1 * data.jenisKendaraan.firstValue)
+                    biayaParkir: (settingToHoursMathCeil * data.jenisKendaraan[0].value) + (1 * data.jenisKendaraan[0].firstValue)
                 })             
             }
         }
