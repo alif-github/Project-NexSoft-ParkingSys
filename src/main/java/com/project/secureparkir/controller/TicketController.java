@@ -10,6 +10,7 @@ import com.project.secureparkir.util.CustomSuccessType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -98,33 +99,55 @@ public class TicketController {
         }
     }
 
+    //Read Data By Ticket-ok
+    @GetMapping("/read-ticket/")
+    public ResponseEntity<?> getData(@RequestParam Map<Object, Object> params) {
+        List<Ticket> ticketList;
+        Map<String, Object> output = new HashMap<>();
+
+        try {
+            ticketList = ticketServices.readDataByQuery(params);
+            output.put("data",ticketList);
+            return new ResponseEntity<>(output, HttpStatus.OK);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
+        }
+    }
+
     @PutMapping("/parkir-out/")
     public ResponseEntity<?> parkingOut(@RequestParam("isMember") int isMember, @RequestParam("id") String id, @RequestBody Ticket ticket) {
         logger.info("Update for exit");
         Ticket dataPengunjung = ticketServices.findLastIdWithParams(id);
+        Map<String, Object> output = new HashMap<>();
 
         Boolean isMemberTemp = null;
         if (isMember == 1) isMemberTemp = true;
         else if (isMember == 0) isMemberTemp = false;
 
-        if (isMemberTemp && dataPengunjung.getId().contains("MEMBER-")) {
+        if (isMemberTemp && dataPengunjung.getId().contains("MEMBER-") && dataPengunjung.getTglJamKeluar().equalsIgnoreCase("-")) {
             if (dataPengunjung == null) {
                 //data member tidak ditemukan
                 return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
             } else {
                 //data member ditemukan
                 ticketServices.exitTicket(isMemberTemp, dataPengunjung.getIdData(), ticket);
-                return new ResponseEntity<>(new CustomSuccessType("Parking out success"), HttpStatus.OK);
+                output.put("id", dataPengunjung.getIdData());
+                output.put("message", new CustomSuccessType("Parking out success"));
+                return new ResponseEntity<>(output, HttpStatus.OK);
             }
-        } else {
+        } else if (!isMemberTemp && !dataPengunjung.getId().contains("MEMBER-") && dataPengunjung.getTglJamKeluar().equalsIgnoreCase("-")) {
             if (dataPengunjung == null) {
                 //data reguler tidak ditemukan
                 return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
             } else {
                 //data reguler ditemukan
                 ticketServices.exitTicket(isMemberTemp, dataPengunjung.getIdData(), ticket);
-                return new ResponseEntity<>(new CustomSuccessType("Parking out success"), HttpStatus.OK);
+                output.put("id", dataPengunjung.getIdData());
+                output.put("message", new CustomSuccessType("Parking out success"));
+                return new ResponseEntity<>(output, HttpStatus.OK);
             }
+        } else {
+            return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
         }
     }
 }
