@@ -81,12 +81,13 @@ class DashBoardStaff extends Component {
         this.handleParkirKeluar = () => {
             const {id} = this.state
             if (id.includes("MEMBER-")) {
-                alert("member")
                 this.setState({
                     isMemberOut: 1
                 })
             } else {
-                alert("reg")
+                this.setState({
+                    isMemberOut: 0
+                },() => this.props.history.push("/reguler-out/"+id+""));
             }
         }
     }
@@ -187,7 +188,7 @@ class DashBoardStaff extends Component {
                                     <form className={useStyles.root} noValidate autoComplete="off">
                                         <TextField
                                             style={inputStyle}
-                                            label="Input ID"
+                                            label="Input Ticket ID"
                                             name="id"
                                             value={this.state.id}
                                             onChange={this.handleExitById}

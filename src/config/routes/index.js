@@ -12,6 +12,7 @@ import UpdateStaff from '../../moleculs/update-staff';
 import UpdateMember from '../../moleculs/update-member';
 import AddStaff from '../../moleculs/add-staff'
 import AddMember from '../../moleculs/add-member'
+import ParkingOutForm from '../../moleculs/parking-out-form'
 
 import Page404 from "../../moleculs/404-Not-Found";
 import ProfileDet from "../../moleculs/profile-detail"
@@ -40,7 +41,8 @@ const Routes = (props) => {
         return (
         <Router>
             <Switch>
-                <Route path="/" exact component={(props) => <HomePageStaff {...props} comp={<DashBoardStaff/>}/>}/>
+                <Route path="/reguler-out/:id" exact component={(props) => <HomePageStaff {...props} comp={<ParkingOutForm/>}/>}/>
+                <Route path="/" exact component={(props) => <HomePageStaff {...props} comp={<DashBoardStaff {...props}/>}/>}/>
                 <Route path="/profile/change-password" exact component={(props) => <HomePageStaff {...props} comp={<ChangePasswordProfile {...props}/>}/>}/>
                 <Route path="/profile" exact component={(props) => <HomePageStaff {...props} comp={<ProfileDet {...props}/>}/>}/>
                 <Route path="/member/add" exact component={(props) => <HomePageStaff {...props} comp={<AddMember {...props}/>}/>}/>
