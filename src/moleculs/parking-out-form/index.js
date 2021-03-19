@@ -29,7 +29,8 @@ class ParkingOutForm extends Component {
             data: {},
             errorNoPol: false,
             helperTextNoPol: ' ',
-            noPol: ''
+            noPol: '',
+            biayaParkir: 'Free'
         }
         this.handleCancelAdd = () => {
             Swal.fire({
@@ -178,13 +179,31 @@ class ParkingOutForm extends Component {
                 )
         }
         this.handleCalculateParkingFee = () => {
-            const {data} = this.state
+            const {data, biayaParkir} = this.state
             let tglJamMasukTemp = new Date(data.tglJamMasuk);
             let tglJamKeluarTemp = new Date(data.tglJamKeluar);
             let secondsTglJamMasukTemp = tglJamMasukTemp.getTime() / 1000;
             let secondsTglJamKeluarTemp = tglJamKeluarTemp.getTime() / 1000;
             let selisihDetik = secondsTglJamKeluarTemp - secondsTglJamMasukTemp;
-            console.log("detik saat ini:",selisihDetik);
+            let settingToHours = selisihDetik/3600;
+            
+            if (settingToHours < 1) {
+                let settingToMinute = settingToHours * 60;
+                if (settingToMinute <= 5) {
+                    //ini gratis
+                } else {
+                    //ini bayar yang awal banget
+                    let biaya = data.jenisKendaraan.firstValue
+                    this.setState({
+                        biayaParkir: biaya
+                    })
+                }
+            } else {
+                let settingToHoursMathCeil = Math.ceil(settingToHours) - 1;
+                this.setState({
+                    biayaParkir: (settingToHoursMathCeil * data.jenisKendaraan.value) + (1 * data.jenisKendaraan.firstValue)
+                })             
+            }
         }
     }
     componentDidMount() {
@@ -194,6 +213,7 @@ class ParkingOutForm extends Component {
         })
     }
     render() {
+        console.log("biayaParkirnya adalah:",this.state.biayaParkir);
         const useStyles = makeStyles((theme) => ({
             root: {
                 '& > *': {
