@@ -28,6 +28,9 @@ public interface TicketRepository {
     //Exit ticket
     void exitTicket(Boolean isMember, String id, Ticket ticket);
 
+    //Update the Data
+    void updateTicket(String idData, Double jumlahDenda, Ticket ticket);
+
     //Read Data by Query
     List<Ticket> readDataByQuery(String query, String pagging);
 }

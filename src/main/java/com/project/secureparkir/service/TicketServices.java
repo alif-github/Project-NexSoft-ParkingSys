@@ -24,6 +24,9 @@ public interface TicketServices {
     //Exit ticket
     void exitTicket(Boolean isMember, String id, Ticket ticket);
 
+    //Update the Data
+    void updateTicket(String idData, Double jumlahDenda, Ticket ticket);
+
     //Read Data by query
     List<Ticket> readDataByQuery(Map<Object, Object> params);
 }

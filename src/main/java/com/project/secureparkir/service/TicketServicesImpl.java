@@ -64,6 +64,13 @@ public class TicketServicesImpl implements TicketServices {
     }
 
     @Override
+    public void updateTicket(String idData, Double jumlahDenda, Ticket ticket) {
+        synchronized (this) {
+            ticketRepository.updateTicket(idData, jumlahDenda, ticket);
+        }
+    }
+
+    @Override
     public List<Ticket> readDataByQuery(Map<Object, Object> params) {
         synchronized (this) {
             String query = "";

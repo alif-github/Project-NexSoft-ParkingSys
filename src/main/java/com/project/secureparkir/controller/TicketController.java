@@ -1,6 +1,5 @@
 package com.project.secureparkir.controller;
 
-import com.ctc.wstx.io.ReaderSource;
 import com.project.secureparkir.model.Member;
 import com.project.secureparkir.model.Ticket;
 import com.project.secureparkir.service.MemberServices;
@@ -148,6 +147,28 @@ public class TicketController {
             }
         } else {
             return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Update Ticket-ok
+    @PutMapping("/update/")
+    public ResponseEntity<?> updateSingleTicketNormal(@RequestParam("idData") String idData, @RequestBody Ticket ticket) {
+        logger.info("Update Data");
+
+        Map<Object, Object> input = new HashMap<>();
+        input.put("idData",idData);
+
+        List<Ticket> ticketList = ticketServices.readDataByQuery(input);
+
+        if (ticketList.isEmpty()) {
+            return new ResponseEntity<>(new CustomErrorType("Data not found"), HttpStatus.OK);
+        } else {
+            try {
+                ticketServices.updateTicket(idData, ticketList.get(0).getDenda().get(0).getJumlahDenda(), ticket);
+                return new ResponseEntity<>(new CustomSuccessType("Update Success"), HttpStatus.OK);
+            } catch(Exception e) {
+                return new ResponseEntity<>(new CustomErrorType("Update Failed"), HttpStatus.BAD_REQUEST);
+            }
         }
     }
 }

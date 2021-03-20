@@ -227,6 +227,16 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
+    public void updateTicket(String idData, Double jumlahDenda, Ticket ticket) {
+        Double nominal = (ticket.getBiayaParkir() + jumlahDenda);
+        String sqlUpdateTicket = "UPDATE ticket SET biayaParkir = ?, nominal = ? WHERE idData = ?";
+        databases.update(sqlUpdateTicket,
+                ticket.getBiayaParkir(),
+                nominal,
+                idData);
+    }
+
+    @Override
     public List<Ticket> readDataByQuery(String query, String pagging) {
         List<Ticket> ticket;
         String sql = "SELECT * FROM ticket "+query+" "+pagging+"";
