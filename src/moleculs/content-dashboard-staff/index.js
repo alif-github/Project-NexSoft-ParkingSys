@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ContainerSingle, Button } from '../../atomics';
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {
     Grid,
     Paper,
@@ -8,8 +8,6 @@ import {
 } from '@material-ui/core'
 import { connect } from "react-redux"
 import Swal from 'sweetalert2'
-import DateFnsUtils from '@date-io/date-fns' 
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import './style.css';
 
 class DashBoardStaff extends Component {
@@ -20,7 +18,7 @@ class DashBoardStaff extends Component {
             isMember: 0,
             id: "",
             isMemberOut: 0,
-            staffGate: this.props.user.namaUser
+            staffGate: this.props.user.idUser
          }
         this.handleSetValue = (event) => {
             this.setState({ 
@@ -74,7 +72,7 @@ class DashBoardStaff extends Component {
                         this.setState({
                             memberId: "",
                             isMember: 0,
-                            staffGate: this.props.user.namaUser
+                            staffGate: this.props.user.idUser
                         })
                     )
         }

@@ -169,6 +169,7 @@ class DashBoardAdmin extends Component {
               danger: 'red',
             },
           });
+        console.log("member duit:", this.state.incomeMemberReal)
 
         return ( 
             <ContainerSingle className="background-content-dashboard-adm">
@@ -226,7 +227,12 @@ class DashBoardAdmin extends Component {
                                     Member Income
                                 </Grid>
                                 <Grid item xs={12} style={gridIsiStyle}>
-                                    Rp. {this.totalIncome(this.state.incomeMemberReal)},-
+                                    {
+                                        this.state.incomeMemberReal === undefined ? 
+                                        "No Transaction"
+                                        :
+                                        "Rp. "+this.totalIncome(this.state.incomeMemberReal)+",-"
+                                    }
                                 </Grid>
                             </Paper>
                         </Grid>

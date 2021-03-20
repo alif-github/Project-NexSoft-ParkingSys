@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import Swal from 'sweetalert2'
 import {
     H5, I, Span, Button} from '../../atomics/index'
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { 
     Grid,
     Paper,
@@ -12,11 +12,7 @@ import {
     FormControl,
     MenuItem,
     Select,
-    IconButton,
-    Input,
-    InputLabel,
-    InputAdornment,
-    FormHelperText } from '@material-ui/core'
+    InputLabel } from '@material-ui/core'
 import './style.css';
 
 class ParkingOutForm extends Component {
@@ -74,7 +70,7 @@ class ParkingOutForm extends Component {
             }
         }
         this.handleFetchingDataParkirKeluar = () => {
-            const {noPol, idJenis, errorNoPol, id, idData} = this.state
+            const {noPol, idJenis, errorNoPol, id} = this.state
             if (
                 errorNoPol === true ||
                 noPol === '' ||
@@ -127,14 +123,6 @@ class ParkingOutForm extends Component {
                                 this.setState({
                                     idData: result.id
                                 },() => this.handleGetDataAfterExit())
-                                Swal.fire({
-                                    title: 'Success!',
-                                    text: result.message.successMessage,
-                                    icon: 'success',
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    showConfirmButton: false,
-                                })
                             }
                         },
                         // Note: it's important to handle errors here
@@ -191,20 +179,73 @@ class ParkingOutForm extends Component {
                 let settingToMinute = settingToHours * 60;
                 if (settingToMinute <= 5) {
                     //ini gratis
+                    this.setState({
+                        biayaParkir: 0
+                    },() => this.handleUpdateBiayaParkirNormal())
                 } else {
-                    console.log("dia lewat dari 5 menit");
                     //ini bayar yang awal banget
                     let biaya = data.jenisKendaraan[0].firstValue
                     this.setState({
                         biayaParkir: ""+biaya+""
-                    })
+                    },() => this.handleUpdateBiayaParkirNormal())
                 }
             } else {
                 let settingToHoursMathCeil = Math.ceil(settingToHours) - 1;
                 this.setState({
                     biayaParkir: (settingToHoursMathCeil * data.jenisKendaraan[0].value) + (1 * data.jenisKendaraan[0].firstValue)
-                })             
+                },() => this.handleUpdateBiayaParkirNormal())            
             }
+        }
+        this.handleUpdateBiayaParkirNormal = () => {
+            const {biayaParkir, idData} = this.state
+            //method to request API
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    biayaParkir: parseInt(biayaParkir)
+                })
+            };
+            //fetching data to url API Back-End
+            fetch("http://localhost:8080/ticket/update/?idData="+idData+"", requestOptions)
+                .then((response) => {
+                    return response.json()
+                })
+                .then(
+                    (result) => {
+                        //do what you want with the response here
+                        if (result.errorMessage) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: result.errorMessage,
+                                icon: 'error',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            })
+                        } else if (result.successMessage) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Bill of Payment: Rp. '+biayaParkir+',-',
+                                icon: 'success',
+                                showConfirmButton: true,
+                            })
+                        }
+                    },
+                    // Note: it's important to handle errors here
+                    // instead of a catch() block so that we don't swallow
+                    // exceptions from actual bugs in components.
+                    (error) => {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Server Not Connect',
+                            icon: 'error',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                        })
+                    }
+                )
         }
     }
     componentDidMount() {
@@ -214,7 +255,6 @@ class ParkingOutForm extends Component {
         })
     }
     render() {
-        console.log("biayaParkirnya adalah:",this.state.biayaParkir);
         const useStyles = makeStyles((theme) => ({
             root: {
                 '& > *': {

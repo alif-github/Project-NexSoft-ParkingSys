@@ -6,6 +6,7 @@ import Profile from '../../moleculs/profile'
 import Nav from '../../moleculs/navigation'
 import Swal from 'sweetalert2'
 import { Redirect } from 'react-router-dom';
+import ClockOnTime from '../../moleculs/clock-ontime';
 
 class HomePage extends Component {
     constructor(props) {
@@ -37,14 +38,19 @@ class HomePage extends Component {
         return ( 
             <ContainerSingle>
                 <ContainerSingle className="header">
-                    <H3>
-                        Secure Parking Integrated System
-                    </H3>
+                    <ContainerSingle className="title-panel">
+                        <H3>
+                            Secure Parking Control Panel
+                        </H3>
+                    </ContainerSingle>
                     <ContainerSingle className="power-off" onClick={() => this.handleLogout()}>
                         <I className="fa fa-power-off logout-icon" aria-hidden="true"></I>
                         <H5 className="logout">
                               Logout
                         </H5>
+                    </ContainerSingle>
+                    <ContainerSingle className="clock-panel">
+                        <ClockOnTime/>
                     </ContainerSingle>
                 </ContainerSingle>
                 <ContainerSingle className="body">

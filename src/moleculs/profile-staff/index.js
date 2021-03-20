@@ -27,7 +27,9 @@ class ProfileStaff extends Component {
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
                         <Paper className={useStyles.paper}>
-                            <center><I className="fa fa-user-circle user-icon" aria-hidden="true"></I></center>
+                            <center>
+                                <I className="fa fa-user-circle user-icon" aria-hidden="true"></I>
+                            </center>
                         </Paper>
                     </Grid>
                     <Grid item xs={9}>
