@@ -17,7 +17,6 @@ class DashBoardStaff extends Component {
             memberId: "",
             isMember: 0,
             id: "",
-            isMemberOut: 0,
             staffGate: this.props.user.idUser
          }
         this.handleSetValue = (event) => {
@@ -78,14 +77,17 @@ class DashBoardStaff extends Component {
         }
         this.handleParkirKeluar = () => {
             const {id} = this.state
-            if (id.includes("MEMBER-")) {
-                this.setState({
-                    isMemberOut: 1
-                })
+            if (id.length === 10) {
+                this.props.history.push("/reguler-out/"+id+"")
             } else {
-                this.setState({
-                    isMemberOut: 0
-                },() => this.props.history.push("/reguler-out/"+id+""));
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'ID Ticket must 10 character!',
+                    icon: 'error',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
             }
         }
     }

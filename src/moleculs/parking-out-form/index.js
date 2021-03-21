@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ContainerSingle } from '../../atomics';
+import { ContainerSingle, Image } from '../../atomics';
 import {withRouter} from 'react-router-dom';
 import Swal from 'sweetalert2'
 import {
@@ -71,30 +71,14 @@ class ParkingOutForm extends Component {
         }
         this.handleFetchingDataParkirKeluar = () => {
             const {noPol, idJenis, errorNoPol, id} = this.state
-            if (
-                errorNoPol === true ||
-                noPol === '' ||
-                idJenis === '' ) {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Please check your form',
-                        icon: 'error',
-                        timer: 2000,
-                        timerProgressBar: true,
-                        showConfirmButton: false,
-                    })
-            } else {
-                //method to request API
+            if (id.includes("MEMBER-") === true) {
                 const requestOptions = {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        noPol: '' + noPol + '',
-                        idJenis: idJenis
-                    })
+                    body: JSON.stringify({})
                 };
                 //fetching data to url API Back-End
-                fetch("http://localhost:8080/ticket/parkir-out/?isMember=0&id="+id+"", requestOptions)
+                fetch("http://localhost:8080/ticket/parkir-out/?isMember=1&id="+id+"", requestOptions)
                     .then((response) => {
                         return response.json()
                     })
@@ -139,6 +123,76 @@ class ParkingOutForm extends Component {
                             })
                         }
                     )
+            } else {
+                if (
+                    errorNoPol === true ||
+                    noPol === '' ||
+                    idJenis === '' ) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Please check your form',
+                            icon: 'error',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                        })
+                } else {
+                    //method to request API
+                    const requestOptions = {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            noPol: '' + noPol + '',
+                            idJenis: idJenis
+                        })
+                    };
+                    //fetching data to url API Back-End
+                    fetch("http://localhost:8080/ticket/parkir-out/?isMember=0&id="+id+"", requestOptions)
+                        .then((response) => {
+                            return response.json()
+                        })
+                        .then(
+                            (result) => {
+                                //do what you want with the response here
+                                if (result.errorMessage) {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: result.errorMessage,
+                                        icon: 'error',
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        showConfirmButton: false,
+                                    })
+                                } else if (result.error === 'Internal Server Error') {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Cannot find this Id ticket',
+                                        icon: 'error',
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        showConfirmButton: false,
+                                    })
+                                } else {
+                                    this.setState({
+                                        idData: result.id
+                                    },() => this.handleGetDataAfterExit())
+                                }
+                            },
+                            // Note: it's important to handle errors here
+                            // instead of a catch() block so that we don't swallow
+                            // exceptions from actual bugs in components.
+                            (error) => {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Cannot find this Id ticket',
+                                    icon: 'error',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    showConfirmButton: false,
+                                })
+                            }
+                        )
+                }
             }
         }
         this.handleGetDataAfterExit = () => {
@@ -224,12 +278,21 @@ class ParkingOutForm extends Component {
                                 showConfirmButton: false,
                             })
                         } else if (result.successMessage) {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Bill of Payment: Rp. '+biayaParkir+',-',
-                                icon: 'success',
-                                showConfirmButton: true,
-                            })
+                            if (this.state.id.includes("MEMBER-") === true) {
+                                Swal.fire({
+                                    title: 'MEMBER IS FREE!',
+                                    text: 'Check No.Police : '+this.state.data.noPol+'',
+                                    icon: 'success',
+                                    showConfirmButton: true,
+                                })
+                            } else {
+                                Swal.fire({
+                                    title: 'REGULER CONFIRM!',
+                                    text: 'Bill of Payment: Rp. '+biayaParkir+',-',
+                                    icon: 'success',
+                                    showConfirmButton: true,
+                                })
+                            }
                         }
                     },
                     // Note: it's important to handle errors here
@@ -255,6 +318,9 @@ class ParkingOutForm extends Component {
         })
     }
     render() {
+        // if (this.state.id.length < 10) this.props.history.push("")
+        console.log("Objek data: ", this.state.data)
+
         const useStyles = makeStyles((theme) => ({
             root: {
                 '& > *': {
@@ -295,43 +361,71 @@ class ParkingOutForm extends Component {
                     <Grid item xs={12}>
                         <Paper elevation={10} style={paperStyle}>
                             <Grid item xs={12} style={judulProfileStyle}>
-                                <H5>Exit Form Reguler</H5>
+                                <H5>
+                                    {
+                                        this.state.id.includes("MEMBER-") === true ?
+                                        "Member Parking Out"
+                                        :
+                                        "Reguler Parking Out Form"
+                                    }
+                                </H5>
                             </Grid>
                             <Grid item xs={12} style={gridIsiStyle}>
                                 <form className={useStyles.root} noValidate autoComplete="off">
-                                    <TextField
-                                        error={this.state.errorNoPol === true}
-                                        style={inputStyle} 
-                                        label="Input No.Police"
-                                        name="noPol"
-                                        defaultValue={this.state.noPol}
-                                        onChange={this.handleSetValue}
-                                        fullWidth
-                                        helperText={this.state.helperTextNoPol}
-                                    />
-                                    <FormControl fullWidth className={useStyles.formControl}>
-                                        <InputLabel>Type</InputLabel>
-                                        <Select
-                                            name="idJenis"
-                                            defaultValue={this.state.idJenis}
-                                            onChange={this.handleSetValue}
-                                            >
-                                            <MenuItem value={1}>Motorcycle</MenuItem>
-                                            <MenuItem value={2}>Car</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <ContainerSingle className="control-2">
-                                        <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingDataParkirKeluar()}>
-                                            <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
-                                            Next
-                                        </Button>
-                                        <Button className="btn btn-danger btn-float" onClick={() => this.handleCancelAdd()}>
-                                            <Span><I className="fa fa-times fa-icon" aria-hidden="true"></I></Span>
-                                            Back
-                                        </Button>
-                                    </ContainerSingle>
-                                </form>
-                            </Grid>
+                                    {
+                                        this.state.id.includes("MEMBER-") === true ?
+                                            <>
+                                                <ContainerSingle className="container-member-png">
+                                                    <Image className="memberPng" src="https://www.pngkey.com/png/full/16-162388_membership-badge-png-club-penguin-membership-logo.png" alt="member"/>
+                                                </ContainerSingle>
+                                                <ContainerSingle className="control-2">
+                                                    <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingDataParkirKeluar()}>
+                                                        <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
+                                                        Next
+                                                    </Button>
+                                                    <Button className="btn btn-danger btn-float" onClick={() => this.handleCancelAdd()}>
+                                                        <Span><I className="fa fa-times fa-icon" aria-hidden="true"></I></Span>
+                                                        Back
+                                                    </Button>
+                                                </ContainerSingle>
+                                            </>
+                                            :
+                                            <>
+                                                <TextField
+                                                error={this.state.errorNoPol === true}
+                                                style={inputStyle} 
+                                                label="Input No.Police"
+                                                name="noPol"
+                                                defaultValue={this.state.noPol}
+                                                onChange={this.handleSetValue}
+                                                fullWidth
+                                                helperText={this.state.helperTextNoPol}
+                                                />
+                                                <FormControl fullWidth className={useStyles.formControl}>
+                                                    <InputLabel>Type</InputLabel>
+                                                    <Select
+                                                        name="idJenis"
+                                                        defaultValue={this.state.idJenis}
+                                                        onChange={this.handleSetValue}
+                                                        >
+                                                        <MenuItem value={1}>Motorcycle</MenuItem>
+                                                        <MenuItem value={2}>Car</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                                <ContainerSingle className="control-2">
+                                                    <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingDataParkirKeluar()}>
+                                                        <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
+                                                        Next
+                                                    </Button>
+                                                    <Button className="btn btn-danger btn-float" onClick={() => this.handleCancelAdd()}>
+                                                        <Span><I className="fa fa-times fa-icon" aria-hidden="true"></I></Span>
+                                                        Back
+                                                    </Button>
+                                                </ContainerSingle>
+                                            </>
+                                    }
+                                    </form>
+                                </Grid>
                         </Paper>
                     </Grid>
                 </Grid>
