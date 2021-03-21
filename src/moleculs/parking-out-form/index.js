@@ -7,12 +7,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     Grid,
-    Paper,
-    TextField,
-    FormControl,
-    MenuItem,
-    Select,
-    InputLabel } from '@material-ui/core'
+    Paper } from '@material-ui/core'
 import './style.css';
 
 class ParkingOutForm extends Component {
@@ -23,9 +18,6 @@ class ParkingOutForm extends Component {
             idData:"",
             idJenis: 1,
             data: {},
-            errorNoPol: false,
-            helperTextNoPol: ' ',
-            noPol: '',
             biayaParkir: 'Free'
         }
         this.handleCancelAdd = () => {
@@ -39,7 +31,7 @@ class ParkingOutForm extends Component {
                 confirmButtonText: 'Yes!'
               }).then((result) => {
                 if (result.isConfirmed) {
-                    this.props.history.push('/')
+                    this.props.history.push('')
                 }
               })
         }
@@ -70,49 +62,31 @@ class ParkingOutForm extends Component {
             }
         }
         this.handleFetchingDataParkirKeluar = () => {
-            const {noPol, idJenis, errorNoPol, id} = this.state
-            if (id.includes("MEMBER-") === true) {
-                const requestOptions = {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({})
-                };
-                //fetching data to url API Back-End
-                fetch("http://localhost:8080/ticket/parkir-out/?isMember=1&id="+id+"", requestOptions)
-                    .then((response) => {
-                        return response.json()
-                    })
-                    .then(
-                        (result) => {
-                            //do what you want with the response here
-                            if (result.errorMessage) {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: result.errorMessage,
-                                    icon: 'error',
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    showConfirmButton: false,
-                                })
-                            } else if (result.error === 'Internal Server Error') {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Cannot find this Id ticket',
-                                    icon: 'error',
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    showConfirmButton: false,
-                                })
-                            } else {
-                                this.setState({
-                                    idData: result.id
-                                },() => this.handleGetDataAfterExit())
-                            }
-                        },
-                        // Note: it's important to handle errors here
-                        // instead of a catch() block so that we don't swallow
-                        // exceptions from actual bugs in components.
-                        (error) => {
+            const {id} = this.state
+            
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            };
+            //fetching data to url API Back-End
+            fetch("http://localhost:8080/ticket/parkir-out/?id="+id+"", requestOptions)
+                .then((response) => {
+                    return response.json()
+                })
+                .then(
+                    (result) => {
+                        //do what you want with the response here
+                        if (result.errorMessage) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: result.errorMessage,
+                                icon: 'error',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            })
+                        } else if (result.error === 'Internal Server Error') {
                             Swal.fire({
                                 title: 'Error!',
                                 text: 'Cannot find this Id ticket',
@@ -121,79 +95,26 @@ class ParkingOutForm extends Component {
                                 timerProgressBar: true,
                                 showConfirmButton: false,
                             })
+                        } else {
+                            this.setState({
+                                idData: result.id
+                            },() => this.handleGetDataAfterExit())
                         }
-                    )
-            } else {
-                if (
-                    errorNoPol === true ||
-                    noPol === '' ||
-                    idJenis === '' ) {
+                    },
+                    // Note: it's important to handle errors here
+                    // instead of a catch() block so that we don't swallow
+                    // exceptions from actual bugs in components.
+                    (error) => {
                         Swal.fire({
                             title: 'Error!',
-                            text: 'Please check your form',
+                            text: 'Cannot find this Id ticket',
                             icon: 'error',
                             timer: 2000,
                             timerProgressBar: true,
                             showConfirmButton: false,
                         })
-                } else {
-                    //method to request API
-                    const requestOptions = {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            noPol: '' + noPol + '',
-                            idJenis: idJenis
-                        })
-                    };
-                    //fetching data to url API Back-End
-                    fetch("http://localhost:8080/ticket/parkir-out/?isMember=0&id="+id+"", requestOptions)
-                        .then((response) => {
-                            return response.json()
-                        })
-                        .then(
-                            (result) => {
-                                //do what you want with the response here
-                                if (result.errorMessage) {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: result.errorMessage,
-                                        icon: 'error',
-                                        timer: 2000,
-                                        timerProgressBar: true,
-                                        showConfirmButton: false,
-                                    })
-                                } else if (result.error === 'Internal Server Error') {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: 'Cannot find this Id ticket',
-                                        icon: 'error',
-                                        timer: 2000,
-                                        timerProgressBar: true,
-                                        showConfirmButton: false,
-                                    })
-                                } else {
-                                    this.setState({
-                                        idData: result.id
-                                    },() => this.handleGetDataAfterExit())
-                                }
-                            },
-                            // Note: it's important to handle errors here
-                            // instead of a catch() block so that we don't swallow
-                            // exceptions from actual bugs in components.
-                            (error) => {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Cannot find this Id ticket',
-                                    icon: 'error',
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    showConfirmButton: false,
-                                })
-                            }
-                        )
-                }
-            }
+                    }
+                )
         }
         this.handleGetDataAfterExit = () => {
             const {idData} = this.state
@@ -287,8 +208,8 @@ class ParkingOutForm extends Component {
                                 })
                             } else {
                                 Swal.fire({
-                                    title: 'REGULER CONFIRM!',
-                                    text: 'Bill of Payment: Rp. '+biayaParkir+',-',
+                                    title: 'Bill of Payment: Rp. '+biayaParkir+',-',
+                                    text: 'Check No.Police : '+this.state.data.noPol+'',
                                     icon: 'success',
                                     showConfirmButton: true,
                                 })
@@ -391,27 +312,9 @@ class ParkingOutForm extends Component {
                                             </>
                                             :
                                             <>
-                                                <TextField
-                                                error={this.state.errorNoPol === true}
-                                                style={inputStyle} 
-                                                label="Input No.Police"
-                                                name="noPol"
-                                                defaultValue={this.state.noPol}
-                                                onChange={this.handleSetValue}
-                                                fullWidth
-                                                helperText={this.state.helperTextNoPol}
-                                                />
-                                                <FormControl fullWidth className={useStyles.formControl}>
-                                                    <InputLabel>Type</InputLabel>
-                                                    <Select
-                                                        name="idJenis"
-                                                        defaultValue={this.state.idJenis}
-                                                        onChange={this.handleSetValue}
-                                                        >
-                                                        <MenuItem value={1}>Motorcycle</MenuItem>
-                                                        <MenuItem value={2}>Car</MenuItem>
-                                                    </Select>
-                                                </FormControl>
+                                                <ContainerSingle className="container-member-png">
+                                                    <Image className="regulerPng" src="https://powerplan4u.co.id/assets/uploads/package/reguler.png" alt="reguler"/>
+                                                </ContainerSingle>
                                                 <ContainerSingle className="control-2">
                                                     <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingDataParkirKeluar()}>
                                                         <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>

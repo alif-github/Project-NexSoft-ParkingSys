@@ -17,6 +17,7 @@ import ParkingOutForm from '../../moleculs/parking-out-form'
 import Page404 from "../../moleculs/404-Not-Found";
 import ProfileDet from "../../moleculs/profile-detail"
 import ChangePasswordProfile from '../../moleculs/change-password-profile';
+import ParkingInForm from '../../moleculs/parking-in-form';
 
 
 const Routes = (props) => {
@@ -42,6 +43,7 @@ const Routes = (props) => {
         <Router>
             <Switch>
                 <Route path="/reguler-out/:id" exact component={(props) => <HomePageStaff {...props} comp={<ParkingOutForm/>}/>}/>
+                <Route path="/reguler-in" exact component={(props) => <HomePageStaff {...props} comp={<ParkingInForm {...props}/>}/>}/>
                 <Route path="/" exact component={(props) => <HomePageStaff {...props} comp={<DashBoardStaff {...props}/>}/>}/>
                 <Route path="/profile/change-password" exact component={(props) => <HomePageStaff {...props} comp={<ChangePasswordProfile {...props}/>}/>}/>
                 <Route path="/profile" exact component={(props) => <HomePageStaff {...props} comp={<ProfileDet {...props}/>}/>}/>

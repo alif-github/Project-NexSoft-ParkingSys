@@ -34,46 +34,49 @@ class DashBoardStaff extends Component {
         }
         this.handleFetchingDataParkirMasuk = () => {
             const {memberId , isMember, staffGate} = this.state
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id: ''+memberId+'',
-                    namaStaff: ''+staffGate+''
-                })
-            };
-            fetch("http://localhost:8080/ticket/parking-in/?isMember="+isMember+"", requestOptions)
-                    .then((response) => {
-                        return response.json()
+
+            if (isMember === 0) {
+                this.props.history.push("/reguler-in")
+            } else {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: ''+memberId+'',
+                        namaStaff: ''+staffGate+''
                     })
-                    .then((result) => {
-                        if (result.errorMessage) {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: result.errorMessage,
-                                icon: 'error',
-                                timer: 2000,
-                                timerProgressBar: true,
-                                showConfirmButton: false,
-                            })
-                        } else {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: '['+result.id+'] '+result.message.successMessage+'',
-                                icon: 'success',
-                                timer: 2000,
-                                timerProgressBar: true,
-                                showConfirmButton: false,
-                            })
-                        }
-                    })
-                    .then(
-                        this.setState({
-                            memberId: "",
-                            isMember: 0,
-                            staffGate: this.props.user.idUser
+                };
+                fetch("http://localhost:8080/ticket/parking-in/?isMember="+isMember+"", requestOptions)
+                        .then((response) => {
+                            return response.json()
                         })
-                    )
+                        .then((result) => {
+                            if (result.errorMessage) {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: result.errorMessage,
+                                    icon: 'error',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    showConfirmButton: false,
+                                })
+                            } else {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: '['+result.id+'] '+result.message.successMessage+'',
+                                    icon: 'success',
+                                    showConfirmButton: true,
+                                })
+                            }
+                        })
+                        .then(
+                            this.setState({
+                                memberId: "",
+                                isMember: 0,
+                                staffGate: this.props.user.idUser
+                            })
+                        )
+            }
         }
         this.handleParkirKeluar = () => {
             const {id} = this.state
