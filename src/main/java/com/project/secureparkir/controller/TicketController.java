@@ -114,33 +114,18 @@ public class TicketController {
     }
 
     @PutMapping("/parkir-out/")
-    public ResponseEntity<?> parkingOut(@RequestParam("isMember") int isMember, @RequestParam("id") String id, @RequestBody Ticket ticket) {
+    public ResponseEntity<?> parkingOut(@RequestParam("id") String id, @RequestBody Ticket ticket) {
         logger.info("Update for exit");
         Ticket dataPengunjung = ticketServices.findLastIdWithParams(id);
         Map<String, Object> output = new HashMap<>();
 
-        Boolean isMemberTemp = null;
-        if (isMember == 1) isMemberTemp = true;
-        else if (isMember == 0) isMemberTemp = false;
-
-        if (isMemberTemp && dataPengunjung.getId().contains("MEMBER-") && dataPengunjung.getTglJamKeluar().equalsIgnoreCase("-")) {
+        if (dataPengunjung.getTglJamKeluar().equalsIgnoreCase("-")) {
             if (dataPengunjung == null) {
                 //data member tidak ditemukan
                 return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
             } else {
                 //data member ditemukan
-                ticketServices.exitTicket(isMemberTemp, dataPengunjung.getIdData(), ticket);
-                output.put("id", dataPengunjung.getIdData());
-                output.put("message", new CustomSuccessType("Parking out success"));
-                return new ResponseEntity<>(output, HttpStatus.OK);
-            }
-        } else if (!isMemberTemp && !dataPengunjung.getId().contains("MEMBER-") && dataPengunjung.getTglJamKeluar().equalsIgnoreCase("-")) {
-            if (dataPengunjung == null) {
-                //data reguler tidak ditemukan
-                return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
-            } else {
-                //data reguler ditemukan
-                ticketServices.exitTicket(isMemberTemp, dataPengunjung.getIdData(), ticket);
+                ticketServices.exitTicket(dataPengunjung.getIdData(), ticket);
                 output.put("id", dataPengunjung.getIdData());
                 output.put("message", new CustomSuccessType("Parking out success"));
                 return new ResponseEntity<>(output, HttpStatus.OK);

@@ -124,8 +124,6 @@ public class TicketRepositoryImpl implements TicketRepository {
         } else {
             String idTicketTemp = generateRandomString(10);
             ticket.setId(idTicketTemp);
-            ticket.setNoPol("-");
-            ticket.setIdJenis(0);
         }
 
         //---------------------------------------------------
@@ -201,10 +199,9 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public void exitTicket(Boolean isMember, String id, Ticket ticket) {
+    public void exitTicket(String id, Ticket ticket) {
         //keluar bisa masukin id atau masukin no plat
-        String sqlUpdateMember = "UPDATE ticket SET tglJamKeluar = ? WHERE idData = ?";
-        String sqlUpdateReguler = "UPDATE ticket SET noPol = ? , idJenis = ? , tglJamKeluar = ? WHERE idData = ?";
+        String sqlUpdate = "UPDATE ticket SET tglJamKeluar = ? WHERE idData = ?";
 
         //---------------------------------------------------
         Date date = new Date();
@@ -213,17 +210,9 @@ public class TicketRepositoryImpl implements TicketRepository {
         //---------------------------------------------------
         ticket.setTglJamKeluar(formatter.format(ts));
 
-        if (isMember) {
-            databases.update(sqlUpdateMember,
-                    ticket.getTglJamKeluar(),
-                    id);
-        } else {
-            databases.update(sqlUpdateReguler,
-                    ticket.getNoPol(),
-                    ticket.getIdJenis(),
-                    ticket.getTglJamKeluar(),
-                    id);
-        }
+        databases.update(sqlUpdate,
+                ticket.getTglJamKeluar(),
+                id);
     }
 
     @Override

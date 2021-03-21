@@ -26,7 +26,7 @@ public interface TicketRepository {
 
     //Update the Data
     //Exit ticket
-    void exitTicket(Boolean isMember, String id, Ticket ticket);
+    void exitTicket(String id, Ticket ticket);
 
     //Update the Data
     void updateTicket(String idData, Double jumlahDenda, Ticket ticket);

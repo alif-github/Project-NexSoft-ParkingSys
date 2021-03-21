@@ -57,9 +57,9 @@ public class TicketServicesImpl implements TicketServices {
     }
 
     @Override
-    public void exitTicket(Boolean isMember, String id, Ticket ticket) {
+    public void exitTicket(String id, Ticket ticket) {
         synchronized (this) {
-            ticketRepository.exitTicket(isMember, id, ticket);
+            ticketRepository.exitTicket(id, ticket);
         }
     }
 
