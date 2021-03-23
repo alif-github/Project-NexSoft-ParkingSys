@@ -14,8 +14,11 @@ public interface TicketRepository {
     //findLastIdPengunjung
     Ticket findLastId();
 
-    //findLastIdMember
+    //findLastPersonById
     Ticket findLastIdWithParams(String id);
+
+    //findLastPersonByNoPol
+    Ticket findLastNoPolWithParams(String noPol);
 
     //Create Ticket
     void createTicket(Boolean isMember, String idMember, Ticket ticket);
@@ -26,11 +29,27 @@ public interface TicketRepository {
 
     //Update the Data
     //Exit ticket
-    void exitTicket(String id, Ticket ticket);
+    void exitTicketNormal(String idData, Ticket ticket);
+
+    //Update the Data
+    //Exit ticket
+    void exitTicketDenda(String idData, String id, Ticket ticket);
 
     //Update the Data
     void updateTicket(String idData, Double jumlahDenda, Ticket ticket);
 
     //Read Data by Query
     List<Ticket> readDataByQuery(String query, String pagging);
+
+    //Count Data by Query
+    int countAllDataByQuery(String query);
+
+    //Count Data by Query
+    int countInByQuery(String query);
+
+    //Count Data by Query
+    int countOutByQuery(String query);
+
+    //Sum Daya by Query
+    Double sumAllDataByQuery(String query);
 }

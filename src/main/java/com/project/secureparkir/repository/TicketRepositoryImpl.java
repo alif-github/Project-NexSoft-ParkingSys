@@ -109,6 +109,47 @@ public class TicketRepositoryImpl implements TicketRepository {
         return ticket;
     }
 
+    @Override
+    public Ticket findLastNoPolWithParams(String noPol) {
+        String querySql = "SELECT * FROM ticket WHERE noPol='"+noPol+"' ORDER BY tglJamMasuk DESC LIMIT 1 ";
+        Ticket ticket;
+        ticket = databases.queryForObject(querySql,
+                (rs, rowNum) ->
+                        new Ticket(
+                                rs.getString("idData"),
+                                rs.getString("id"),
+                                rs.getString("noPol"),
+                                rs.getInt("idJenis"),
+                                rs.getString("tglJamMasuk"),
+                                rs.getString("tglJamKeluar"),
+                                rs.getDouble("biayaParkir"),
+                                rs.getInt("idDenda"),
+                                rs.getString("namaStaff"),
+                                rs.getDouble("nominal"),
+                                null,
+                                null
+                        ));
+        String sql1 = "SELECT * FROM denda WHERE idDenda=?";
+        ticket.setDenda(databases.query(sql1,
+                preparedStatement -> preparedStatement.setInt(1,ticket.getIdDenda()),
+                (rs, rowNum) ->
+                        new Denda(
+                                rs.getInt("idDenda"),
+                                rs.getString("denda"),
+                                rs.getDouble("jumlahDenda")
+                        )));
+        String sql2 = "SELECT * FROM jeniskendaraan WHERE idJenis="+ticket.getIdJenis()+"";
+        ticket.setJenisKendaraan(databases.query(sql2,
+                (rs, rowNum) ->
+                        new JenisKendaraan(
+                                rs.getInt("idJenis"),
+                                rs.getString("jenis"),
+                                rs.getDouble("value"),
+                                rs.getDouble("firstValue")
+                        )));
+        return ticket;
+    }
+
     //Tiket masuk:::::::::::::::::::::::::::::::::::::>>>
     @Override
     public void createTicket(Boolean isMember, String idMember, Ticket ticket) {
@@ -199,8 +240,7 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public void exitTicket(String id, Ticket ticket) {
-        //keluar bisa masukin id atau masukin no plat
+    public void exitTicketNormal(String idData, Ticket ticket) {
         String sqlUpdate = "UPDATE ticket SET tglJamKeluar = ? WHERE idData = ?";
 
         //---------------------------------------------------
@@ -212,7 +252,30 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         databases.update(sqlUpdate,
                 ticket.getTglJamKeluar(),
-                id);
+                idData);
+    }
+
+    @Override
+    public void exitTicketDenda(String idData, String id, Ticket ticket) {
+        String sqlUpdate = "UPDATE ticket SET tglJamKeluar = ?, idDenda = ? WHERE idData = ?";
+
+        //---------------------------------------------------
+        Date date = new Date();
+        Timestamp ts = new Timestamp(date.getTime());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //---------------------------------------------------
+        ticket.setTglJamKeluar(formatter.format(ts));
+
+        if (id.contains("MEMBER-")) {
+            ticket.setIdDenda(1);
+        } else {
+            ticket.setIdDenda(2);
+        }
+        databases.update(sqlUpdate,
+                ticket.getTglJamKeluar(),
+                ticket.getIdDenda(),
+                idData);
+
     }
 
     @Override
@@ -266,5 +329,37 @@ public class TicketRepositoryImpl implements TicketRepository {
                             )));
         }
         return ticket;
+    }
+
+    @Override
+    public int countAllDataByQuery(String query) {
+        String sql = "SELECT COUNT(idData) as count FROM ticket " + query;
+        int countTicket = databases.queryForObject(
+                sql, Integer.class);
+        return countTicket;
+    }
+
+    @Override
+    public int countInByQuery(String query) {
+        String sql = "SELECT COUNT(tglJamMasuk) as count FROM ticket " + query;
+        int countTicket = databases.queryForObject(
+                sql, Integer.class);
+        return countTicket;
+    }
+
+    @Override
+    public int countOutByQuery(String query) {
+        String sql = "SELECT COUNT(tglJamKeluar) as count FROM ticket " + query;
+        int countTicket = databases.queryForObject(
+                sql, Integer.class);
+        return countTicket;
+    }
+
+    @Override
+    public Double sumAllDataByQuery(String query) {
+        String sql = "SELECT SUM(nominal) as payment FROM ticket " + query;
+        Double sumTicket = databases.queryForObject(
+                sql, Double.class);
+        return sumTicket;
     }
 }

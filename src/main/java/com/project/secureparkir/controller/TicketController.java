@@ -106,6 +106,10 @@ public class TicketController {
 
         try {
             ticketList = ticketServices.readDataByQuery(params);
+            output.put("jumlah", ticketServices.countAllDataByQuery(params));
+            output.put("payment", ticketServices.sumAllDataByQuery(params));
+            output.put("in", ticketServices.countInByQuery(params));
+            output.put("out", ticketServices.countOutByQuery(params));
             output.put("data",ticketList);
             return new ResponseEntity<>(output, HttpStatus.OK);
         } catch (DataAccessException e) {
@@ -114,21 +118,41 @@ public class TicketController {
     }
 
     @PutMapping("/parkir-out/")
-    public ResponseEntity<?> parkingOut(@RequestParam("id") String id, @RequestBody Ticket ticket) {
+    public ResponseEntity<?> parkingOut(@RequestParam("id") String id, @RequestParam("noPol") String noPol, @RequestBody Ticket ticket) {
         logger.info("Update for exit");
-        Ticket dataPengunjung = ticketServices.findLastIdWithParams(id);
+        Ticket dataPengunjungById = ticketServices.findLastIdWithParams(id);
+        Ticket dataPengunjungByNoPol = ticketServices.findLastNoPolWithParams(noPol);
         Map<String, Object> output = new HashMap<>();
 
-        if (dataPengunjung.getTglJamKeluar().equalsIgnoreCase("-")) {
-            if (dataPengunjung == null) {
-                //data member tidak ditemukan
-                return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
+        if (!id.isBlank() && noPol.isBlank()) {
+            if (dataPengunjungById.getTglJamKeluar().equalsIgnoreCase("-")) {
+                if (dataPengunjungById == null) {
+                    //data member tidak ditemukan
+                    return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
+                } else {
+                    //data ditemukan
+                    ticketServices.exitTicketNormal(dataPengunjungById.getIdData(), ticket);
+                    output.put("idData", dataPengunjungById.getIdData());
+                    output.put("message", new CustomSuccessType("Parking out success"));
+                    return new ResponseEntity<>(output, HttpStatus.OK);
+                }
             } else {
-                //data member ditemukan
-                ticketServices.exitTicket(dataPengunjung.getIdData(), ticket);
-                output.put("id", dataPengunjung.getIdData());
-                output.put("message", new CustomSuccessType("Parking out success"));
-                return new ResponseEntity<>(output, HttpStatus.OK);
+                return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
+            }
+        } else if (!noPol.isBlank() && id.isBlank()) {
+            if (dataPengunjungByNoPol.getTglJamKeluar().equalsIgnoreCase("-")) {
+                if (dataPengunjungByNoPol == null) {
+                    //data member tidak ditemukan
+                    return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
+                } else {
+                    //data ditemukan
+                    ticketServices.exitTicketDenda(dataPengunjungByNoPol.getIdData(), dataPengunjungByNoPol.getId(), ticket);
+                    output.put("idData", dataPengunjungByNoPol.getIdData());
+                    output.put("message", new CustomSuccessType("Parking out success"));
+                    return new ResponseEntity<>(output, HttpStatus.OK);
+                }
+            } else {
+                return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
             }
         } else {
             return new ResponseEntity<>(new CustomErrorType("Parking out failed"), HttpStatus.BAD_REQUEST);
