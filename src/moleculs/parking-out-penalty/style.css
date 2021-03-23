@@ -1,0 +1,38 @@
+.container-reguler {
+    background-color: #babab3;
+    height: 100%;
+    width: 100%;
+}
+
+.container-reguler-exit1 {
+    background-color: #babab3;
+    height: 100%;
+    width: 30%;
+    padding-top: 8vh;
+    float: left;
+}
+
+.container-reguler-exit2 {
+    background-color: #babab3;
+    height: 100%;
+    width: 70%;
+    padding-top: 8vh;
+    float: left;
+}
+
+.penaltyPng {
+    width: 17vw;
+    margin-top: 10vh;
+}
+
+.regulerPng {
+    width: 15vw;
+}
+
+.container-member-png {
+    text-align: -webkit-center;
+}
+
+.column-payment {
+    text-align: left;
+}

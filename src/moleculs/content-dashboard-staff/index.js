@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core'
 import { connect } from "react-redux"
 import Swal from 'sweetalert2'
+import DashboardTransaction from '../../moleculs/dashboard-today-staff'
 import './style.css';
 
 class DashBoardStaff extends Component {
@@ -17,21 +18,22 @@ class DashBoardStaff extends Component {
             memberId: "",
             isMember: 0,
             id: "",
+            noPol: "",
             staffGate: this.props.user.idUser
          }
-        this.handleSetValue = (event) => {
+        this.handleSetValueParkingIn = (event) => {
             this.setState({ 
                 ...this.state, 
                 [event.target.name]: event.target.value,
                 isMember: 1
             });
         };
-        this.handleExitById = (event) => {
+        this.handleSetValue = (event) => {
             this.setState({
                 ...this.state,
                 [event.target.name]: event.target.value
             })
-        }
+        };
         this.handleFetchingDataParkirMasuk = () => {
             const {memberId , isMember, staffGate} = this.state
 
@@ -79,9 +81,11 @@ class DashBoardStaff extends Component {
             }
         }
         this.handleParkirKeluar = () => {
-            const {id} = this.state
+            const {id , noPol} = this.state
             if (id.length === 10) {
                 this.props.history.push("/reguler-out/"+id+"")
+            } else if (noPol !== "") {
+                this.props.history.push("/reguler-out-penalty/"+noPol+"")
             } else {
                 Swal.fire({
                     title: 'Error!',
@@ -165,7 +169,7 @@ class DashBoardStaff extends Component {
                                             label="Member ID"
                                             name="memberId"
                                             value={this.state.memberId}
-                                            onChange={this.handleSetValue}
+                                            onChange={this.handleSetValueParkingIn}
                                             fullWidth
                                             helperText="if Member, you must fill in the input form"
                                         />
@@ -194,14 +198,14 @@ class DashBoardStaff extends Component {
                                             label="Input Ticket ID"
                                             name="id"
                                             value={this.state.id}
-                                            onChange={this.handleExitById}
+                                            onChange={this.handleSetValue}
                                             fullWidth
                                         />
                                         <TextField
                                             style={inputStyle}
                                             label="Input No.Police"
-                                            name="memberId"
-                                            value={this.state.memberId}
+                                            name="noPol"
+                                            value={this.state.noPol}
                                             onChange={this.handleSetValue}
                                             fullWidth
                                             helperText="Optional input"
@@ -211,9 +215,7 @@ class DashBoardStaff extends Component {
                                 <Grid item xs={12} style={gridIsiStyle}>
                                     <center>
                                         <Button className="btn btn-danger btn-edit" onClick={() => this.handleParkirKeluar()}>
-                                            {
-                                                this.state.memberId === "" ? "Parking Out" : "Member In"
-                                            }
+                                            Parking Out
                                         </Button>
                                     </center>
                                 </Grid>
@@ -222,7 +224,7 @@ class DashBoardStaff extends Component {
                     </Grid>
                 </ContainerSingle>
                 <ContainerSingle className="content-dashboard-right-staff">
-                    Isinya...
+                    <DashboardTransaction/>
                 </ContainerSingle>
             </ContainerSingle>
          );

@@ -1,0 +1,50 @@
+.report {
+    width: 100%;
+}
+.judul-report {
+    margin: auto;
+    width: 100%;
+    height: 8vh;
+}
+.left-nav {
+    float: left;
+    width: 10%;
+    height: 70vh;
+    background-color: black;
+    color: white;
+    padding: 2vh;
+    box-sizing: border-box;
+    margin-right: 2vh;
+    border-radius: 1vh;
+}
+
+.middle-content {
+    float: left;
+    width: 87.5%;
+    height: 71vh;
+    margin-right: 2vh;
+}
+
+.menu-title {
+    text-align: center;
+    background-color: #fcb134;
+    border-radius: 1vh;
+    padding: 1vh;
+    color: black;
+    vertical-align: middle;
+}
+.nav-title {
+    text-align: center;
+    color: white;
+    vertical-align: middle;
+    margin-top: 12vh;
+}
+.nav-title:hover {
+    text-align: center;
+    color: black;
+    background-color: white;
+    vertical-align: middle;
+    margin-top: 12vh;
+    cursor: pointer;
+    border-radius: 0.5vh;
+}

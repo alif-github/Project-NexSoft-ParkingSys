@@ -7,14 +7,16 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { 
     Grid,
-    Paper } from '@material-ui/core'
+    Paper,
+    TextField, } from '@material-ui/core'
 import './style.css';
+import { Spa } from '@material-ui/icons';
 
-class ParkingOutForm extends Component {
+class ParkingOutPenalty extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            id:"",
+            noPol:"",
             idData:"",
             idJenis: 1,
             data: {},
@@ -62,7 +64,7 @@ class ParkingOutForm extends Component {
             }
         }
         this.handleFetchingDataParkirKeluar = () => {
-            const {id} = this.state
+            const {noPol} = this.state
             
             const requestOptions = {
                 method: 'PUT',
@@ -70,7 +72,7 @@ class ParkingOutForm extends Component {
                 body: JSON.stringify({})
             };
             //fetching data to url API Back-End
-            fetch("http://localhost:8080/ticket/parkir-out/?id="+id+"&noPol=", requestOptions)
+            fetch("http://localhost:8080/ticket/parkir-out/?id=&noPol="+noPol+"", requestOptions)
                 .then((response) => {
                     return response.json()
                 })
@@ -199,21 +201,7 @@ class ParkingOutForm extends Component {
                                 showConfirmButton: false,
                             })
                         } else if (result.successMessage) {
-                            if (this.state.id.includes("MEMBER-") === true) {
-                                Swal.fire({
-                                    title: 'MEMBER IS FREE!',
-                                    text: 'Check No.Police : '+this.state.data.noPol+'',
-                                    icon: 'success',
-                                    showConfirmButton: true,
-                                })
-                            } else {
-                                Swal.fire({
-                                    title: 'Bill of Payment: Rp. '+biayaParkir+',-',
-                                    text: 'Check No.Police : '+this.state.data.noPol+'',
-                                    icon: 'success',
-                                    showConfirmButton: true,
-                                })
-                            }
+                            this.handleInfoPaymentBill()
                         }
                     },
                     // Note: it's important to handle errors here
@@ -231,16 +219,41 @@ class ParkingOutForm extends Component {
                     }
                 )
         }
+        this.handleInfoPaymentBill = () => {
+            const {idData} = this.state
+            //method to request API
+            const requestOptionsPage = {
+                method: 'GET'
+            };
+            fetch("http://localhost:8080/ticket/read-ticket/?idData="+idData+"",requestOptionsPage)
+                .then((response) => {
+                    return response.json()
+                })
+                .then(
+                    (result) => {
+                        //do what you want with the response here
+                        if (result.data.length > 0) {
+                            this.setState({
+                                data: result.data[0]
+                            })
+                        }
+                    },
+                    // Note: it's important to handle errors here
+                    // instead of a catch() block so that we don't swallow
+                    // exceptions from actual bugs in components.
+                    (error) => {}
+                )
+        }
     }
     componentDidMount() {
-        let id = this.props.match.params.id
+        let noPol = this.props.match.params.noPol
         this.setState({
-            id: id
+            noPol: noPol
         })
     }
     render() {
         // if (this.state.id.length < 10) this.props.history.push("")
-        console.log("Objek data: ", this.state.data)
+        this.state.data.denda && console.log("Objek data: ", this.state.data.denda[0])
 
         const useStyles = makeStyles((theme) => ({
             root: {
@@ -258,8 +271,22 @@ class ParkingOutForm extends Component {
         }));
         const paperStyle = {
             padding: 13,
-            height: '60vh',
-            width: '40%',
+            height: '64vh',
+            width: '90%',
+            margin: 'auto',
+            borderRadius: '1vh'
+        } 
+        const paperTotalStyle = {
+            padding: 13,
+            height: '38vh',
+            width: '90%',
+            margin: 'auto',
+            borderRadius: '1vh'
+        } 
+        const paperTotalShowStyle = {
+            padding: 13,
+            height: '22vh',
+            width: '90%',
             margin: 'auto',
             borderRadius: '1vh'
         } 
@@ -277,64 +304,94 @@ class ParkingOutForm extends Component {
         const gridIsiStyle = {
         }
         return ( 
-            <ContainerSingle className="container-reguler-exit">
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Paper elevation={10} style={paperStyle}>
-                            <Grid item xs={12} style={judulProfileStyle}>
-                                <H5>
-                                    {
-                                        this.state.id.includes("MEMBER-") === true ?
-                                        "Member Parking Out"
-                                        :
-                                        "Reguler Parking Out Form"
-                                    }
-                                </H5>
-                            </Grid>
-                            <Grid item xs={12} style={gridIsiStyle}>
-                                <form className={useStyles.root} noValidate autoComplete="off">
-                                    {
-                                        this.state.id.includes("MEMBER-") === true ?
-                                            <>
-                                                <ContainerSingle className="container-member-png">
-                                                    <Image className="memberPng" src="https://www.pngkey.com/png/full/16-162388_membership-badge-png-club-penguin-membership-logo.png" alt="member"/>
-                                                </ContainerSingle>
-                                                <ContainerSingle className="control-2">
-                                                    <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingDataParkirKeluar()}>
-                                                        <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
-                                                        Next
-                                                    </Button>
-                                                    <Button className="btn btn-danger btn-float" onClick={() => this.handleCancelAdd()}>
-                                                        <Span><I className="fa fa-times fa-icon" aria-hidden="true"></I></Span>
-                                                        Back
-                                                    </Button>
-                                                </ContainerSingle>
-                                            </>
-                                            :
-                                            <>
-                                                <ContainerSingle className="container-member-png">
-                                                    <Image className="regulerPng" src="https://powerplan4u.co.id/assets/uploads/package/reguler.png" alt="reguler"/>
-                                                </ContainerSingle>
-                                                <ContainerSingle className="control-2">
-                                                    <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingDataParkirKeluar()}>
-                                                        <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
-                                                        Next
-                                                    </Button>
-                                                    <Button className="btn btn-danger btn-float" onClick={() => this.handleCancelAdd()}>
-                                                        <Span><I className="fa fa-times fa-icon" aria-hidden="true"></I></Span>
-                                                        Back
-                                                    </Button>
-                                                </ContainerSingle>
-                                            </>
-                                    }
+            <ContainerSingle className="container-reguler">
+                <ContainerSingle className="container-reguler-exit1">
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Paper elevation={10} style={paperStyle}>
+                                <Grid item xs={12} style={gridIsiStyle}>
+                                    <form className={useStyles.root} noValidate autoComplete="off">
+                                        <ContainerSingle className="container-member-png">
+                                            <Image className="penaltyPng" src="https://uxwing.com/wp-content/themes/uxwing/download/16-business-and-finance/penalty.png" alt="fined"/>
+                                        </ContainerSingle>
                                     </form>
                                 </Grid>
-                        </Paper>
+                            </Paper>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </ContainerSingle>
+                <ContainerSingle className="container-reguler-exit2">
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Paper elevation={10} style={paperTotalStyle}>
+                                <Grid item xs={12} style={judulProfileStyle}>
+                                    <H5>
+                                        Parking Out With Penalty
+                                    </H5>
+                                </Grid>
+                                <Grid item xs={12} style={gridIsiStyle}>
+                                    <form className={useStyles.root} noValidate autoComplete="off">
+                                        <TextField
+                                            style={inputStyle}
+                                            label="Input No.Police"
+                                            name="noPol"
+                                            value={this.state.noPol}
+                                            onChange={this.handleSetValue}
+                                            fullWidth
+                                        />
+                                        <ContainerSingle className="control-2">
+                                            <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingDataParkirKeluar()}>
+                                                <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
+                                                Show Penalty
+                                            </Button>
+                                            <Button className="btn btn-danger btn-float" onClick={() => this.handleCancelAdd()}>
+                                                <Span><I className="fa fa-times fa-icon" aria-hidden="true"></I></Span>
+                                                Back
+                                            </Button>
+                                        </ContainerSingle>
+                                    </form>
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper elevation={10} style={paperTotalShowStyle}>
+                                <Grid item xs={12} style={gridIsiStyle}>
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th className="column-payment" scope="row">Parking Payment</th>
+                                                <td className="column-payment">
+                                                    {
+                                                        this.state.data.biayaParkir
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th className="column-payment" scope="row">Fine Payment</th>
+                                                <td className="column-payment">
+                                                    {
+                                                        this.state.data.denda && this.state.data.denda[0].jumlahDenda
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr className="table-dark">
+                                                <th className="column-payment" scope="row">Total Payment</th>
+                                                <td className="column-payment">
+                                                    {
+                                                        this.state.data.nominal
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </ContainerSingle>
             </ContainerSingle>
          );
     }
 }
  
-export default withRouter(ParkingOutForm);
+export default withRouter(ParkingOutPenalty);

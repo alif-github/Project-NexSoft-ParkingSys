@@ -13,6 +13,8 @@ import UpdateMember from '../../moleculs/update-member';
 import AddStaff from '../../moleculs/add-staff'
 import AddMember from '../../moleculs/add-member'
 import ParkingOutForm from '../../moleculs/parking-out-form'
+import ParkingOutPenalty from '../../moleculs/parking-out-penalty'
+import ReportStaff from '../../moleculs/report-staff'
 
 import Page404 from "../../moleculs/404-Not-Found";
 import ProfileDet from "../../moleculs/profile-detail"
@@ -42,6 +44,7 @@ const Routes = (props) => {
         return (
         <Router>
             <Switch>
+                <Route path="/reguler-out-penalty/:noPol" exact component={(props) => <HomePageStaff {...props} comp={<ParkingOutPenalty/>}/>}/>
                 <Route path="/reguler-out/:id" exact component={(props) => <HomePageStaff {...props} comp={<ParkingOutForm/>}/>}/>
                 <Route path="/reguler-in" exact component={(props) => <HomePageStaff {...props} comp={<ParkingInForm {...props}/>}/>}/>
                 <Route path="/" exact component={(props) => <HomePageStaff {...props} comp={<DashBoardStaff {...props}/>}/>}/>
@@ -50,6 +53,7 @@ const Routes = (props) => {
                 <Route path="/member/add" exact component={(props) => <HomePageStaff {...props} comp={<AddMember {...props}/>}/>}/>
                 <Route path="/member/update/:id" exact component={(props) => <HomePageStaff {...props} comp={<UpdateMember {...props}/>}/>}/>
                 <Route path="/member" exact component={(props) => <HomePageStaff {...props} comp={<Member {...props}/>}/>}/>
+                <Route path="/report" exact component={(props) => <HomePageStaff {...props} comp={<ReportStaff {...props}/>}/>}/>
                 <Route component={Page404}></Route>
             </Switch>
         </Router>

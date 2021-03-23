@@ -169,7 +169,6 @@ class DashBoardAdmin extends Component {
               danger: 'red',
             },
           });
-        console.log("member duit:", this.state.incomeMemberReal)
 
         return ( 
             <ContainerSingle className="background-content-dashboard-adm">

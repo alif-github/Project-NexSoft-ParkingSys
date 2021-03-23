@@ -1,0 +1,17 @@
+.title-pick {
+    float: left;
+}
+
+.page-dashboard {
+    position: fixed;
+    bottom: 40px;
+    width: 53.2%;
+    padding: 1.2vh;
+    background-color: #f2f2f2;
+}
+
+.h1-style {
+    margin-top: 3vh;
+    text-align: center;
+    -webkit-text-stroke-width: medium;
+}

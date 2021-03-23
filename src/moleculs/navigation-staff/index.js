@@ -27,7 +27,7 @@ class NavStaff extends Component {
                         </H5>
                     </ContainerSingle>
                 </Link>
-                <Link to="#" style={{textDecoration: 'none'}}>
+                <Link to="/report" style={{textDecoration: 'none'}}>
                     <ContainerSingle className="menu-item-staff">
                         <H5 className="menu-content">
                             Report
