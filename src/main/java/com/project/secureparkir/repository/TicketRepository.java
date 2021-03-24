@@ -56,4 +56,7 @@ public interface TicketRepository {
 
     //Sum Biaya Parkir by Query
     Double sumBiayaParkirByQuery(String query);
+
+    //Sum Denda Parkir by Query
+    Double sumDendaParkirByQuery(String query);
 }

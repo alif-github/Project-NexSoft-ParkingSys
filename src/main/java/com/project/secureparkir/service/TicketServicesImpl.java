@@ -255,13 +255,41 @@ public class TicketServicesImpl implements TicketServices {
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
-                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
+                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' and id not like '%MEMBER-%' order by tglJamKeluar desc");
             }
 
             if (!whereQuery.isEmpty())
                 query += "WHERE " + String.join(" AND ", whereQuery);
 
             return ticketRepository.sumBiayaParkirByQuery(query);
+        }
+    }
+
+    @Override
+    public Double sumDendaParkirByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
+                whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol='"+params.get("noPol")+"'");
+            if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
+                whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
+                String tglAwal = ""+params.get("dateTime")+" 00:00:01";
+                String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
+                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
+            }
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return ticketRepository.sumDendaParkirByQuery(query);
         }
     }
 }

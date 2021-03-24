@@ -370,4 +370,12 @@ public class TicketRepositoryImpl implements TicketRepository {
                 sql, Double.class);
         return sumTicket;
     }
+
+    @Override
+    public Double sumDendaParkirByQuery(String query) {
+        String sql = "SELECT SUM(d.jumlahDenda) as totalDenda FROM ticket t left join denda d on t.idDenda = d.idDenda " + query;
+        Double sumTicket = databases.queryForObject(
+                sql, Double.class);
+        return sumTicket;
+    }
 }

@@ -107,7 +107,7 @@ public class TicketController {
         try {
             ticketList = ticketServices.readDataByQuery(params);
             output.put("jumlah", ticketServices.countAllDataByQuery(params));
-            output.put("payment", ticketServices.sumAllDataByQuery(params));
+            output.put("denda", ticketServices.sumDendaParkirByQuery(params));
             output.put("in", ticketServices.countInByQuery(params));
             output.put("out", ticketServices.countOutByQuery(params));
             output.put("parkingBill", ticketServices.sumBiayaParkirByQuery(params));

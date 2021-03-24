@@ -51,4 +51,7 @@ public interface TicketServices {
 
     //Sum Biaya Parkir by Query
     Double sumBiayaParkirByQuery(Map <Object, Object> params);
+
+    //Sum Denda Parkir by Query
+    Double sumDendaParkirByQuery(Map <Object, Object> params);
 }
