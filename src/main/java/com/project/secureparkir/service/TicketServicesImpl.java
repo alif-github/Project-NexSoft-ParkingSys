@@ -99,26 +99,16 @@ public class TicketServicesImpl implements TicketServices {
 
             if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
                 whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
             if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
-            if (params.containsKey("tglJamKeluar") && !String.valueOf(params.get("tglJamKeluar")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamKeluar")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamKeluar")+" 23:59:59";
-                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
-            }
-            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamMasuk")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamMasuk")+" 23:59:59";
-                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamMasuk desc");
-            }
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
-                String tglAwal1 = ""+params.get("dateTime")+" 00:00:01";
-                String tglAkhir1 = ""+params.get("dateTime")+" 23:59:59";
-                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' or tglJamKeluar between '"+tglAwal1+"' and '"+tglAkhir1+"' order by tglJamKeluar desc");
+                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
             }
 
             if (params.containsKey("limit") && !String.valueOf(params.get("limit")).isBlank())
@@ -144,26 +134,16 @@ public class TicketServicesImpl implements TicketServices {
 
             if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
                 whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
             if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
-            if (params.containsKey("tglJamKeluar") && !String.valueOf(params.get("tglJamKeluar")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamKeluar")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamKeluar")+" 23:59:59";
-                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
-            }
-            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamMasuk")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamMasuk")+" 23:59:59";
-                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamMasuk desc");
-            }
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
-                String tglAwal1 = ""+params.get("dateTime")+" 00:00:01";
-                String tglAkhir1 = ""+params.get("dateTime")+" 23:59:59";
-                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' or tglJamKeluar between '"+tglAwal1+"' and '"+tglAkhir1+"' order by tglJamKeluar desc");
+                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
             }
 
             if (!whereQuery.isEmpty())
@@ -182,20 +162,12 @@ public class TicketServicesImpl implements TicketServices {
 
             if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
                 whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
             if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
-            if (params.containsKey("tglJamKeluar") && !String.valueOf(params.get("tglJamKeluar")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamKeluar")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamKeluar")+" 23:59:59";
-                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
-            }
-            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamMasuk")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamMasuk")+" 23:59:59";
-                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamMasuk desc");
-            }
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -218,20 +190,12 @@ public class TicketServicesImpl implements TicketServices {
 
             if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
                 whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
             if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
-            if (params.containsKey("tglJamKeluar") && !String.valueOf(params.get("tglJamKeluar")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamKeluar")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamKeluar")+" 23:59:59";
-                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
-            }
-            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamMasuk")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamMasuk")+" 23:59:59";
-                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamMasuk desc");
-            }
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -254,32 +218,50 @@ public class TicketServicesImpl implements TicketServices {
 
             if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
                 whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
             if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
-            if (params.containsKey("tglJamKeluar") && !String.valueOf(params.get("tglJamKeluar")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamKeluar")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamKeluar")+" 23:59:59";
-                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
-            }
-            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
-                String tglAwal = ""+params.get("tglJamMasuk")+" 00:00:01";
-                String tglAkhir = ""+params.get("tglJamMasuk")+" 23:59:59";
-                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamMasuk desc");
-            }
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
-                String tglAwal1 = ""+params.get("dateTime")+" 00:00:01";
-                String tglAkhir1 = ""+params.get("dateTime")+" 23:59:59";
-                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' or tglJamKeluar between '"+tglAwal1+"' and '"+tglAkhir1+"' order by tglJamKeluar desc");
+                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
             }
 
             if (!whereQuery.isEmpty())
                 query += "WHERE " + String.join(" AND ", whereQuery);
 
             return ticketRepository.sumAllDataByQuery(query);
+        }
+    }
+
+    @Override
+    public Double sumBiayaParkirByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
+                whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol='"+params.get("noPol")+"'");
+            if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
+                whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
+                String tglAwal = ""+params.get("dateTime")+" 00:00:01";
+                String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
+                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' order by tglJamKeluar desc");
+            }
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return ticketRepository.sumBiayaParkirByQuery(query);
         }
     }
 }

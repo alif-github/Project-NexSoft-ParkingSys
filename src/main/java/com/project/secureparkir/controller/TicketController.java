@@ -110,6 +110,7 @@ public class TicketController {
             output.put("payment", ticketServices.sumAllDataByQuery(params));
             output.put("in", ticketServices.countInByQuery(params));
             output.put("out", ticketServices.countOutByQuery(params));
+            output.put("parkingBill", ticketServices.sumBiayaParkirByQuery(params));
             output.put("data",ticketList);
             return new ResponseEntity<>(output, HttpStatus.OK);
         } catch (DataAccessException e) {

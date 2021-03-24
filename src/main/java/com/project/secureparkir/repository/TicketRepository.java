@@ -3,6 +3,7 @@ package com.project.secureparkir.repository;
 import com.project.secureparkir.model.Ticket;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TicketRepository {
 
@@ -52,4 +53,7 @@ public interface TicketRepository {
 
     //Sum Daya by Query
     Double sumAllDataByQuery(String query);
+
+    //Sum Biaya Parkir by Query
+    Double sumBiayaParkirByQuery(String query);
 }

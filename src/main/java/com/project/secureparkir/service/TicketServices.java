@@ -46,6 +46,9 @@ public interface TicketServices {
     //Count Data by Query
     int countOutByQuery(Map <Object, Object> params);
 
-    //Sum Daya by Query
+    //Sum Data by Query
     Double sumAllDataByQuery(Map <Object, Object> params);
+
+    //Sum Biaya Parkir by Query
+    Double sumBiayaParkirByQuery(Map <Object, Object> params);
 }
