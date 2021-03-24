@@ -20,13 +20,14 @@ import DateFnsUtils from '@date-io/date-fns'
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import './style.css'
+import ModalTransactionDetail from '../modal-detail-report-transaction';
 
 class TransactionReportStaff extends Component {
     constructor(props) {
         super(props);
         this.state = { 
             transactionData: [],
-            payment: 0,
+            denda: 0,
             parkingBill: 0,
             chooseDate: new Date(),
             countData: 0, 
@@ -127,7 +128,7 @@ class TransactionReportStaff extends Component {
                         this.setState({
                         isLoaded: true,
                         transactionData: result.data,
-                        payment: result.payment,
+                        denda: result.denda,
                         parkingBill: result.parkingBill,
                         countData: Math.ceil(result.jumlah/limit)
                         });
@@ -168,7 +169,7 @@ class TransactionReportStaff extends Component {
                                 this.setState({
                                     isLoaded: true,
                                     transactionData: result.data,
-                                    payment: result.payment,
+                                    denda: result.denda,
                                     parkingBill: result.parkingBill,
                                     countData: Math.ceil(result.jumlah/limit)
                                 });
@@ -204,7 +205,7 @@ class TransactionReportStaff extends Component {
                                 this.setState({
                                     isLoaded: true,
                                     transactionData: result.data,
-                                    payment: result.payment,
+                                    denda: result.denda,
                                     parkingBill: result.parkingBill,
                                     countData: Math.ceil(result.jumlah/limit)
                                 });
@@ -221,6 +222,12 @@ class TransactionReportStaff extends Component {
                         )
                 }
             }
+        }
+        this.handleModal = index => {
+            console.log("Masuk modal", index);
+            return (
+                <ModalTransactionDetail dataTable={this.state.transactionData[index]}/>
+            )
         }
     }
     componentDidMount() {
@@ -244,7 +251,7 @@ class TransactionReportStaff extends Component {
                     this.setState({
                       isLoaded: true,
                       transactionData: result.data,
-                      payment: result.payment,
+                      denda: result.denda,
                       parkingBill: result.parkingBill,
                       date: formatted_date,
                       countData: Math.ceil(result.jumlah/limit)
@@ -262,7 +269,6 @@ class TransactionReportStaff extends Component {
             )
     }
     render() {
-        console.log("date today:",this.state.chooseDate);
         const useStyles = makeStyles((theme) => ({
             root: {
               flexGrow: 1,
@@ -350,11 +356,25 @@ class TransactionReportStaff extends Component {
                                                     </TD>
                                                     <TD className="th-size">{el.tglJamMasuk}</TD>
                                                     <TD className="th-size">{el.tglJamKeluar}</TD>
-                                                    <TD className="th-size">{el.biayaParkir}</TD>
-                                                    <TD className="th-size">{el.denda.length > 0 && el.denda[0].jumlahDenda}</TD>
-                                                    <TD className="th-size">{el.nominal}</TD>
                                                     <TD className="th-size">
-                                                        <ButtonModal className="btn btn-secondary">
+                                                        {
+                                                            el.id.includes("MEMBER-") ?
+                                                            "Free"
+                                                            :
+                                                            el.biayaParkir
+                                                        }
+                                                    </TD>
+                                                    <TD className="th-size">{el.denda.length > 0 && el.denda[0].jumlahDenda}</TD>
+                                                    <TD className="th-size">
+                                                        {
+                                                            el.id.includes("MEMBER-") ?
+                                                            el.denda.length > 0 && el.denda[0].jumlahDenda
+                                                            :
+                                                            el.nominal
+                                                        }
+                                                    </TD>
+                                                    <TD className="th-size">
+                                                        <ButtonModal onClick={() => this.handleModal(idx)} type="button" className="btn btn-secondary btn-modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                             Detail
                                                         </ButtonModal>
                                                     </TD>
@@ -423,8 +443,8 @@ class TransactionReportStaff extends Component {
                                     <th className="detail-style">Total Penalty</th>
                                     <td className="detail-style">
                                         {
-                                            (this.state.payment - this.state.parkingBill) > 0 ?
-                                            ": Rp. "+this.totalIncome(this.state.payment - this.state.parkingBill)+",-"
+                                            (this.state.denda) > 0 ?
+                                            ": Rp. "+this.totalIncome(this.state.denda)+",-"
                                             :
                                             ": No Transaction"
                                         }
@@ -434,8 +454,8 @@ class TransactionReportStaff extends Component {
                                     <th className="detail-style total">Total Income</th>
                                     <td className="detail-style total">
                                         {
-                                            this.state.payment > 0 ?
-                                            ": Rp. "+this.totalIncome(this.state.payment)+",-"
+                                            (this.state.parkingBill + this.state.denda) > 0 ?
+                                            ": Rp. "+this.totalIncome(this.state.parkingBill + this.state.denda)+",-"
                                             :
                                             ": No Transaction"
                                         }

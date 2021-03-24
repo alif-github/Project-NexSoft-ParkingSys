@@ -24,7 +24,8 @@ class DashboardTransaction extends Component {
             offset: 0,
             limit: 3,
             ticketData: [],
-            payment: 0,
+            parkingBill: 0,
+            denda: 0,
             in: 0,
             out: 0
          }
@@ -84,7 +85,8 @@ class DashboardTransaction extends Component {
                         this.setState({
                         isLoaded: true,
                         ticketData: result.data,
-                        payment: result.payment,
+                        parkingBill: result.parkingBill,
+                        denda: result.denda,
                         in: result.in,
                         out: result.out,
                         countData: Math.ceil(result.jumlah/limit)
@@ -123,7 +125,8 @@ class DashboardTransaction extends Component {
                     this.setState({
                       isLoaded: true,
                       ticketData: result.data,
-                      payment: result.payment,
+                      parkingBill: result.parkingBill,
+                      denda: result.denda,
                       in: result.in,
                       out: result.out,
                       countData: Math.ceil(result.jumlah/limit)
@@ -224,8 +227,8 @@ class DashboardTransaction extends Component {
                             <Grid item xs={12}>
                                 <h1 className="h1-style">
                                     {
-                                        this.state.payment > 0 ?
-                                        "Rp. "+this.totalIncome(this.state.payment)+",-"
+                                        (this.state.parkingBill + this.state.denda) > 0 ?
+                                        "Rp. "+this.totalIncome(this.state.parkingBill + this.state.denda)+",-"
                                         :
                                         "No Transaction"
                                     }

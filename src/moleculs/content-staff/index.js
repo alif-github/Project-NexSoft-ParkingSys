@@ -497,51 +497,51 @@ class Staff extends Component {
                                                 {   
                                                     el.posisi !== "Admin" ?
                                                     <center>
-                                                    <div className="container-action-button">
-                                                        <div onClick={() => this.props.addDummy(this.state.userData[idx])}>
+                                                    <ContainerSingle className="container-action-button">
+                                                        <ContainerSingle onClick={() => this.props.addDummy(this.state.userData[idx])}>
                                                             <ModalDetailStaff />
-                                                        </div>
-                                                        <div>
+                                                        </ContainerSingle>
+                                                        <ContainerSingle>
                                                             <Button className="btn btn-warning" 
                                                                 onClick={() => {this.props.history.push('/staff/update/'+el.idUser);this.props.addDummy(this.state.userData[idx])}}>
                                                                 <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
                                                                 Edit
                                                             </Button>
-                                                        </div>
+                                                        </ContainerSingle>
                                                         {
                                                             el.posisi !== "Admin" && 
-                                                            <div>
+                                                            <ContainerSingle>
                                                                 <Button className="btn btn-danger" onClick={() => this.handleDeleteUserConfirm(el.idUser,el.namaUser)}>
                                                                     <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
                                                                     Delete
                                                                 </Button>
-                                                            </div>
+                                                            </ContainerSingle>
                                                         }
-                                                    </div>
+                                                    </ContainerSingle>
                                                     </center>
                                                     :
                                                     <center>
-                                                    <div className="container-action-button-staff">
-                                                        <div onClick={() => this.props.addDummy(this.state.userData[idx])}>
+                                                    <ContainerSingle className="container-action-button-staff">
+                                                        <ContainerSingle onClick={() => this.props.addDummy(this.state.userData[idx])}>
                                                             <ModalDetailStaff />
-                                                        </div>
-                                                        <div>
+                                                        </ContainerSingle>
+                                                        <ContainerSingle>
                                                             <Button className="btn btn-warning" 
                                                                 onClick={() => {this.props.history.push('/staff/update/'+el.idUser);this.props.addDummy(this.state.userData[idx])}}>
                                                                 <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
                                                                 Edit
                                                             </Button>
-                                                        </div>
+                                                        </ContainerSingle>
                                                         {
                                                             el.posisi !== "Admin" && 
-                                                            <div>
+                                                            <ContainerSingle>
                                                                 <Button className="btn btn-danger" onClick={() => this.handleDeleteUserConfirm(el.idUser,el.namaUser)}>
                                                                     <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
                                                                     Delete
                                                                 </Button>
-                                                            </div>
+                                                            </ContainerSingle>
                                                         }
-                                                    </div>
+                                                    </ContainerSingle>
                                                     </center>
                                                 }
                                             </TD>
