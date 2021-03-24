@@ -2,10 +2,10 @@
     float: left;
 }
 
-.page-dashboard {
+.page-dashboard-style {
     position: fixed;
     bottom: 40px;
-    width: 53.2%;
+    width: 54.3%;
     padding: 1.2vh;
     background-color: #f2f2f2;
 }
@@ -14,4 +14,23 @@
     margin-top: 3vh;
     text-align: center;
     -webkit-text-stroke-width: medium;
+}
+
+.summary {
+    text-align: center;
+}
+
+.on-point {
+    font-weight: bold;
+}
+
+.box-typography , .box-pagination {
+    float: left;
+}
+.box-typography {
+    margin-top: 0.7vh;
+}
+
+.bawah-kiri-report {
+    width: 100%;
 }

@@ -504,7 +504,7 @@ class Member extends Component {
                         <ContainerSingle className="panel-control-add">
                             <Button className="btn btn-success btn-add" onClick={() => this.props.history.push('/member/add')}>
                                 <Span><I className="fa fa-plus fa-icon" aria-hidden="true"></I></Span>
-                                    Add Staff
+                                    Add Member
                             </Button>
                         </ContainerSingle>
                     </ContainerSingle>

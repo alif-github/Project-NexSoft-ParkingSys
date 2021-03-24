@@ -6,9 +6,9 @@ class Option extends Component {
         this.state = {  }
     }
     render() { 
-        const { value , children } = this.props
+        const { className , value , children } = this.props
         return ( 
-            <option value={value}>{children}</option>
+            <option className={className} value={value}>{children}</option>
          );
     }
 }

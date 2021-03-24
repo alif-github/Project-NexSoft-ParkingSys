@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { ContainerSingle, Span } from '../../atomics';
+import { ContainerSingle, H5, Span } from '../../atomics';
 import {
     Grid,
     Paper,
@@ -22,22 +22,26 @@ class DashboardTransaction extends Component {
             countData: 0, 
             page: 1,
             offset: 0,
-            limit: 4,
+            limit: 3,
             ticketData: [],
             payment: 0,
             in: 0,
             out: 0
          }
         this.handleDateChange = (date) => {
-            let current_datetime = new Date(date)
+            this.setState({
+                chooseDate: date,
+                page: 1
+            },() => this.handleRefreshData())
+        }
+        this.dateSetRead = dateValue => {
+            let current_datetime = dateValue
             let year = current_datetime.getFullYear();
             let month = ("0" + (current_datetime.getMonth() + 1)).slice(-2)
             let day = ("0" + current_datetime.getDate()).slice(-2)
             let formatted_date = year + "-" + month + "-" + day
-            this.setState({
-                chooseDate: formatted_date,
-                page: 1
-            },() => this.handleRefreshData())
+
+            return formatted_date
         }
         this.totalIncome = nilaiUang => {
             var bilangan = nilaiUang;
@@ -63,13 +67,14 @@ class DashboardTransaction extends Component {
         };
 
         this.handleRefreshData = () => {
-            const {page, offset, limit, chooseDate} = this.state
+            const {page, limit, chooseDate} = this.state
+            let dateValue = this.dateSetRead(chooseDate)
             let start = (page - 1)*limit;
             //method to request API
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+chooseDate+"",requestOptionsPage)
+            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -203,11 +208,9 @@ class DashboardTransaction extends Component {
                                         className={useStyles.root}
                                         clearable
                                         value={this.state.chooseDate}
-                                        // placeholder='Pick date for filtering'
                                         onChange={date => this.handleDateChange(date)}
                                         maxDate={new Date()}
                                         minDate={new Date("03-16-2021")}
-                                        format="yyyy-MM-dd"
                                     />
                                 </MuiPickersUtilsProvider>
                             </ThemeProvider>
@@ -220,7 +223,12 @@ class DashboardTransaction extends Component {
                             </Grid>
                             <Grid item xs={12}>
                                 <h1 className="h1-style">
-                                    Rp. {this.totalIncome(this.state.payment)} ,-
+                                    {
+                                        this.state.payment > 0 ?
+                                        "Rp. "+this.totalIncome(this.state.payment)+",-"
+                                        :
+                                        "No Transaction"
+                                    }
                                 </h1>
                             </Grid>
                         </Paper>
@@ -250,6 +258,7 @@ class DashboardTransaction extends Component {
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
+                        <H5 className="summary">Summary Ticket Transaction</H5>
                         <table className="table table-striped table-hover position-table">
                             <thead>
                                 <tr>
@@ -262,6 +271,7 @@ class DashboardTransaction extends Component {
                             </thead>
                             <tbody>
                                 {
+                                    this.state.ticketData.length > 0 ?
                                     this.state.ticketData.map((el, idx) => {
                                         return (
                                             <tr key={idx}>
@@ -272,19 +282,34 @@ class DashboardTransaction extends Component {
                                                     :
                                                     "-"}</td>
                                                 <td>{el.tglJamMasuk}</td>
-                                                <td>{el.tglJamKeluar}</td>
+                                                <td className="on-point">{el.tglJamKeluar}</td>
                                             </tr>
                                         )
                                     })
+                                    :
+                                    <tr>
+                                        <td colSpan="5">No Transaction</td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
                     </Grid>
                     <Grid item xs={12}>
-                        <ContainerSingle className="page-dashboard">
-                            <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
-                                <Typography>Page: {this.state.page}</Typography>
-                                <Pagination count={this.state.countData} page={this.state.page} onChange={this.handleChangePage} />
+                        <ContainerSingle className="page-dashboard-style">
+                            <ContainerSingle className={useStyles.root + ' bawah-kiri-report'}>
+                                <ContainerSingle className="box-typography">
+                                    <Typography>
+                                        {
+                                            this.state.ticketData.length > 0 ?
+                                            "Page: "+this.state.page+""
+                                            :
+                                            "Page: No-data"
+                                        }
+                                    </Typography>
+                                </ContainerSingle>
+                                <ContainerSingle className="box-pagination">
+                                    <Pagination count={this.state.countData} page={this.state.page} onChange={this.handleChangePage} />
+                                </ContainerSingle>
                             </ContainerSingle>
                         </ContainerSingle>
                     </Grid>
