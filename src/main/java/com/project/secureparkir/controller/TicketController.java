@@ -46,7 +46,7 @@ public class TicketController {
 
         if (isMemberTemp) {
             //ini member
-            List<Ticket> ticket1 = ticketServices.findById(ticket.getId());
+            Ticket ticket1 = ticketServices.findLastIdWithParams(ticket.getId());
             Member member = memberServices.findByIdMember(ticket.getId());
 
             if (member == null) {
@@ -54,7 +54,7 @@ public class TicketController {
             } else {
                 if (!member.getStatus()) {
                     return new ResponseEntity<>(new CustomErrorType("Member is Non-Active"), HttpStatus.BAD_REQUEST);
-                } else if (!ticket1.isEmpty() && ticket1.get(ticket1.size()-1).getTglJamKeluar().equalsIgnoreCase("-")) {
+                } else if (ticket1 != null && ticket1.getTglJamKeluar().equalsIgnoreCase("-")) {
                     return new ResponseEntity<>(new CustomErrorType("Cannot Click Entry Twice!"), HttpStatus.BAD_REQUEST);
                 } else {
                     ticketServices.createTicket(isMemberTemp, ticket.getId(), ticket);
