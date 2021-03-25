@@ -36,6 +36,7 @@ const Routes = (props) => {
                     <Route path="/member/add" exact component={(props) => <HomePage {...props} comp={<AddMember {...props}/>}/>}/>
                     <Route path="/member/update/:id" exact component={(props) => <HomePage {...props} comp={<UpdateMember {...props}/>}/>}/>
                     <Route path="/member" exact component={(props) => <HomePage {...props} comp={<Member {...props}/>}/>}/>
+                    <Route path="/report-admin" exact component={(props) => <HomePage {...props} comp={<ReportStaff {...props}/>}/>}/>
                     <Route component={Page404}></Route>
                 </Switch> 
             </Router>

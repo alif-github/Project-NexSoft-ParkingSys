@@ -121,7 +121,6 @@ class DashboardTransaction extends Component {
             })
             .then(
                 (result) => {
-                    //do what you want with the response here
                     this.setState({
                       isLoaded: true,
                       ticketData: result.data,
@@ -132,9 +131,6 @@ class DashboardTransaction extends Component {
                       countData: Math.ceil(result.jumlah/limit)
                     });
                 },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
                 (error) => {
                     this.setState({
                         isLoaded: false,

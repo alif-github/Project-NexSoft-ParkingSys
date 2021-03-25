@@ -30,15 +30,11 @@ class TransactionReportStaff extends Component {
         this.state = { 
             transactionData: [],
             objTransactionData: {
-                jenisKendaraan: [
-                    {
-                        jenis: ""
-                    }
-                ],
+                jenisKendaraan: [{jenis: ""}],
                 denda: [
                     {
-                        denda: "",
-                        jumlahDenda: 0
+                    denda: "",
+                    jumlahDenda: 0
                     }
                 ]
             },
@@ -133,7 +129,10 @@ class TransactionReportStaff extends Component {
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+            let nama;
+            if (this.props.user.posisi === "Admin") nama = ""
+            else nama = this.props.user.idUser
+            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -148,9 +147,6 @@ class TransactionReportStaff extends Component {
                         countData: Math.ceil(result.jumlah/limit)
                         });
                     },
-                    // Note: it's important to handle errors here
-                    // instead of a catch() block so that we don't swallow
-                    // exceptions from actual bugs in components.
                     (error) => {
                         this.setState({
                             isLoaded: false,
@@ -174,7 +170,10 @@ class TransactionReportStaff extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+                    let nama;
+                    if (this.props.user.posisi === "Admin") nama = ""
+                    else nama = this.props.user.idUser
+                    fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -187,6 +186,26 @@ class TransactionReportStaff extends Component {
                                     denda: result.denda,
                                     parkingBill: result.parkingBill,
                                     countData: Math.ceil(result.jumlah/limit)
+                                });
+                            },
+                            (error) => {
+                                this.setState({
+                                    isLoaded: false,
+                                    error
+                                });
+                            }
+                        )
+                    fetch("http://localhost:8080/parkir/user/",requestOptionsPage)
+                        .then((response) => {
+                            return response.json()
+                        })
+                        .then(
+                            (result) => {
+                                //do what you want with the response here
+                                this.setState({
+                                    isLoaded: true,
+                                    userData: result.data,
+                                    countData: Math.ceil(result.jumlah/this.state.limit)
                                 });
                             },
                             // Note: it's important to handle errors here
@@ -210,7 +229,10 @@ class TransactionReportStaff extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+                    let nama;
+                    if (this.props.user.posisi === "Admin") nama = ""
+                    else nama = this.props.user.idUser
+                    fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -225,9 +247,6 @@ class TransactionReportStaff extends Component {
                                     countData: Math.ceil(result.jumlah/limit)
                                 });
                             },
-                            // Note: it's important to handle errors here
-                            // instead of a catch() block so that we don't swallow
-                            // exceptions from actual bugs in components.
                             (error) => {
                                 this.setState({
                                     isLoaded: false,
@@ -256,7 +275,10 @@ class TransactionReportStaff extends Component {
         const requestOptionsPage = {
             method: 'GET'
         };
-        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+this.props.user.idUser+"&dateTime="+formatted_date+"",requestOptionsPage)
+        let nama;
+        if (this.props.user.posisi === "Admin") nama = ""
+        else nama = this.props.user.idUser
+        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+nama+"&dateTime="+formatted_date+"",requestOptionsPage)
             .then((response) => {
                 return response.json()
             })
@@ -272,9 +294,6 @@ class TransactionReportStaff extends Component {
                       countData: Math.ceil(result.jumlah/limit)
                     });
                 },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
                 (error) => {
                     this.setState({
                         isLoaded: false,
@@ -308,6 +327,12 @@ class TransactionReportStaff extends Component {
                             <Grid container spacing={3}>
                                 <Grid item xs={9}>
                                     <ContainerSingle className="panel-control">
+                                        <ContainerSingle className="panel-control-selectby"> 
+                                            <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindBy}>
+                                                <Option className="option-menu" value="ID">Code</Option>
+                                                <Option className="option-menu" value="NoPol">No.Police</Option>
+                                            </SelectSm>
+                                        </ContainerSingle>
                                         <ContainerSingle className="panel-control-selectby"> 
                                             <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindBy}>
                                                 <Option className="option-menu" value="ID">Code</Option>
@@ -405,7 +430,7 @@ class TransactionReportStaff extends Component {
                             </Table>
                         </ContainerSingle>
                         <ContainerSingle>
-                            <ContainerSingle className="page-dashboard-report">
+                            <ContainerSingle className={this.props.user.posisi === "Admin" ? "page-dashboard-reportt" : "page-dashboard-report" }>
                                 <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
                                     <Typography className="page-title">
                                         {

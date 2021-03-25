@@ -149,7 +149,10 @@ class OutReportStaff extends Component {
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+            let nama;
+            if (this.props.user.posisi === "Admin") nama = ""
+            else nama = this.props.user.idUser
+            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -191,7 +194,10 @@ class OutReportStaff extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
+                    let nama;
+                    if (this.props.user.posisi === "Admin") nama = ""
+                    else nama = this.props.user.idUser
+                    fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+nama+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -228,7 +234,10 @@ class OutReportStaff extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
+                    let nama;
+                    if (this.props.user.posisi === "Admin") nama = ""
+                    else nama = this.props.user.idUser
+                    fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+nama+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -275,7 +284,10 @@ class OutReportStaff extends Component {
         const requestOptionsPage = {
             method: 'GET'
         };
-        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+this.props.user.idUser+"&dateTime="+formatted_date+"",requestOptionsPage)
+        let nama;
+        if (this.props.user.posisi === "Admin") nama = ""
+        else nama = this.props.user.idUser
+        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+nama+"&dateTime="+formatted_date+"",requestOptionsPage)
             .then((response) => {
                 return response.json()
             })
@@ -403,7 +415,7 @@ class OutReportStaff extends Component {
                             </Table>
                         </ContainerSingle>
                         <ContainerSingle>
-                            <ContainerSingle className="page-dashboard-report">
+                            <ContainerSingle className={this.props.user.posisi === "Admin" ? "page-dashboard-reportt" : "page-dashboard-report"}>
                                 <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
                                     <Typography className="page-title">
                                         {
