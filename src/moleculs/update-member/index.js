@@ -22,7 +22,7 @@ import './style.css'
 class UpdateMember extends Component {
     constructor(props) {
         super(props);
-        const {idMember, namaMember, noPol, idJenis, status, dieditOleh} = this.props.member
+        const {idMember, namaMember, noPol, idJenis, status} = this.props.member
         this.state = { 
             errorNoPol: false,
             helperTextNoPol: ' ',

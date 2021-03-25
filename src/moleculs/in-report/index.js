@@ -24,11 +24,26 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import './style.css'
 
-class TransactionReportStaff extends Component {
+class InReportStaff extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            transactionData: [],
+            transactionData: [
+                {
+                    id: "",
+                    idData: "",
+                    jenisKendaraan: [
+                        {
+                            jenis: ""
+                        }
+                    ],
+                    denda: [
+                        {
+                            denda: ""
+                        }
+                    ]
+                }
+            ],
             objTransactionData: {
                 jenisKendaraan: [
                     {
@@ -42,8 +57,9 @@ class TransactionReportStaff extends Component {
                     }
                 ]
             },
-            denda: 0,
-            parkingBill: 0,
+            inCar: 0,
+            inMotorCycle: 0,
+            in: 0,
             chooseDate: new Date(),
             countData: 0, 
             page: 1,
@@ -133,7 +149,7 @@ class TransactionReportStaff extends Component {
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -143,8 +159,10 @@ class TransactionReportStaff extends Component {
                         this.setState({
                         isLoaded: true,
                         transactionData: result.data,
-                        denda: result.denda,
-                        parkingBill: result.parkingBill,
+                        inCar: result.inCar,
+                        inMotorCycle: result.inMotor,
+                        in: result.in,
+                        out: result.out,
                         countData: Math.ceil(result.jumlah/limit)
                         });
                     },
@@ -174,7 +192,7 @@ class TransactionReportStaff extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+                    fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -184,8 +202,10 @@ class TransactionReportStaff extends Component {
                                 this.setState({
                                     isLoaded: true,
                                     transactionData: result.data,
-                                    denda: result.denda,
-                                    parkingBill: result.parkingBill,
+                                    inCar: result.inCar,
+                                    inMotorCycle: result.inMotor,
+                                    in: result.in,
+                                    out: result.out,
                                     countData: Math.ceil(result.jumlah/limit)
                                 });
                             },
@@ -210,7 +230,7 @@ class TransactionReportStaff extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+                    fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -220,8 +240,9 @@ class TransactionReportStaff extends Component {
                                 this.setState({
                                     isLoaded: true,
                                     transactionData: result.data,
-                                    denda: result.denda,
-                                    parkingBill: result.parkingBill,
+                                    inCar: result.inCar,
+                                    inMotorCycle: result.inMotor,
+                                    in: result.in,
                                     countData: Math.ceil(result.jumlah/limit)
                                 });
                             },
@@ -256,7 +277,7 @@ class TransactionReportStaff extends Component {
         const requestOptionsPage = {
             method: 'GET'
         };
-        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+this.props.user.idUser+"&dateTime="+formatted_date+"",requestOptionsPage)
+        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+this.props.user.idUser+"&tglJamMasuk="+formatted_date+"",requestOptionsPage)
             .then((response) => {
                 return response.json()
             })
@@ -266,8 +287,9 @@ class TransactionReportStaff extends Component {
                     this.setState({
                       isLoaded: true,
                       transactionData: result.data,
-                      denda: result.denda,
-                      parkingBill: result.parkingBill,
+                      inCar: result.inCar,
+                      inMotorCycle: result.inMotor,
+                      in: result.in,
                       date: formatted_date,
                       countData: Math.ceil(result.jumlah/limit)
                     });
@@ -340,16 +362,12 @@ class TransactionReportStaff extends Component {
                         </ContainerSingle>
                         <ContainerSingle>
                             <Table className="table table-striped table-hover position-table table-size">
-                                <thead>
+                                <thead className="head-table-report">
                                     <tr>
                                         <TH className="th-size">Ticket Code</TH>
                                         <TH className="th-size">No. Police</TH>
                                         <TH className="th-size">Type</TH>
                                         <TH className="th-size">IN-Date Time</TH>
-                                        <TH className="th-size">OUT-Date Time</TH>
-                                        <TH className="th-size">Parking Bill</TH>
-                                        <TH className="th-size">Penalty</TH>
-                                        <TH className="th-size">Total</TH>
                                         <TH className="th-size">Action</TH>
                                     </tr>
                                 </thead>
@@ -370,24 +388,6 @@ class TransactionReportStaff extends Component {
                                                         }
                                                     </TD>
                                                     <TD className="th-size">{el.tglJamMasuk}</TD>
-                                                    <TD className="th-size">{el.tglJamKeluar}</TD>
-                                                    <TD className="th-size">
-                                                        {
-                                                            el.id.includes("MEMBER-") ?
-                                                            "Free"
-                                                            :
-                                                            "Rp."+this.totalIncome(el.biayaParkir)+",-"
-                                                        }
-                                                    </TD>
-                                                    <TD className="th-size">{el.denda.length > 0 && "Rp."+this.totalIncome(el.denda[0].jumlahDenda)+",-"}</TD>
-                                                    <TD className="th-size">
-                                                        {
-                                                            el.id.includes("MEMBER-") ?
-                                                            el.denda.length > 0 && "Rp."+this.totalIncome(el.denda[0].jumlahDenda)+",-"
-                                                            :
-                                                            "Rp."+this.totalIncome(el.nominal)+",-"
-                                                        }
-                                                    </TD>
                                                     <TD className="th-size">
                                                         <ButtonModal onClick={() => this.handleModal(idx)} type="button" className="btn btn-secondary btn-modal-report" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                             Detail
@@ -434,47 +434,30 @@ class TransactionReportStaff extends Component {
                     <ContainerSingle className="right-transaction">
                         <hr></hr>
                         <ContainerSingle className="judul-detail-transaction">
-                            Detail Total Income
+                            Detail IN Visitor
                         </ContainerSingle>
                         <hr></hr>
                         <ContainerSingle>
                             <Table className="table-detail-style">
-                                <tr>
+                                <tr className="detail-style">
                                     <TH className="detail-style">Date</TH>
                                     <TD className="detail-style">: {this.dateSetRead(new Date(this.state.chooseDate))}</TD>
                                 </tr>
-                                <tr>
-                                    <TH className="detail-style">Total Parking Bill</TH>
-                                    <TD className="detail-style">
-                                        {
-                                            this.state.parkingBill > 0 ?
-                                            ": Rp. "+this.totalIncome(this.state.parkingBill)+",-"
-                                            :
-                                            ": No Transaction"
-                                        }
-                                    </TD>
+                                <tr className="detail-style">
+                                    <TH className="detail-style">
+                                        Car IN
+                                    </TH>
+                                    <TD className="detail-style">: { this.state.inCar } person </TD>
                                 </tr>
-                                <tr>
-                                    <TH className="detail-style">Total Penalty</TH>
-                                    <TD className="detail-style">
-                                        {
-                                            (this.state.denda) > 0 ?
-                                            ": Rp. "+this.totalIncome(this.state.denda)+",-"
-                                            :
-                                            ": No Transaction"
-                                        }
-                                    </TD>
+                                <tr className="detail-style">
+                                    <TH className="detail-style">
+                                        Motocycle IN
+                                    </TH>
+                                    <TD className="detail-style">: { this.state.inMotorCycle } person </TD>
                                 </tr>
-                                <tr>
-                                    <th className="detail-style total">Total Income</th>
-                                    <td className="detail-style total">
-                                        {
-                                            (this.state.parkingBill + this.state.denda) > 0 ?
-                                            ": Rp. "+this.totalIncome(this.state.parkingBill + this.state.denda)+",-"
-                                            :
-                                            ": No Transaction"
-                                        }
-                                    </td>
+                                <tr className="detail-style">
+                                    <th className="detail-style total-report-in">IN Total</th>
+                                    <td className="detail-style total-report-in">: { this.state.in } person</td>
                                 </tr>
                             </Table>
                         </ContainerSingle>
@@ -559,4 +542,4 @@ const mapDispatchToProps = dispatch => {
     return {}
 }
  
-export default connect(mapStateToProps , mapDispatchToProps)(TransactionReportStaff);
+export default connect(mapStateToProps , mapDispatchToProps)(InReportStaff);

@@ -34,7 +34,7 @@ class AddMember extends Component {
             helperTextNoPol: ' '
          }
         this.handleCancelAdd = () => {
-            const { name , noPol , createdBy , type } = this.state
+            const { name , noPol } = this.state
             if (name !== '' || noPol !== '') {
                 Swal.fire({
                     title: 'Are you sure?',

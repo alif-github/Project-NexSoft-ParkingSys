@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import {ContainerSingle, H3, H5, SelectSm, Option} from '../../atomics'
+import {ContainerSingle, H3, SelectSm, Option} from '../../atomics'
 import TransactionReportStaff from '../transaction-report';
+import InReportStaff from '../in-report';
+import OutReportStaff from '../out-report';
 import './style.css'
 
 class ReportStaff extends Component {
@@ -16,7 +18,6 @@ class ReportStaff extends Component {
         }
     }
     render() { 
-        console.log("reportStatus:", this.state.reportStatus)
         return ( 
             <ContainerSingle className="report">
                 <ContainerSingle className="judul-report">
@@ -45,11 +46,15 @@ class ReportStaff extends Component {
                                     )
                                 case "parkingIn" :
                                     return (
-                                        <h5>HAHAHAHA</h5>
+                                        <>
+                                            <InReportStaff/>
+                                        </>
                                     )
                                 case "parkingOut" :
                                     return (
-                                        <h5>HEHEHE</h5>
+                                        <>
+                                            <OutReportStaff/>
+                                        </>
                                     )
                                 default :
                                     return (

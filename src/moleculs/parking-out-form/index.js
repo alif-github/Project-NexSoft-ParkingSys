@@ -269,10 +269,6 @@ class ParkingOutForm extends Component {
             borderRadius: '1vh',
             padding: '1vh',
             marginBottom: '30px'
-        } 
-        const inputStyle = {
-            marginTop: '5px',
-            marginBottom: '5px'
         }
         const gridIsiStyle = {
         }

@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns' 
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import Carousel from 'react-bootstrap/Carousel'
 import './style.css'
 
 class DashBoardAdmin extends Component {
@@ -172,6 +173,42 @@ class DashBoardAdmin extends Component {
 
         return ( 
             <ContainerSingle className="background-content-dashboard-adm">
+                <ContainerSingle>
+                    <Carousel>
+                        <Carousel.Item>
+                            <img
+                            className="d-block w-100"
+                            src="https://images.theconversation.com/files/274516/original/file-20190515-60532-1lo0hf3.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop"
+                            alt="First slide"
+                            />
+                            <Carousel.Caption>
+                                <h3>First slide label</h3>
+                            </Carousel.Caption>
+                        </Carousel.Item>
+                        <Carousel.Item>
+                            <img
+                            className="d-block w-100"
+                            src="https://motorcyclehabit.com/wp-content/uploads/2019/05/Parked-Motorcycles-Large.jpg"
+                            alt="Second slide"
+                            />
+
+                            <Carousel.Caption>
+                                <h3>Second slide label</h3>
+                            </Carousel.Caption>
+                        </Carousel.Item>
+                        <Carousel.Item>
+                            <img
+                            className="d-block w-100"
+                            src="https://www.secureparking.co.id/images/logo_spi.jpg"
+                            alt="Third slide"
+                            />
+
+                            <Carousel.Caption>
+                                <h3>Third slide label</h3>
+                            </Carousel.Caption>
+                        </Carousel.Item>
+                    </Carousel>
+                </ContainerSingle>
                 <ContainerSingle className="content-item">
                     DASHBOARD ADMIN
                 </ContainerSingle>

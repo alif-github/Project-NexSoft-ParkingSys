@@ -91,3 +91,7 @@
     float: left;
     /* border: 1px solid black; */
 }
+.d-block {
+    height: 100px;
+    object-fit: cover;
+}

@@ -4,7 +4,6 @@ import {
     Paper,
     TextField,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles';
 import Swal from 'sweetalert2'
 import { connect } from "react-redux"
 import { Button, ContainerSingle, H5, I, Span } from '../../atomics';
@@ -167,28 +166,6 @@ class ProfileDet extends Component {
         }
     }
     render() {
-        const useStyles = makeStyles((theme) => ({
-            root: {
-                '& > *': {
-                  margin: theme.spacing(1),
-                  width: '25ch',
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                },
-            },
-            container: {
-                flexGrow: 1
-            },
-            margin: {
-                margin: theme.spacing(1),
-            },
-            withoutLabel: {
-                marginTop: theme.spacing(3),
-            },
-            textField: {
-                width: '25ch',
-            },
-        }));
         const inputStyle = {
             marginTop: '5px',
             marginBottom: '5px'
