@@ -3,7 +3,6 @@ package com.project.secureparkir.repository;
 import com.project.secureparkir.model.Ticket;
 
 import java.util.List;
-import java.util.Map;
 
 public interface TicketRepository {
 
@@ -50,6 +49,18 @@ public interface TicketRepository {
 
     //Count Data by Query
     int countOutByQuery(String query);
+
+    //Count Data by Query
+    int countInCarByQuery(String query);
+
+    //Count Data by Query
+    int countInMotorCycleByQuery(String query);
+
+    //Count Data by Query
+    int countOutCarByQuery(String query);
+
+    //Count Data by Query
+    int countOutMotorCycleByQuery(String query);
 
     //Sum Daya by Query
     Double sumAllDataByQuery(String query);

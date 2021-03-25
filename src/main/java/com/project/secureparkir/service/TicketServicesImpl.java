@@ -105,6 +105,11 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
+                String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
+                String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
+                whereQuery.add("tglJamMasuk between '"+tglAwalMasuk+"' and '"+tglAkhirMasuk+"' order by tglJamMasuk desc");
+            }
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -140,6 +145,11 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
+                String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
+                String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
+                whereQuery.add("tglJamMasuk between '"+tglAwalMasuk+"' and '"+tglAkhirMasuk+"' order by tglJamMasuk desc");
+            }
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -168,6 +178,11 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
+                String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
+                String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
+                whereQuery.add("tglJamMasuk between '"+tglAwalMasuk+"' and '"+tglAkhirMasuk+"' order by tglJamMasuk desc");
+            }
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -206,6 +221,128 @@ public class TicketServicesImpl implements TicketServices {
                 query += "WHERE " + String.join(" AND ", whereQuery);
 
             return ticketRepository.countOutByQuery(query);
+        }
+    }
+
+    @Override
+    public int countInCarByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
+                whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol='"+params.get("noPol")+"'");
+            if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
+                whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
+                String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
+                String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
+                whereQuery.add("tglJamMasuk between '"+tglAwalMasuk+"' and '"+tglAkhirMasuk+"' and idJenis = 2 order by tglJamMasuk desc");
+            }
+            if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
+                String tglAwal = ""+params.get("dateTime")+" 00:00:01";
+                String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
+                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' and idJenis = 2 order by tglJamMasuk desc");
+            }
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return ticketRepository.countInCarByQuery(query);
+        }
+    }
+
+    @Override
+    public int countInMotorCycleByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
+                whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol='"+params.get("noPol")+"'");
+            if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
+                whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
+                String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
+                String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
+                whereQuery.add("tglJamMasuk between '"+tglAwalMasuk+"' and '"+tglAkhirMasuk+"' and idJenis = 1 order by tglJamMasuk desc");
+            }
+            if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
+                String tglAwal = ""+params.get("dateTime")+" 00:00:01";
+                String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
+                whereQuery.add("tglJamMasuk between '"+tglAwal+"' and '"+tglAkhir+"' and idJenis = 1 order by tglJamMasuk desc");
+            }
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return ticketRepository.countInMotorCycleByQuery(query);
+        }
+    }
+
+    @Override
+    public int countOutCarByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
+                whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol='"+params.get("noPol")+"'");
+            if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
+                whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
+                String tglAwal = ""+params.get("dateTime")+" 00:00:01";
+                String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
+                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' and idJenis = 2 order by tglJamKeluar desc");
+            }
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return ticketRepository.countOutCarByQuery(query);
+        }
+    }
+
+    @Override
+    public int countOutMotorCycleByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idData") && !String.valueOf(params.get("idData")).isBlank())
+                whereQuery.add("idData='"+params.get("idData")+"'");
+            if (params.containsKey("id") && !String.valueOf(params.get("id")).isBlank())
+                whereQuery.add("id='"+params.get("id")+"'");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol='"+params.get("noPol")+"'");
+            if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
+                whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
+                String tglAwal = ""+params.get("dateTime")+" 00:00:01";
+                String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
+                whereQuery.add("tglJamKeluar between '"+tglAwal+"' and '"+tglAkhir+"' and idJenis = 1 order by tglJamKeluar desc");
+            }
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return ticketRepository.countOutMotorCycleByQuery(query);
         }
     }
 

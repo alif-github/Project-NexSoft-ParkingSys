@@ -356,6 +356,38 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
+    public int countInCarByQuery(String query) {
+        String sql = "SELECT COUNT(idJenis) as count FROM ticket " + query;
+        int countTicket = databases.queryForObject(
+                sql, Integer.class);
+        return countTicket;
+    }
+
+    @Override
+    public int countInMotorCycleByQuery(String query) {
+        String sql = "SELECT COUNT(idJenis) as count FROM ticket " + query;
+        int countTicket = databases.queryForObject(
+                sql, Integer.class);
+        return countTicket;
+    }
+
+    @Override
+    public int countOutCarByQuery(String query) {
+        String sql = "SELECT COUNT(idJenis) as count FROM ticket " + query;
+        int countTicket = databases.queryForObject(
+                sql, Integer.class);
+        return countTicket;
+    }
+
+    @Override
+    public int countOutMotorCycleByQuery(String query) {
+        String sql = "SELECT COUNT(idJenis) as count FROM ticket " + query;
+        int countTicket = databases.queryForObject(
+                sql, Integer.class);
+        return countTicket;
+    }
+
+    @Override
     public Double sumAllDataByQuery(String query) {
         String sql = "SELECT SUM(nominal) as payment FROM ticket " + query;
         Double sumTicket = databases.queryForObject(

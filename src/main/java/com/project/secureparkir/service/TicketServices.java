@@ -46,6 +46,18 @@ public interface TicketServices {
     //Count Data by Query
     int countOutByQuery(Map <Object, Object> params);
 
+    //Count Car By Query
+    int countInCarByQuery(Map <Object, Object> params);
+
+    //Count Motor By Query
+    int countInMotorCycleByQuery(Map <Object, Object> params);
+
+    //Count Car By Query
+    int countOutCarByQuery(Map <Object, Object> params);
+
+    //Count Motor By Query
+    int countOutMotorCycleByQuery(Map <Object, Object> params);
+
     //Sum Data by Query
     Double sumAllDataByQuery(Map <Object, Object> params);
 

@@ -106,13 +106,25 @@ public class TicketController {
 
         try {
             ticketList = ticketServices.readDataByQuery(params);
-            output.put("jumlah", ticketServices.countAllDataByQuery(params));
-            output.put("denda", ticketServices.sumDendaParkirByQuery(params));
-            output.put("in", ticketServices.countInByQuery(params));
-            output.put("out", ticketServices.countOutByQuery(params));
-            output.put("parkingBill", ticketServices.sumBiayaParkirByQuery(params));
-            output.put("data",ticketList);
-            return new ResponseEntity<>(output, HttpStatus.OK);
+
+            if (params.containsKey("tglJamMasuk")) {
+                output.put("jumlah", ticketServices.countAllDataByQuery(params));
+                output.put("in", ticketServices.countInByQuery(params));
+                output.put("inCar", ticketServices.countInCarByQuery(params));
+                output.put("inMotor", ticketServices.countInMotorCycleByQuery(params));
+                output.put("data",ticketList);
+                return new ResponseEntity<>(output, HttpStatus.OK);
+            } else {
+                output.put("jumlah", ticketServices.countAllDataByQuery(params));
+                output.put("denda", ticketServices.sumDendaParkirByQuery(params));
+                output.put("in", ticketServices.countInByQuery(params));
+                output.put("out", ticketServices.countOutByQuery(params));
+                output.put("outCar", ticketServices.countOutCarByQuery(params));
+                output.put("outMotor", ticketServices.countOutMotorCycleByQuery(params));
+                output.put("parkingBill", ticketServices.sumBiayaParkirByQuery(params));
+                output.put("data",ticketList);
+                return new ResponseEntity<>(output, HttpStatus.OK);
+            }
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
         }
