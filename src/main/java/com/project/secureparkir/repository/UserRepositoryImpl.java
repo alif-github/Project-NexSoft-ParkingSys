@@ -95,7 +95,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User findByUsername(String username) {
-        String sql = "select * from user u inner join posisi p on u.idPosisi = p.idPosisi where u.username = ?;";
+        String sql = "select * from user u inner join posisi p on u.idPosisi = p.idPosisi where binary u.username = ?;";
         return databases.queryForObject(sql,
                 new Object[]{username},
                 (rs, rowNum) ->
@@ -203,7 +203,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public int countAllDataByQuery(String query) {
-        String sql = "SELECT COUNT(namaUser) as count FROM user " + query;
+        String sql = "SELECT COUNT(namaUser) as count FROM user u inner join posisi p on u.idPosisi = p.idPosisi " + query;
         int countUser = databases.queryForObject(
                 sql, Integer.class);
         return countUser;

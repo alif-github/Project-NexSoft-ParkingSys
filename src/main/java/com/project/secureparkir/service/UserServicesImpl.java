@@ -117,6 +117,8 @@ public class UserServicesImpl implements UserServices {
                 whereQuery.add("username LIKE '%"+params.get("username")+"%'");
             if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
                 whereQuery.add("status="+params.get("status")+"");
+            if (params.containsKey("posisi") && !String.valueOf(params.get("posisi")).isBlank())
+                whereQuery.add("posisi='"+params.get("posisi")+"'");
             if (params.containsKey("limit") && !String.valueOf(params.get("limit")).isBlank())
                 pageQuery.add(" LIMIT "+params.get("limit"));
             if (params.containsKey("offset") && !String.valueOf(params.get("offset")).isBlank())
@@ -144,6 +146,8 @@ public class UserServicesImpl implements UserServices {
                 whereQuery.add("username LIKE '%"+params.get("username")+"%'");
             if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
                 whereQuery.add("status="+params.get("status")+"");
+            if (params.containsKey("posisi") && !String.valueOf(params.get("posisi")).isBlank())
+                whereQuery.add("posisi='"+params.get("posisi")+"'");
 
             if (!whereQuery.isEmpty())
                 query += "WHERE " + String.join(" AND ", whereQuery);
