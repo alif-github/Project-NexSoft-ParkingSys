@@ -27,12 +27,14 @@ class ProfileDet extends Component {
             password: password,
             tglRegister: tglRegister,
             idPosisi: idPosisi,
-            posisi: posisi
+            posisi: posisi,
+            statusButtonUpdate: "Edit"
         }
         this.handleOpenDisabled = () => {
             if (this.state.disabled) {
                 this.setState({
-                    disabled: false
+                    disabled: false,
+                    statusButtonUpdate: "Update"
                 })
             } else {
                 this.setState({
@@ -162,6 +164,12 @@ class ProfileDet extends Component {
                             // this.props.history.push('/500-internal-server-error')
                         }
                     )
+                    .then(
+                        this.setState({
+                            statusButtonUpdate: "Edit",
+                            disabled: true
+                        })
+                    )
             }
         }
     }
@@ -275,14 +283,18 @@ class ProfileDet extends Component {
                                         helperText=" "
                                     />
                                     <ContainerSingle className="control-2">
-                                        <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingUpdateUserAPI()}>
-                                            <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
-                                            Update
-                                        </Button>
-                                        <Button className="btn btn-warning btn-float" onClick={() => this.handleOpenDisabled()}>
-                                            <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
-                                            Edit
-                                        </Button>
+                                        {
+                                            this.state.statusButtonUpdate === "Edit" ?
+                                            <Button className="btn btn-warning btn-float" onClick={() => this.handleOpenDisabled()}>
+                                                <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
+                                                Edit
+                                            </Button>
+                                            :
+                                            <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingUpdateUserAPI()}>
+                                                <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
+                                                Update
+                                            </Button>
+                                        }
                                         <Button className="btn btn-warning btn-float" onClick={() => this.props.history.push("/profile/change-password")}>
                                             <Span><I className="fa fa-key fa-icon" aria-hidden="true"></I></Span>
                                             Change Password

@@ -33,22 +33,17 @@ class InReportStaff extends Component {
                     id: "",
                     idData: "",
                     jenisKendaraan: [
-                        {
-                            jenis: ""
-                        }
+                        {jenis: ""}
                     ],
                     denda: [
-                        {
-                            denda: ""
-                        }
+                        {denda: ""}
                     ]
                 }
             ],
+            dataStaff: [],
             objTransactionData: {
                 jenisKendaraan: [
-                    {
-                        jenis: ""
-                    }
+                    {jenis: ""}
                 ],
                 denda: [
                     {
@@ -67,6 +62,7 @@ class InReportStaff extends Component {
             limit: 5,
             date: "",
             toogleFind: "ID",
+            toogleFindStaff: "",
             inputFind: ""
          }
         this.handleSetValue = el => {
@@ -128,6 +124,11 @@ class InReportStaff extends Component {
                 toogleFind: el.target.value
             })
         }
+        this.handleFindByStaff = el => {
+            this.setState({
+                toogleFindStaff: el.target.value
+            },() => this.handleRefreshData())
+        }
         this.handleClickedFind = () => {
             if (this.state.page !== 1) {
                 this.setState({
@@ -139,7 +140,7 @@ class InReportStaff extends Component {
         }
         //---------------------------------------------------------------------------------------------------------------------
         this.handleRefreshData = () => {
-            const {page, limit, chooseDate} = this.state
+            const {page, limit, chooseDate , toogleFindStaff} = this.state
             let dateValue = this.dateSetRead(chooseDate)
             if (chooseDate === new Date()) {
                 this.dateSetRead(chooseDate)
@@ -150,7 +151,7 @@ class InReportStaff extends Component {
                 method: 'GET'
             };
             let nama;
-            if (this.props.user.posisi === "Admin") nama = ""
+            if (this.props.user.posisi === "Admin") nama = toogleFindStaff
             else nama = this.props.user.idUser
             fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+nama+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
                 .then((response) => {
@@ -181,7 +182,7 @@ class InReportStaff extends Component {
                 )   
         }
         this.handleShowPengunjungBy = () => {
-            const {chooseDate} = this.state
+            const {chooseDate, toogleFindStaff} = this.state
             let dateValue = this.dateSetRead(chooseDate)
             const findUserValue = this.state.inputFind;
             
@@ -196,7 +197,7 @@ class InReportStaff extends Component {
                         method: 'GET'
                     };
                     let nama;
-                    if (this.props.user.posisi === "Admin") nama = ""
+                    if (this.props.user.posisi === "Admin") nama = toogleFindStaff
                     else nama = this.props.user.idUser
                     fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+nama+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
                         .then((response) => {
@@ -237,7 +238,7 @@ class InReportStaff extends Component {
                         method: 'GET'
                     };
                     let nama;
-                    if (this.props.user.posisi === "Admin") nama = ""
+                    if (this.props.user.posisi === "Admin") nama = toogleFindStaff
                     else nama = this.props.user.idUser
                     fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+nama+"&tglJamMasuk="+dateValue+"",requestOptionsPage)
                         .then((response) => {
@@ -276,7 +277,7 @@ class InReportStaff extends Component {
         }
     }
     componentDidMount() {
-        const {offset, limit} = this.state
+        const {offset, limit, toogleFindStaff} = this.state
         let current_datetime = new Date()
         let year = current_datetime.getFullYear();
         let month = ("0" + (current_datetime.getMonth() + 1)).slice(-2)
@@ -287,7 +288,7 @@ class InReportStaff extends Component {
             method: 'GET'
         };
         let nama;
-        if (this.props.user.posisi === "Admin") nama = ""
+        if (this.props.user.posisi === "Admin") nama = toogleFindStaff
         else nama = this.props.user.idUser
         fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+nama+"&tglJamMasuk="+formatted_date+"",requestOptionsPage)
             .then((response) => {
@@ -316,6 +317,19 @@ class InReportStaff extends Component {
                     });
                 }
             )
+        fetch("http://localhost:8080/parkir/user/?posisi=Staff", requestOptionsPage)
+            .then((response) => {
+                return response.json()
+            })
+            .then(
+                (result) => {
+                    //do what you want with the response here
+                    this.setState({
+                        dataStaff: result.data
+                    });
+                },
+                (error) => {}
+            )
     }
     render() {
         const useStyles = makeStyles((theme) => ({
@@ -342,6 +356,24 @@ class InReportStaff extends Component {
                             <Grid container spacing={3}>
                                 <Grid item xs={9}>
                                     <ContainerSingle className="panel-control">
+                                        {
+                                        this.props.user.posisi === "Admin" && 
+                                        <ContainerSingle className="panel-control-selectby"> 
+                                                <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindByStaff}>
+                                                    <Option className="option-menu-report" value="">-All-</Option>
+                                                    {
+                                                        this.state.dataStaff.length > 0 ?
+                                                        this.state.dataStaff.map((el,idx) => {
+                                                            return (
+                                                                <Option className="option-menu-report" key={idx} value={el.idUser}>{el.namaUser}</Option>            
+                                                            )
+                                                        })
+                                                        :
+                                                        <Option className="option-menu-report">No Data</Option>
+                                                    }
+                                                </SelectSm>
+                                        </ContainerSingle>
+                                        }
                                         <ContainerSingle className="panel-control-selectby"> 
                                             <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindBy}>
                                                 <Option className="option-menu" value="ID">Code</Option>
@@ -362,6 +394,7 @@ class InReportStaff extends Component {
                                             <KeyboardDatePicker
                                                 className={useStyles.root}
                                                 clearable
+                                                onKeyDown={(e) => e.preventDefault()}
                                                 value= {this.dateSetRead(new Date(this.state.chooseDate))}
                                                 onChange={date => this.handleDateChange(date)}
                                                 maxDate={new Date()}

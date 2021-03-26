@@ -3,9 +3,7 @@ import { connect } from "react-redux"
 import {
     ContainerSingle,
     Span,
-    Table,
     THead,
-    TRow,
     TH,
     TBody,
     TD,
@@ -36,6 +34,7 @@ class Member extends Component {
             offset: 0,
             limit: 5,
             toogleFind: "ID",
+            toggleFindStatus: "",
             findById: "",
             inputFind: "", 
             memberData: []
@@ -65,13 +64,13 @@ class Member extends Component {
         //When data must be refresh, this is the solutions
         //---------------------------------------------------------------------------------------------------------------------
         this.refreshMemberData = () => {
-            const {page,limit} = this.state;
+            const {page,limit,toggleFindStatus} = this.state;
             let start = (page - 1)*limit;
             //method to request API
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember=&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+            fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember=&status="+toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -116,6 +115,12 @@ class Member extends Component {
             this.setState({
                 toogleFind: el.target.value
             })
+        }
+        this.handleFindByStatus = el => {
+            this.setState({
+                toggleFindStatus: el.target.value,
+                page: 1
+            },() => this.refreshMemberData())
         }
         //---------------------------------------------------------------------------------------------------------------------
         this.handleDeleteMemberAPI = (idMember,namaMember) => {
@@ -230,7 +235,7 @@ class Member extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/member/read-member/?idMember="+findMemberValue+"&noPol=&namaMember=&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    fetch("http://localhost:8080/member/read-member/?idMember="+findMemberValue+"&noPol=&namaMember=&status="+this.state.toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -264,7 +269,7 @@ class Member extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember="+findMemberValue+"&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember="+findMemberValue+"&status="+this.state.toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -298,51 +303,7 @@ class Member extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol="+findMemberValue+"&namaMember=&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
-                        .then((response) => {
-                            return response.json()
-                        })
-                        .then(
-                            (result) => {
-                                //do what you want with the response here
-                                this.setState({
-                                isLoaded: true,
-                                memberData: result.data,
-                                countData: Math.ceil(result.jumlah/this.state.limit)
-                                });
-                            },
-                            // Note: it's important to handle errors here
-                            // instead of a catch() block so that we don't swallow
-                            // exceptions from actual bugs in components.
-                            (error) => {
-                                this.setState({
-                                    isLoaded: false,
-                                    error
-                                });
-                            }
-                        )
-                }
-            } else if (this.state.toogleFind === "Status") {
-                if (findMemberValue === "") {
-                    this.refreshMemberData();
-                } else {
-                    let findMemberValueNew;
-                    const {page,limit} = this.state;
-                    let start = (page - 1)*limit;
-                    //method to request API
-                    const requestOptionsPage = {
-                        method: 'GET'
-                    };
-                    
-                    if (findMemberValue === 'Active') {
-                        findMemberValueNew = 1
-                    } else if (findMemberValue === 'Non-Active') {
-                        findMemberValueNew = 0 
-                    } else {
-                        findMemberValueNew = 0
-                    }
-                    
-                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember=&status="+findMemberValueNew+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol="+findMemberValue+"&namaMember=&status="+this.state.toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -426,9 +387,9 @@ class Member extends Component {
         if (error) {
             return (
                 <ContainerSingle>
-                    <Table className="table table-striped table-hover position-table">
+                    <table className="table table-striped table-hover position-table">
                         <THead>
-                            <TRow>
+                            <tr>
                                 <TH>ID</TH>
                                 <TH>Name</TH>
                                 <TH>No Police</TH>
@@ -436,16 +397,16 @@ class Member extends Component {
                                 <TH>Status</TH>
                                 <TH>Register Date</TH>
                                 <TH>Action</TH>
-                            </TRow>
+                            </tr>
                         </THead>
                         <TBody>
-                            <TRow>
+                            <tr>
                                 <TD colSpan="7">
                                     Error for fetching data, connection refused.
                                 </TD>
-                            </TRow>
+                            </tr>
                         </TBody>
-                    </Table>
+                    </table>
                 </ContainerSingle>
             )
         // When Loading
@@ -453,9 +414,9 @@ class Member extends Component {
         } else if (!isLoaded) {
             return (
                 <ContainerSingle>
-                    <Table className="table table-striped table-hover position-table">
+                    <table className="table table-striped table-hover position-table">
                         <THead>
-                            <TRow>
+                            <tr>
                                 <TH>ID</TH>
                                 <TH>Name</TH>
                                 <TH>No Police</TH>
@@ -463,19 +424,19 @@ class Member extends Component {
                                 <TH>Status</TH>
                                 <TH>Register Date</TH>
                                 <TH>Action</TH>
-                            </TRow>
+                            </tr>
                         </THead>
                         <TBody>
-                            <TRow>
+                            <tr>
                                 <TD colSpan="7">
                                     <ContainerSingle className={useStyles.root}>
                                         <CircularProgress />
                                     </ContainerSingle>
                                     Loading...
                                 </TD>
-                            </TRow>
+                            </tr>
                         </TBody>
-                    </Table>
+                    </table>
                 </ContainerSingle>
             )
         // When Success
@@ -485,7 +446,14 @@ class Member extends Component {
                 <ContainerSingle>
                     <ContainerSingle className="panel-control">
                         <ContainerSingle className="panel-control-findby">
-                            Find By :
+                            Status :
+                        </ContainerSingle>
+                        <ContainerSingle className="panel-control-selectby"> 
+                            <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindByStatus}>
+                                <Option value="">All Status</Option>
+                                <Option value="1">Active</Option>
+                                <Option value="0">Non-Active</Option>
+                            </SelectSm>
                         </ContainerSingle>
                         <ContainerSingle className="panel-control-selectby"> 
                             <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindBy}>
@@ -495,23 +463,23 @@ class Member extends Component {
                                 <Option value="Status">Status</Option>
                             </SelectSm>
                         </ContainerSingle>
-                        <div className="panel-control-inputby input-group mb-3">
+                        <ContainerSingle className="panel-control-inputby input-group mb-3">
                             <input type="text" className="form-control form-control-sm form-opt" onChange={el => this.handleSetValue(el)} placeholder="Find..." aria-label="Recipient's username" aria-describedby="button-addon2"/>
-                            <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => this.handleClickedFind()}>
+                            <Button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => this.handleClickedFind()}>
                                 <Span><I className="fa fa-search fa-icon" aria-hidden="true"></I></Span>
-                            </button>
-                        </div>
-                        <ContainerSingle className="panel-control-add">
+                            </Button>
+                        </ContainerSingle>
+                        <ContainerSingle className="panel-control-add-member">
                             <Button className="btn btn-success btn-add" onClick={() => this.props.history.push('/member/add')}>
                                 <Span><I className="fa fa-plus fa-icon" aria-hidden="true"></I></Span>
-                                    Add Member
+                                    Add
                             </Button>
                         </ContainerSingle>
                     </ContainerSingle>
                     <ContainerSingle className="table-scrolling">
-                    <Table className="table table-striped table-hover position-table">
+                    <table className="table table-striped table-hover position-table">
                         <THead className="head-member">
-                            <TRow>
+                            <tr>
                                 <TH>ID</TH>
                                 <TH>Name</TH>
                                 <TH>No Police</TH>
@@ -519,13 +487,14 @@ class Member extends Component {
                                 <TH>Status</TH>
                                 <TH>Register Date</TH>
                                 <TH>Action</TH>
-                            </TRow>
+                            </tr>
                         </THead>
                         <TBody>
                             {
+                                this.state.memberData.length > 0 ?
                                 this.state.memberData.map((el, idx) => {
                                     return (
-                                        <TRow key={idx}>
+                                        <tr key={idx}>
                                             <TD>{el.idMember}</TD>
                                             <TD>{el.namaMember}</TD>
                                             <TD>{el.noPol}</TD>
@@ -535,37 +504,46 @@ class Member extends Component {
                                             <TD>
                                                 {
                                                     <center>
-                                                    <div className="container-action-button-staff">
-                                                        <div onClick={() => this.props.addDummy(this.state.memberData[idx])}>
+                                                    <ContainerSingle className="container-action-button-staff">
+                                                        <ContainerSingle onClick={() => this.props.addDummy(this.state.memberData[idx])}>
                                                             <ModalDetailMember />
-                                                        </div>
-                                                        <div>
+                                                        </ContainerSingle>
+                                                        <ContainerSingle>
                                                             <Button className="btn btn-warning" 
                                                                 onClick={() => {this.props.history.push('/member/update/'+el.idMember);this.props.addDummy(this.state.memberData[idx])}}>
                                                                 <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
                                                                 Edit
                                                             </Button>
-                                                        </div> 
-                                                        <div>
-                                                            <Button className="btn btn-danger" onClick={() => this.handleDeleteMemberConfirm(el.idMember,el.namaMember)}>
-                                                                <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
-                                                                Delete
-                                                            </Button>
-                                                        </div>
-                                                    </div>
+                                                        </ContainerSingle> 
+                                                        <ContainerSingle>
+                                                            {
+                                                                this.props.user.posisi === "Admin" &&
+                                                                <Button className="btn btn-danger" onClick={() => this.handleDeleteMemberConfirm(el.idMember,el.namaMember)}>
+                                                                    <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
+                                                                    Delete
+                                                                </Button>
+                                                            }
+                                                        </ContainerSingle>
+                                                    </ContainerSingle>
                                                     </center>
                                                 }
                                             </TD>
-                                        </TRow>
+                                        </tr>
                                     )
                                 })
+                                :
+                                <tr>
+                                    <TD colSpan={7}>No Data</TD>
+                                </tr>
                             }
                         </TBody>
-                    </Table>
+                    </table>
                     </ContainerSingle>
                     <ContainerSingle className="page">
                         <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
-                            <Typography>Page: {this.state.page}</Typography>
+                            <Typography>
+                                Page: {this.state.memberData.length > 0 ? this.state.page : "No Data"}
+                            </Typography>
                             <Pagination count={this.state.countData} page={this.state.page} onChange={this.handleChangePage} />
                         </ContainerSingle>
                         <ContainerSingle className='bawah-kanan'>
@@ -590,7 +568,8 @@ class Member extends Component {
 // Redux util
 //---------------------------------------------------------------------------------------------------------------------
 const mapStateToProps = state => ({
-    isLogin: state.auth.isLogin
+    isLogin: state.auth.isLogin,
+    user: state.auth.user
 })
 
 const mapDispatchToProps = dispatch => {

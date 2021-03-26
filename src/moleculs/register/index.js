@@ -287,7 +287,6 @@ class Register extends Component {
                             <form className={useStyles.root} noValidate autoComplete="off">
                                 <TextField
                                     style={inputStyle}
-                                    id="standard-basic" 
                                     label="Full Name"
                                     name="name"
                                     onChange={this.handleSetValue}
@@ -299,7 +298,6 @@ class Register extends Component {
                                     <Grid item xs={6}>
                                         <TextField
                                             style={inputStyle}
-                                            id="standard-basic" 
                                             label="Username"
                                             name="username"
                                             onChange={this.handleSetValue}
@@ -312,7 +310,6 @@ class Register extends Component {
                                         <TextField
                                             error={this.state.errorEmail === true}
                                             style={inputStyle}
-                                            id="standard-basic" 
                                             label="Email"
                                             name="email"
                                             onChange={this.handleSetValue}
@@ -343,7 +340,6 @@ class Register extends Component {
                                         className={clsx(useStyles.margin, useStyles.textField)}>
                                         <InputLabel required htmlFor="standard-adornment-password">Password</InputLabel>
                                         <Input
-                                            id="standard-adornment-password"
                                             type={this.state.showPassword ? 'text' : 'password'}
                                             value={this.state.password}
                                             name="password"
@@ -371,7 +367,6 @@ class Register extends Component {
                                         className={clsx(useStyles.margin, useStyles.textField)}>
                                         <InputLabel required htmlFor="standard-adornment-password">Confirmation Password</InputLabel>
                                         <Input
-                                            id="standard-adornment-password"
                                             type={this.state.showPasswordConfirm ? 'text' : 'password'}
                                             value={this.state.passwordConfirm}
                                             name="passwordConfirm"

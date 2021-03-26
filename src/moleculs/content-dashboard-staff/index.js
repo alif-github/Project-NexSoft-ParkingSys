@@ -73,6 +73,7 @@ class DashBoardStaff extends Component {
                         })
                         .then(
                             this.setState({
+                                isMustRefresh: 1,
                                 memberId: "",
                                 isMember: 0,
                                 staffGate: this.props.user.idUser
@@ -99,6 +100,8 @@ class DashBoardStaff extends Component {
         }
     }
     render() {
+        console.log("refresh:",this.state.isMustRefresh);
+        console.log("memberID:",this.state.memberId);
         const useStyles = makeStyles((theme) => ({
             root: {
                 '& > *': {
@@ -224,7 +227,7 @@ class DashBoardStaff extends Component {
                     </Grid>
                 </ContainerSingle>
                 <ContainerSingle className="content-dashboard-right-staff">
-                    <DashboardTransaction/>
+                    <DashboardTransaction />
                 </ContainerSingle>
             </ContainerSingle>
          );

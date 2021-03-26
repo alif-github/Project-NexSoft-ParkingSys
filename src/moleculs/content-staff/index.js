@@ -36,6 +36,7 @@ class Staff extends Component {
             offset: 0,
             limit: 5,
             toogleFind: "ID",
+            toggleFindStatus: "",
             findById: "",
             inputFind: "", 
             userData: []
@@ -65,13 +66,13 @@ class Staff extends Component {
         //When data must be refresh, this is the solutions
         //---------------------------------------------------------------------------------------------------------------------
         this.refreshUserData = () => {
-            const {page,limit} = this.state;
+            const {page,limit,toggleFindStatus} = this.state;
             let start = (page - 1)*limit;
             //method to request API
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/parkir/user/?idUser=&username=&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+            fetch("http://localhost:8080/parkir/user/?idUser=&username=&status="+toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -116,6 +117,12 @@ class Staff extends Component {
             this.setState({
                 toogleFind: el.target.value
             })
+        }
+        this.handleFindByStatus = el => {
+            this.setState({
+                toggleFindStatus: el.target.value,
+                page: 1
+            },() => this.refreshUserData())
         }
         //---------------------------------------------------------------------------------------------------------------------
         this.handleDeleteUserAPI = (idUser,namaUser) => {
@@ -230,7 +237,7 @@ class Staff extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/parkir/user/?idUser="+findUserValue+"&username=&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    fetch("http://localhost:8080/parkir/user/?idUser="+findUserValue+"&username=&status="+this.state.toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -264,51 +271,7 @@ class Staff extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/parkir/user/?idUser=&username="+findUserValue+"&status=&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
-                        .then((response) => {
-                            return response.json()
-                        })
-                        .then(
-                            (result) => {
-                                //do what you want with the response here
-                                this.setState({
-                                isLoaded: true,
-                                userData: result.data,
-                                countData: Math.ceil(result.jumlah/this.state.limit)
-                                });
-                            },
-                            // Note: it's important to handle errors here
-                            // instead of a catch() block so that we don't swallow
-                            // exceptions from actual bugs in components.
-                            (error) => {
-                                this.setState({
-                                    isLoaded: false,
-                                    error
-                                });
-                            }
-                        )
-                }
-            } else if (this.state.toogleFind === "Status") {
-                if (findUserValue === "") {
-                    this.refreshUserData();
-                } else {
-                    let findUserValueNew;
-                    const {page,limit} = this.state;
-                    let start = (page - 1)*limit;
-                    //method to request API
-                    const requestOptionsPage = {
-                        method: 'GET'
-                    };
-                    
-                    if (findUserValue === 'Active') {
-                        findUserValueNew = 1
-                    } else if (findUserValue === 'Non-Active') {
-                        findUserValueNew = 0 
-                    } else {
-                        findUserValueNew = 0
-                    }
-                    
-                    fetch("http://localhost:8080/parkir/user/?idUser=&username=&status="+findUserValueNew+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    fetch("http://localhost:8080/parkir/user/?idUser=&username="+findUserValue+"&status="+this.state.toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -449,22 +412,28 @@ class Staff extends Component {
                 <ContainerSingle>
                     <ContainerSingle className="panel-control">
                         <ContainerSingle className="panel-control-findby">
-                            Find By :
+                            Status :
+                        </ContainerSingle>
+                        <ContainerSingle className="panel-control-selectby"> 
+                            <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindByStatus}>
+                                <Option value="">All Status</Option>
+                                <Option value="1">Active</Option>
+                                <Option value="0">Non-Active</Option>
+                            </SelectSm>
                         </ContainerSingle>
                         <ContainerSingle className="panel-control-selectby"> 
                             <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindBy}>
                                 <Option value="ID">ID</Option>
                                 <Option value="Username">Username</Option>
-                                <Option value="Status">Status</Option>
                             </SelectSm>
                         </ContainerSingle>
-                        <div className="panel-control-inputby input-group mb-3">
+                        <ContainerSingle className="panel-control-inputby input-group mb-3">
                             <input type="text" className="form-control form-control-sm form-opt" onChange={el => this.handleSetValue(el)} placeholder="Find..." aria-label="Recipient's username" aria-describedby="button-addon2"/>
-                            <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => this.handleClickedFind()}>
+                            <Button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => this.handleClickedFind()}>
                                 <Span><I className="fa fa-search fa-icon" aria-hidden="true"></I></Span>
-                            </button>
-                        </div>
-                        <ContainerSingle className="panel-control-add">
+                            </Button>
+                        </ContainerSingle>
+                        <ContainerSingle className="panel-control-add-staff">
                             <Button className="btn btn-success btn-add" onClick={() => this.props.history.push('/staff/add')}>
                                 <Span><I className="fa fa-plus fa-icon" aria-hidden="true"></I></Span>
                                     Add Staff
@@ -472,7 +441,7 @@ class Staff extends Component {
                         </ContainerSingle>
                     </ContainerSingle>
                     <ContainerSingle className="table-scrolling">
-                    <Table className="table table-striped table-hover position-table">
+                    <table className="table table-striped table-hover position-table">
                         <THead>
                             <TRow>
                                 <TH>ID</TH>
@@ -491,7 +460,7 @@ class Staff extends Component {
                                             <TD>{el.idUser}</TD>
                                             <TD>{el.namaUser}</TD>
                                             <TD>{el.username}</TD>
-                                            <TD>{el.status === false ? "Non-active":"Active"}</TD>
+                                            <TD>{el.status === false ? <Span className="span-off">Off-Duty</Span>:<Span className="span-on">On-Duty</Span>}</TD>
                                             <TD>{el.posisi}</TD>
                                             <TD>
                                                 {   
@@ -525,13 +494,16 @@ class Staff extends Component {
                                                         <ContainerSingle onClick={() => this.props.addDummy(this.state.userData[idx])}>
                                                             <ModalDetailStaff />
                                                         </ContainerSingle>
-                                                        <ContainerSingle>
-                                                            <Button className="btn btn-warning" 
-                                                                onClick={() => {this.props.history.push('/staff/update/'+el.idUser);this.props.addDummy(this.state.userData[idx])}}>
-                                                                <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
-                                                                Edit
-                                                            </Button>
-                                                        </ContainerSingle>
+                                                        {
+                                                            el.idUser === this.props.user.idUser &&
+                                                            <ContainerSingle>
+                                                                <Button className="btn btn-warning" 
+                                                                    onClick={() => {this.props.history.push('/staff/update/'+el.idUser);this.props.addDummy(this.state.userData[idx])}}>
+                                                                    <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
+                                                                    Edit
+                                                                </Button>
+                                                            </ContainerSingle>
+                                                        }
                                                         {
                                                             el.posisi !== "Admin" && 
                                                             <ContainerSingle>
@@ -550,7 +522,7 @@ class Staff extends Component {
                                 })
                             }
                         </TBody>
-                    </Table>
+                    </table>
                     </ContainerSingle>
                     <ContainerSingle className="page">
                         <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
@@ -579,7 +551,8 @@ class Staff extends Component {
 // Redux util
 //---------------------------------------------------------------------------------------------------------------------
 const mapStateToProps = state => ({
-    isLogin: state.auth.isLogin
+    isLogin: state.auth.isLogin,
+    user: state.auth.user
 })
 
 const mapDispatchToProps = dispatch => {

@@ -168,12 +168,7 @@ class UpdateStaff extends Component {
                                 })
                             }
                         },
-                        // Note: it's important to handle errors here
-                        // instead of a catch() block so that we don't swallow
-                        // exceptions from actual bugs in components.
-                        (error) => {
-                            // this.props.history.push('/500-internal-server-error')
-                        }
+                        (error) => {}
                     )
             }
         }
@@ -290,19 +285,22 @@ class UpdateStaff extends Component {
                                     helperText=" "
                                 />
                             </form>
-                            <FormControl fullWidth className={useStyles.formControl}>
-                                <InputLabel id="demo-simple-select-label">Update status</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    name="status"
-                                    defaultValue={this.state.status}
-                                    onChange={this.handleSetValue}
-                                    >
-                                    <MenuItem value={true}>Active</MenuItem>
-                                    <MenuItem value={false}>Non-Active</MenuItem>
-                                </Select>
-                            </FormControl>
+                            {
+                                this.props.user.idUser !== this.state.idUser &&
+                                <FormControl fullWidth className={useStyles.formControl}>
+                                    <InputLabel id="demo-simple-select-label">Update status</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        name="status"
+                                        defaultValue={this.state.status}
+                                        onChange={this.handleSetValue}
+                                        >
+                                        <MenuItem value={true}>Active</MenuItem>
+                                        <MenuItem value={false}>Non-Active</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            }
                             <ContainerSingle className="control-2">
                                 <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingUpdateUserAPI()}>
                                     <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
@@ -323,6 +321,7 @@ class UpdateStaff extends Component {
 
 const mapStateToProps = state => ({
     isLogin: state.auth.isLogin,
+    user: state.auth.user,
     staff: state.staffColReducer.staff
 })
 

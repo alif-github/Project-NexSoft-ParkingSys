@@ -27,7 +27,8 @@ class DashboardTransaction extends Component {
             parkingBill: 0,
             denda: 0,
             in: 0,
-            out: 0
+            out: 0,
+            isMustRefresh: 0
          }
         this.handleDateChange = (date) => {
             this.setState({
@@ -139,7 +140,8 @@ class DashboardTransaction extends Component {
                 }
             )
     }
-    render() { 
+
+    render() {
         const useStyles = makeStyles((theme) => ({
             root: {
               flexGrow: 1,
@@ -206,6 +208,7 @@ class DashboardTransaction extends Component {
                                     <KeyboardDatePicker
                                         className={useStyles.root}
                                         clearable
+                                        onKeyDown={(e) => e.preventDefault()}
                                         value={this.state.chooseDate}
                                         onChange={date => this.handleDateChange(date)}
                                         maxDate={new Date()}

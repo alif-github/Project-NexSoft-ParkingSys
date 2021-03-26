@@ -57,13 +57,13 @@ TD {
 }
 
 .panel-control-inputby {
-    width: 45%;
+    width: 30%;
     margin-bottom: 1vh;
 }
 
-.panel-control-add {
+.panel-control-add-member {
     float: right;
-    width: 20%;
+    width: 10%;
 }
 
 .btn-add {

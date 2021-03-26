@@ -13,6 +13,7 @@ class DashBoardAdmin extends Component {
         super(props);
         this.state = {
             chooseDate: null,
+            chooseDate2: null,
             incomeMemberReal: 0,
             parkingBill: 0,
             denda: 0,
@@ -22,11 +23,14 @@ class DashBoardAdmin extends Component {
         this.handleDateChange = (date) => {
             let current_datetime = new Date(date)
             let yearTwoDigit = current_datetime.getFullYear().toString().substr(2,2);
+            let year = current_datetime.getFullYear();
             let monthTwoDigit = ("0" + (current_datetime.getMonth() + 1)).slice(-2)
             let dateTwoDigit = ("0" + current_datetime.getDate()).slice(-2)
             let formatted_date = monthTwoDigit + "-" + dateTwoDigit + "-" + yearTwoDigit
+            let formatted_date2 = year + "-" + monthTwoDigit + "-" + dateTwoDigit
             this.setState({
-                chooseDate: formatted_date
+                chooseDate: formatted_date,
+                chooseDate2: formatted_date2
             },() => this.refreshIncomeMember())
         }
         this.totalIncome = nilaiUang => {
@@ -44,8 +48,7 @@ class DashBoardAdmin extends Component {
             return rupiah;
         }
         this.refreshIncomeMember = () => {
-            const {chooseDate} = this.state
-            console.log(chooseDate)
+            const {chooseDate , chooseDate2} = this.state
             //method to request API
             const requestOptionsPage = {
                 method: 'GET'
@@ -69,6 +72,22 @@ class DashBoardAdmin extends Component {
                     // Note: it's important to handle errors here
                     // instead of a catch() block so that we don't swallow
                     // exceptions from actual bugs in components.
+                    (error) => {}
+                )
+            fetch("http://localhost:8080/ticket/read-ticket/?dateTime="+chooseDate2+"",requestOptionsPage)
+                .then((response) => {
+                    return response.json()
+                })
+                .then(
+                    (result) => {
+                        //do what you want with the response here
+                        this.setState({
+                            parkingBill: result.parkingBill,
+                            denda: result.denda,
+                            in: result.in,
+                            out: result.out
+                        });
+                    },
                     (error) => {}
                 )
         }

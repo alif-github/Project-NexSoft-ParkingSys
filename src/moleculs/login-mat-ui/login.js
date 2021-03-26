@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import './style.css'
 import { 
     A,
-    Span } from '../../atomics/index'
+    ContainerSingle,
+    Span,
+    Image,
+    H1,
+    H5,
+} from '../../atomics/index'
 import { 
     Grid,
     Paper,
@@ -14,7 +19,8 @@ import {
     InputAdornment,
     FormControl,
     Button,
-    FormHelperText } from '@material-ui/core'
+    FormHelperText
+} from '@material-ui/core'
 import { 
     LockOutlined as LockOutlinedIcon, 
     Visibility, 
@@ -22,6 +28,7 @@ import {
 import Swal from 'sweetalert2'
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import Carousel from 'react-bootstrap/Carousel'
 import { connect } from 'react-redux'
 
 class Login extends Component {
@@ -87,9 +94,6 @@ class Login extends Component {
                                 this.props.history.push('/change-password')
                             }
                         },
-                        // Note: it's important to handle errors here
-                        // instead of a catch() block so that we don't swallow
-                        // exceptions from actual bugs in components.
                         (error) => {
                             this.props.history.push('/500-internal-server-error')
                         }
@@ -139,9 +143,6 @@ class Login extends Component {
                             })
                         }
                     },
-                    // Note: it's important to handle errors here
-                    // instead of a catch() block so that we don't swallow
-                    // exceptions from actual bugs in components.
                     (error) => {
                         this.props.history.push('/500-internal-server-error')
                     }
@@ -158,9 +159,6 @@ class Login extends Component {
                 display: 'flex',
                 flexWrap: 'wrap',
               },
-            },
-            container: {
-                flexGrow: 1
             },
             margin: {
                 margin: theme.spacing(1),
@@ -197,7 +195,51 @@ class Login extends Component {
         }
 
         return (
-            <div className={useStyles.container}>
+            <>
+            <ContainerSingle className="container-login-image">
+                <ContainerSingle className="bannerr">
+                    <Carousel>
+                        <Carousel.Item style={{height: "50vh",width: "100%"}}>
+                            <center>
+                                <Image
+                                className="image-login-banner"
+                                src="https://seekvectorlogo.com/wp-content/uploads/2018/03/secure-parking-vector-logo.png"
+                                alt="First slide"
+                                />
+                            </center>
+                        </Carousel.Item>
+                        <Carousel.Item style={{height: "50vh",width: "100%"}}>
+                            <center>
+                                <Image
+                                className="image-login-banner"
+                                src="https://boxies123.co.id/wp-content/uploads/2020/01/PREMIUM-MOTORCYLCE-PARKING.png"
+                                alt="Second slide"
+                                />
+                            </center>
+                        </Carousel.Item>
+                        <Carousel.Item style={{height: "50vh",width: "100%"}}>
+                            <center>
+                                <Image
+                                className="image-login-banner"
+                                src="http://www.secureparking.co.id/images_news/GOPAY.jpg"
+                                alt="Third slide"
+                                />
+                            </center>
+                        </Carousel.Item>
+                    </Carousel>
+                </ContainerSingle>
+                <ContainerSingle className="judul-bannerr bannerr">
+                    <center>
+                        <H1 className="judul-bannerr">
+                            Secure Parking
+                        </H1>
+                        <H5 className="judul-bannerr">
+                            Welcome to our Apps, We made it with love and with heart
+                        </H5>
+                    </center>
+                </ContainerSingle>
+            </ContainerSingle>
+            <ContainerSingle className="container-registration">
                 <Grid>
                     <Paper elevation={10} style={paperStyle}>
                         <Grid align='center'>
@@ -256,7 +298,8 @@ class Login extends Component {
                         </A></center>
                     </Paper>
                 </Grid>
-            </div>
+            </ContainerSingle>
+            </>
          );
     }
 }
