@@ -156,7 +156,7 @@ class DashboardTransaction extends Component {
         const pickDateStyle = {
             padding: 10,
             height: '7vh',
-            width: '53%',
+            width: '48.3%',
             backgroundColor: '#ede6e6',
         }
         const ticketIncomeStyle = {
@@ -202,7 +202,7 @@ class DashboardTransaction extends Component {
                 <Grid container spacing={3}>
                     <Grid item xs={12} style={gridStyle}>
                         <Paper elevation={3} style={pickDateStyle}>
-                            <Span className="title-pick">Pick The Date : </Span>
+                            <Span className="title-pick">Pick Date : </Span>
                             <ThemeProvider theme={theme}>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                     <KeyboardDatePicker

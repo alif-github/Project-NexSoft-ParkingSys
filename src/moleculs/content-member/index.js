@@ -460,7 +460,6 @@ class Member extends Component {
                                 <Option value="ID">ID</Option>
                                 <Option value="NamaMember">Nama Member</Option>
                                 <Option value="NoPol">Police Number</Option>
-                                <Option value="Status">Status</Option>
                             </SelectSm>
                         </ContainerSingle>
                         <ContainerSingle className="panel-control-inputby input-group mb-3">
@@ -504,7 +503,7 @@ class Member extends Component {
                                             <TD>
                                                 {
                                                     <center>
-                                                    <ContainerSingle className="container-action-button-staff">
+                                                    <ContainerSingle className={this.props.user.posisi === "Admin" ? "container-action-button-staff":"container-action-button-stafff"}>
                                                         <ContainerSingle onClick={() => this.props.addDummy(this.state.memberData[idx])}>
                                                             <ModalDetailMember />
                                                         </ContainerSingle>
@@ -539,7 +538,7 @@ class Member extends Component {
                         </TBody>
                     </table>
                     </ContainerSingle>
-                    <ContainerSingle className="page">
+                    <ContainerSingle className={this.props.user.posisi === "Admin" ? "page-admin":"page-staff"}>
                         <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
                             <Typography>
                                 Page: {this.state.memberData.length > 0 ? this.state.page : "No Data"}

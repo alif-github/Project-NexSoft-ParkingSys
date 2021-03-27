@@ -16,7 +16,7 @@ class NavStaff extends Component {
                 <Link to="/" style={{textDecoration: 'none'}}>
                     <ContainerSingle className="menu-item-staff">
                         <H5 className="menu-content">
-                            Dashboard
+                            Home
                         </H5>
                     </ContainerSingle>
                 </Link>

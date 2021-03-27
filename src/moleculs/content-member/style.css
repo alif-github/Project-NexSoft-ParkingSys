@@ -103,12 +103,25 @@ TD {
     justify-content: space-between;
 }
 
+.container-action-button-stafff {
+    display: flex;
+    flex-direction: row;
+    margin-left: 38px;
+    margin-right: 38px;
+    place-content: center;
+}
 .panel-control-search {
     width: fit-content;
     text-align: center;
 }
-
-.page {
+.page-staff {
+    position: fixed;
+    bottom: 40px;
+    width: 81%;
+    padding: 1.2vh;
+    background-color: #f2f2f2;
+}
+.page-admin {
     position: fixed;
     bottom: 40px;
     width: 76%;

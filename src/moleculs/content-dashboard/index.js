@@ -248,8 +248,8 @@ class DashBoardAdmin extends Component {
                                 <KeyboardDatePicker
                                     className={useStyles.root}
                                     clearable
-                                    value={this.state.chooseDate}
-                                    placeholder='Pick date for filtering'
+                                    value={this.state.chooseDate === null ? new Date() : this.state.chooseDate}
+                                    onKeyDown={(e) => e.preventDefault()}
                                     onChange={date => this.handleDateChange(date)}
                                     maxDate={new Date()}
                                     minDate={new Date("03-16-2021")}
