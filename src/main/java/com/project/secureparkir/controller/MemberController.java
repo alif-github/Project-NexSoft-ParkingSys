@@ -87,6 +87,8 @@ public class MemberController {
             memberList = memberServices.readDataByQuery(params);
             output.put("jumlah", memberServices.countAllDataByQuery(params));
             output.put("data", memberList);
+            output.put("motor", memberServices.countDataMotorByQuery(params));
+            output.put("mobil", memberServices.countDataCarByQuery(params));
             return new ResponseEntity<>(output, HttpStatus.OK);
         } catch (DataAccessException e) {
             return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);

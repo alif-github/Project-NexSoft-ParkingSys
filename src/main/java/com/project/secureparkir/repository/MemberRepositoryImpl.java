@@ -216,6 +216,22 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public int countDataMotorByQuery(String query) {
+        String sql = "SELECT COUNT(namaMember) as count FROM member " + query;
+        int countMember = databases.queryForObject(
+                sql, Integer.class);
+        return countMember;
+    }
+
+    @Override
+    public int countDataCarByQuery(String query) {
+        String sql = "SELECT COUNT(namaMember) as count FROM member " + query;
+        int countMember = databases.queryForObject(
+                sql, Integer.class);
+        return countMember;
+    }
+
+    @Override
     public double sumAllData(String query) {
         String sql = "select sum(biayaMember) as biayaTotal from member "+query+"";
         double sumTotal = databases.queryForObject(

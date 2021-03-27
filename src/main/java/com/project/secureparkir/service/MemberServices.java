@@ -27,6 +27,12 @@ public interface MemberServices {
     //Count Data by query
     int countAllDataByQuery(Map <Object, Object> params);
 
+    //Count Data Motor Member by query
+    int countDataMotorByQuery(Map <Object, Object> params);
+
+    //Count Data Car Member by query
+    int countDataCarByQuery(Map <Object, Object> params);
+
     //Update the Data
     void updateByIdMember(String idMember, Member member);
 

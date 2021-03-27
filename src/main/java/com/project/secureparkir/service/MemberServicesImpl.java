@@ -73,6 +73,8 @@ public class MemberServicesImpl implements MemberServices {
                 whereQuery.add("namaMember LIKE '%"+params.get("namaMember")+"%'");
             if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
                 whereQuery.add("status="+params.get("status")+"");
+            if (params.containsKey("tglRegister") && !String.valueOf(params.get("tglRegister")).isBlank())
+                whereQuery.add("tglRegister='"+params.get("tglRegister")+"'");
             if (params.containsKey("limit") && !String.valueOf(params.get("limit")).isBlank())
                 pageQuery.add(" LIMIT "+params.get("limit"));
             if (params.containsKey("offset") && !String.valueOf(params.get("offset")).isBlank())
@@ -102,11 +104,63 @@ public class MemberServicesImpl implements MemberServices {
                 whereQuery.add("namaMember LIKE '%"+params.get("namaMember")+"%'");
             if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
                 whereQuery.add("status="+params.get("status")+"");
+            if (params.containsKey("tglRegister") && !String.valueOf(params.get("tglRegister")).isBlank())
+                whereQuery.add("tglRegister='"+params.get("tglRegister")+"'");
 
             if (!whereQuery.isEmpty())
                 query += "WHERE " + String.join(" AND ", whereQuery);
 
             return memberRepository.countAllDataByQuery(query);
+        }
+    }
+
+    @Override
+    public int countDataMotorByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idMember") && !String.valueOf(params.get("idMember")).isBlank())
+                whereQuery.add("idMember LIKE '%"+params.get("idMember")+"%' and idJenis = 1");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol LIKE '%"+params.get("noPol")+"%' and idJenis = 1");
+            if (params.containsKey("namaMember") && !String.valueOf(params.get("namaMember")).isBlank())
+                whereQuery.add("namaMember LIKE '%"+params.get("namaMember")+"%' and idJenis = 1");
+            if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
+                whereQuery.add("status="+params.get("status")+" and idJenis = 1");
+            if (params.containsKey("tglRegister") && !String.valueOf(params.get("tglRegister")).isBlank())
+                whereQuery.add("tglRegister='"+params.get("tglRegister")+"' and idJenis = 1");
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return memberRepository.countDataMotorByQuery(query);
+        }
+    }
+
+    @Override
+    public int countDataCarByQuery(Map<Object, Object> params) {
+        synchronized (this) {
+            String query = "";
+
+            ArrayList<String> whereQuery = new ArrayList<>();
+
+            if (params.containsKey("idMember") && !String.valueOf(params.get("idMember")).isBlank())
+                whereQuery.add("idMember LIKE '%"+params.get("idMember")+"%' and idJenis = 2");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol LIKE '%"+params.get("noPol")+"%' and idJenis = 2");
+            if (params.containsKey("namaMember") && !String.valueOf(params.get("namaMember")).isBlank())
+                whereQuery.add("namaMember LIKE '%"+params.get("namaMember")+"%' and idJenis = 2");
+            if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
+                whereQuery.add("status="+params.get("status")+" and idJenis = 2");
+            if (params.containsKey("tglRegister") && !String.valueOf(params.get("tglRegister")).isBlank())
+                whereQuery.add("tglRegister='"+params.get("tglRegister")+"' and idJenis = 2");
+
+            if (!whereQuery.isEmpty())
+                query += "WHERE " + String.join(" AND ", whereQuery);
+
+            return memberRepository.countDataCarByQuery(query);
         }
     }
 
@@ -131,10 +185,16 @@ public class MemberServicesImpl implements MemberServices {
 
             ArrayList<String> whereQuery = new ArrayList<>();
 
+            if (params.containsKey("idMember") && !String.valueOf(params.get("idMember")).isBlank())
+                whereQuery.add("idMember LIKE '%"+params.get("idMember")+"%'");
+            if (params.containsKey("noPol") && !String.valueOf(params.get("noPol")).isBlank())
+                whereQuery.add("noPol LIKE '%"+params.get("noPol")+"%'");
+            if (params.containsKey("namaMember") && !String.valueOf(params.get("namaMember")).isBlank())
+                whereQuery.add("namaMember LIKE '%"+params.get("namaMember")+"%'");
+            if (params.containsKey("status") && !String.valueOf(params.get("status")).isBlank())
+                whereQuery.add("status="+params.get("status")+"");
             if (params.containsKey("tglRegister") && !String.valueOf(params.get("tglRegister")).isBlank())
-                whereQuery.add("tglRegister= '"+params.get("tglRegister")+"'");
-            if (params.containsKey("dibuatOleh") && !String.valueOf(params.get("dibuatOleh")).isBlank())
-                whereQuery.add("dibuatOleh= '"+params.get("dibuatOleh")+"'");
+                whereQuery.add("tglRegister='"+params.get("tglRegister")+"'");
 
             if (!whereQuery.isEmpty())
                 query += "WHERE " + String.join(" AND ", whereQuery);

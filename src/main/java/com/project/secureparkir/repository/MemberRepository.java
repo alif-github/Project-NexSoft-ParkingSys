@@ -3,6 +3,7 @@ package com.project.secureparkir.repository;
 import com.project.secureparkir.model.Member;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MemberRepository {
 
@@ -34,6 +35,12 @@ public interface MemberRepository {
 
     //Count Daya by Query
     int countAllDataByQuery(String query);
+
+    //Count Data Motor Member by query
+    int countDataMotorByQuery(String query);
+
+    //Count Data Car Member by query
+    int countDataCarByQuery(String query);
 
     //Sum money income from member
     double sumAllData(String query);
