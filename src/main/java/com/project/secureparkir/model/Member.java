@@ -3,6 +3,7 @@ package com.project.secureparkir.model;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class Member {
 
@@ -12,6 +13,7 @@ public class Member {
             message = "Don't input number in name field")
     @NotNull(message = "name member must be fill in")
     @NotEmpty(message = "name member must be fill in")
+    @Size(max = 50, message = "Maximum length 50 words")
     private String namaMember;
 
     private String tglRegister;

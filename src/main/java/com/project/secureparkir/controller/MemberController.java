@@ -7,7 +7,6 @@ import com.project.secureparkir.util.CustomSuccessType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class MemberController {
 
     //Create Member Data-ok
     @PostMapping("/create-member/")
-    public ResponseEntity<?> createUser(@Valid @RequestBody Member member) {
+    public ResponseEntity<?> createMember(@Valid @RequestBody Member member) {
         logger.info("Create data member");
 
         if (memberServices.isMemberExist(member) || memberServices.isNoPlatExist(member)) {
@@ -80,17 +79,16 @@ public class MemberController {
     //Read Data By Member-ok
     @GetMapping("/read-member/")
     public ResponseEntity<?> getData (@RequestParam Map<Object, Object> params) {
-        List<Member> memberList;
-        Map<String, Object> output = new HashMap<>();
-
         try {
+            List<Member> memberList;
+            Map<String, Object> output = new HashMap<>();
             memberList = memberServices.readDataByQuery(params);
             output.put("jumlah", memberServices.countAllDataByQuery(params));
             output.put("data", memberList);
             output.put("motor", memberServices.countDataMotorByQuery(params));
             output.put("mobil", memberServices.countDataCarByQuery(params));
             return new ResponseEntity<>(output, HttpStatus.OK);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
         }
     }

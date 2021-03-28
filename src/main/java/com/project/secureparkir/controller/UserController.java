@@ -1,6 +1,5 @@
 package com.project.secureparkir.controller;
 
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import com.project.secureparkir.model.User;
 import com.project.secureparkir.service.UserServices;
 import com.project.secureparkir.util.CustomErrorType;
@@ -15,10 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.CommunicationException;
 import javax.validation.Valid;
-import java.net.ConnectException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,6 +96,7 @@ public class UserController {
     }
 
     //Authenticator Login-ok
+    //In front-end ini untuk manipulasi login staff dan admin, active dan non active, default dan tidak default
     @GetMapping("/auth/")
     public ResponseEntity<?> authUser(@RequestParam("username") String username, @RequestParam("password") String password) {
         logger.info("check login");
@@ -195,15 +192,14 @@ public class UserController {
     //Read Data By User-ok
     @GetMapping("/user/")
     public ResponseEntity<?> getData (@RequestParam Map<Object, Object> params) {
-        List<User> userList;
-        Map<String, Object> output = new HashMap<>();
-
         try {
+            List<User> userList;
+            Map<String, Object> output = new HashMap<>();
             userList = userServices.readDataByQuery(params);
             output.put("jumlah", userServices.countAllDataByQuery(params));
             output.put("data", userList);
             return new ResponseEntity<>(output, HttpStatus.OK);
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
         }
     }

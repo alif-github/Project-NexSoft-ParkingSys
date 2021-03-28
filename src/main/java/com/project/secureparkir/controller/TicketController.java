@@ -9,7 +9,6 @@ import com.project.secureparkir.util.CustomSuccessType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,10 +64,15 @@ public class TicketController {
             }
         } else {
             //ini reguler
-            ticketServices.createTicket(isMemberTemp, ticket.getId(), ticket);
-            output.put("id",ticketServices.findLastId().getId());
-            output.put("message",new CustomSuccessType("Parking In Success"));
-            return new ResponseEntity<>(output, HttpStatus.CREATED);
+            Ticket ticket2 = ticketServices.findLastNoPolWithParams(ticket.getNoPol());
+            if (ticket2 != null && ticket2.getTglJamKeluar().equalsIgnoreCase("-")) {
+                return new ResponseEntity<>(new CustomErrorType("Cannot Click Entry Twice!"), HttpStatus.BAD_REQUEST);
+            } else {
+                ticketServices.createTicket(isMemberTemp, ticket.getId(), ticket);
+                output.put("id",ticketServices.findLastId().getId());
+                output.put("message",new CustomSuccessType("Parking In Success"));
+                return new ResponseEntity<>(output, HttpStatus.CREATED);
+            }
         }
     }
 
@@ -101,10 +105,9 @@ public class TicketController {
     //Read Data By Ticket-ok
     @GetMapping("/read-ticket/")
     public ResponseEntity<?> getData(@RequestParam Map<Object, Object> params) {
-        List<Ticket> ticketList;
-        Map<String, Object> output = new HashMap<>();
-
         try {
+            List<Ticket> ticketList;
+            Map<String, Object> output = new HashMap<>();
             ticketList = ticketServices.readDataByQuery(params);
 
             if (params.containsKey("tglJamMasuk")) {
@@ -125,7 +128,7 @@ public class TicketController {
                 output.put("data",ticketList);
                 return new ResponseEntity<>(output, HttpStatus.OK);
             }
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
         }
     }
