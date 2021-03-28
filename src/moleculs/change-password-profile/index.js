@@ -279,7 +279,7 @@ class ChangePasswordProfile extends Component {
                                         onClick={() => this.handleChangePasswordAPI()} 
                                         variant="contained" 
                                         color="primary">
-                                        Register
+                                        Change Password
                                     </Button>
                                     </center>
                                     <center>

@@ -1,32 +1,23 @@
 import React, { Component } from 'react';
-import {
-    ContainerSingle,
-    Button,
-    H5,
-    I,
-    Span, } from '../../atomics'
-import {
-    Grid,
-    Paper,
-    TextField,
-} from '@material-ui/core'
-import Swal from 'sweetalert2'
+import {ContainerSingle,Button,H5,I,Span} from '../../atomics'
+import {Grid,Paper,TextField} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from "react-redux"
+import Swal from 'sweetalert2'
 import './style.css'
 
 class AddStaff extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            errorEmail: false,
+            errorName: false,
+            helperTextEmail: ' ',
+            helperTextName: ' ',
             name: '',
             username: '',
             email: '',
             address: '',
-            errorEmail: false,
-            helperTextEmail: ' ',
-            errorName: false,
-            helperTextName: ' ',
          }
         this.handleCancelAdd = () => {
             const { name , username , email , address } = this.state
@@ -39,16 +30,15 @@ class AddStaff extends Component {
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!'
-                  }).then((result) => {
+                }).then((result) => {
                     if (result.isConfirmed) {
                         this.props.history.push('/staff')
                     }
-                  })   
+                })   
             } else this.props.history.push('/staff')
         }
         this.handleSetValue = (event) => {
             this.setState({ 
-                ...this.state, 
                 [event.target.name]: event.target.value,
             },() => this.handleCheckErrorPatern(event.target.name));
         };
@@ -59,13 +49,11 @@ class AddStaff extends Component {
 
                 if (!validationEmail && this.state.email !== '') {
                     this.setState({
-                        ...this.state,
                         errorEmail: true,
                         helperTextEmail: 'email must include @ and .'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorEmail: false,
                         helperTextEmail: ' '
                     })
@@ -76,13 +64,11 @@ class AddStaff extends Component {
 
                 if (!validationName && this.state.name !== '') {
                     this.setState({
-                        ...this.state,
                         errorName: true,
                         helperTextName: 'unable input number character or special character'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorName: false,
                         helperTextName: ' '
                     })
@@ -132,13 +118,14 @@ class AddStaff extends Component {
                             if (result.errors) {
                                 Swal.fire({
                                     title: 'Error!',
-                                    text: 'Please check your form',
+                                    text: result.errors[0].defaultMessage,
                                     icon: 'error',
                                     timer: 2000,
                                     timerProgressBar: true,
                                     showConfirmButton: false,
                                 })
                             } else if (result.errorMessage) {
+                                //salah satu error nya adalah ketika database mati
                                 Swal.fire({
                                     title: 'Error!',
                                     text: result.errorMessage,
@@ -162,7 +149,14 @@ class AddStaff extends Component {
                         // instead of a catch() block so that we don't swallow
                         // exceptions from actual bugs in components.
                         (error) => {
-                            // this.props.history.push('/500-internal-server-error')
+                            //ini error untuk back-end down atau mati
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Internal Server Error',
+                                icon: 'error',
+                                timerProgressBar: false,
+                                showConfirmButton: true,
+                            })
                         }
                     )
                     .then(

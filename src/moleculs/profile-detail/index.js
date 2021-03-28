@@ -147,6 +147,7 @@ class ProfileDet extends Component {
                                     showConfirmButton: false,
                                 })
                             } else {
+                                let logout = setTimeout(() => this.handleLogout(), 2000);
                                 Swal.fire({
                                     title: 'Success!',
                                     text: result.successMessage,
@@ -155,6 +156,7 @@ class ProfileDet extends Component {
                                     timerProgressBar: true,
                                     showConfirmButton: false,
                                 })
+                                .then(logout)
                             }
                         },
                         // Note: it's important to handle errors here
@@ -171,6 +173,10 @@ class ProfileDet extends Component {
                         })
                     )
             }
+        }
+        this.handleLogout = () => {
+            this.props.changeStatusLogout();
+            this.props.history.push("/");
         }
     }
     render() {
@@ -319,7 +325,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        changeStatusLogout: () => dispatch({ type: 'LOGOUT_SUCCESS' })
+    }
 }
  
 export default connect(mapStateToProps , mapDispatchToProps)(ProfileDet);

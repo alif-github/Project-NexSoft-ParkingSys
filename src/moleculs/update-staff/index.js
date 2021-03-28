@@ -1,19 +1,6 @@
 import React, { Component } from 'react';
-import {
-    Button,
-    ContainerSingle,
-    H5,
-    I,
-    Span} from '../../atomics'
-import {
-    Grid,
-    Paper,
-    TextField,
-    FormControl,
-    MenuItem,
-    InputLabel,
-    Select
-} from '@material-ui/core'
+import {Button,ContainerSingle,H5,I,Span} from '../../atomics'
+import {Grid,Paper,TextField,FormControl,MenuItem,InputLabel,Select} from '@material-ui/core'
 import Swal from 'sweetalert2'
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from "react-redux"
@@ -25,8 +12,8 @@ class UpdateStaff extends Component {
         const {idUser, namaUser, username, email, alamat, status, password, tglRegister, idPosisi} = this.props.staff
         this.state = { 
             errorEmail: false,
-            helperTextEmail: ' ',
             errorName: false,
+            helperTextEmail: ' ',
             helperTextName: ' ',
             idUser: idUser,
             namaUser: namaUser,
@@ -55,7 +42,6 @@ class UpdateStaff extends Component {
         }
         this.handleSetValue = (event) => {
             this.setState({
-                ...this.state,
                 [event.target.name]: event.target.value
             },() => this.handleCheckErrorPatern(event.target.name))
         }
@@ -66,13 +52,11 @@ class UpdateStaff extends Component {
 
                 if (!validationEmail && this.state.email !== '') {
                     this.setState({
-                        ...this.state,
                         errorEmail: true,
                         helperTextEmail: 'email must include @ and .'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorEmail: false,
                         helperTextEmail: ' '
                     })
@@ -83,13 +67,11 @@ class UpdateStaff extends Component {
 
                 if (!validationName && this.state.namaUser !== '') {
                     this.setState({
-                        ...this.state,
                         errorName: true,
                         helperTextName: 'unable input number character or special character'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorName: false,
                         helperTextName: ' '
                     })
@@ -153,27 +135,53 @@ class UpdateStaff extends Component {
                                     title: 'Error!',
                                     text: result.errorMessage,
                                     icon: 'error',
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    showConfirmButton: false,
+                                    timerProgressBar: false,
+                                    showConfirmButton: true,
                                 })
                             } else {
-                                Swal.fire({
-                                    title: 'Success!',
-                                    text: result.successMessage,
-                                    icon: 'success',
-                                    timer: 2000,
-                                    timerProgressBar: true,
-                                    showConfirmButton: false,
-                                })
+                                if (this.state.idUser === this.props.user.idUser) {
+                                    let logout = setTimeout(() => this.handleLogout(), 2000);
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: result.successMessage,
+                                        icon: 'success',
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        showConfirmButton: false,
+                                    })
+                                    .then(logout)
+                                } else {
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: result.successMessage,
+                                        icon: 'success',
+                                        timer: 2000,
+                                        timerProgressBar: true,
+                                        showConfirmButton: false,
+                                    })
+                                }
                             }
                         },
-                        (error) => {}
+                        (error) => {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: error,
+                                icon: 'error',
+                                timerProgressBar: false,
+                                showConfirmButton: true,
+                            })
+                        }
                     )
             }
         }
+        this.handleLogout = () => {
+            this.props.changeStatusLogout();
+            this.props.history.push("/");
+        }
     }
     render() { 
+        console.log("id user update:",this.state.idUser)
+        console.log("id user aktif:", this.props.user.idUser)
         if (this.props.isLogin === false) {
             return this.props.history.push('')
         }
@@ -326,7 +334,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        changeStatusLogout: () => dispatch({ type: 'LOGOUT_SUCCESS' })
+    }
 }
  
 export default connect(mapStateToProps , mapDispatchToProps)(UpdateStaff);
