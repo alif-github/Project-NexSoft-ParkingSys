@@ -76,7 +76,7 @@ class AddMember extends Component {
                     })
                 }
             } else if (name === 'name') {
-                let namePattern = /^[a-zA-Z\s\.]*$/;
+                let namePattern = /^[a-zA-Z\s]*$/;
                 let validationName = namePattern.test(this.state.name)
 
                 if (!validationName && this.state.name !== '') {

@@ -13,7 +13,10 @@ import {
     Input,
     H5,
     ContainerModal,
-    Table} from '../../atomics';
+    Table,
+    THead,
+    TRow,
+    TBody} from '../../atomics';
 import {
     Grid,
     Typography
@@ -68,7 +71,6 @@ class MemberReport extends Component {
             return rupiah;
         }
         this.handleDateChange = (date) => {
-            console.log("date disini:",date)
             this.setState({
                 chooseDate: date,
                 page: 1
@@ -91,7 +93,6 @@ class MemberReport extends Component {
             let monthTwoDigit = ("0" + (current_datetime.getMonth() + 1)).slice(-2)
             let dateTwoDigit = ("0" + current_datetime.getDate()).slice(-2)
             let formatted_date = monthTwoDigit + "-" + dateTwoDigit + "-" + yearTwoDigit
-            console.log("tanggal dipilih:",formatted_date)
 
             return formatted_date;
         }
@@ -116,7 +117,6 @@ class MemberReport extends Component {
         this.handleRefreshData = () => {
             const {page, limit, chooseDate} = this.state
             let dateValue = this.dateSetRead(chooseDate)
-            console.log("date di refresh data:",dateValue)
             if (chooseDate === new Date()) {
                 this.dateSetRead(chooseDate)
             }
@@ -309,7 +309,6 @@ class MemberReport extends Component {
     }
     
     render() {
-        console.log("data member ada:", this.state.memberData.length)
         const useStyles = makeStyles((theme) => ({
             root: {
               flexGrow: 1,
@@ -368,8 +367,8 @@ class MemberReport extends Component {
                         </ContainerSingle>
                         <ContainerSingle>
                             <Table className="table table-striped table-hover position-table table-size">
-                                <thead className="head-table">
-                                    <tr>
+                                <THead className="head-table">
+                                    <TRow>
                                         <TH className="th-size">Member ID</TH>
                                         <TH className="th-size">Member Name</TH>
                                         <TH className="th-size">Register Date</TH>
@@ -377,14 +376,14 @@ class MemberReport extends Component {
                                         <TH className="th-size">Type</TH>
                                         <TH className="th-size">Member Bill</TH>
                                         <TH className="th-size">Action</TH>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                    </TRow>
+                                </THead>
+                                <TBody>
                                     {
                                         this.state.memberData.length > 0 ? 
                                         this.state.memberData.map((el, idx) => {
                                             return (
-                                                <tr key={idx}>
+                                                <TRow key={idx}>
                                                     <TD className="th-size">{el.idMember}</TD>
                                                     <TD className="th-size">{el.namaMember}</TD>
                                                     <TD className="th-size">{el.tglRegister}</TD>
@@ -396,15 +395,15 @@ class MemberReport extends Component {
                                                             Detail
                                                         </ButtonModal>
                                                     </TD>
-                                                </tr>
+                                                </TRow>
                                             )
                                         })
                                         :
-                                        <tr>
+                                        <TRow>
                                             <TD colSpan="7">No Transaction</TD>
-                                        </tr>
+                                        </TRow>
                                     }
-                                </tbody>
+                                </TBody>
                             </Table>
                         </ContainerSingle>
                         <ContainerSingle>
@@ -442,42 +441,44 @@ class MemberReport extends Component {
                         <hr></hr>
                         <ContainerSingle>
                             <Table className="table-detail-style">
-                                <tr className="detail-style">
-                                    <TH className="detail-style">Date</TH>
-                                    <TD className="detail-style">: {this.dateSetRead(new Date(this.state.chooseDate))}</TD>
-                                </tr>
-                                <tr className="detail-style">
-                                    <TH className="detail-style">
-                                        Car Total
-                                    </TH>
-                                    <TD className="detail-style">: { this.state.jumlahMobil } vehicle </TD>
-                                </tr>
-                                <tr className="detail-style">
-                                    <TH className="detail-style">
-                                        Motocycle Total
-                                    </TH>
-                                    <TD className="detail-style">: { this.state.jumlahMotor } vehicle </TD>
-                                </tr>
-                                <tr className="detail-style">
-                                    <TH className="detail-style">
-                                        Car Income
-                                    </TH>
-                                    <TD className="detail-style">: Rp.{ this.totalIncome(this.state.jumlahMobil * 120000) },- </TD>
-                                </tr>
-                                <tr className="detail-style">
-                                    <TH className="detail-style">
-                                        Motorcycle Income
-                                    </TH>
-                                    <TD className="detail-style">: Rp.{ this.totalIncome(this.state.jumlahMotor * 60000) },- </TD>
-                                </tr>
-                                <tr className="detail-style">
-                                    <TH className="detail-style total-report-in">Member Total</TH>
-                                    <TD className="detail-style total-report-in">: { this.state.jumlahMember } vehicle</TD>
-                                </tr>
-                                <tr className="detail-style">
-                                    <TH className="detail-style">Member Total Income</TH>
-                                    <TD className="detail-style">: Rp.{ this.totalIncome((this.state.jumlahMotor * 60000) + (this.state.jumlahMobil * 120000)) },- </TD>
-                                </tr>
+                                <TBody>
+                                    <TRow className="detail-style">
+                                        <TH className="detail-style">Date</TH>
+                                        <TD className="detail-style">: {this.dateSetRead(new Date(this.state.chooseDate))}</TD>
+                                    </TRow>
+                                    <TRow className="detail-style">
+                                        <TH className="detail-style">
+                                            Car Total
+                                        </TH>
+                                        <TD className="detail-style">: { this.state.jumlahMobil } vehicle </TD>
+                                    </TRow>
+                                    <TRow className="detail-style">
+                                        <TH className="detail-style">
+                                            Motocycle Total
+                                        </TH>
+                                        <TD className="detail-style">: { this.state.jumlahMotor } vehicle </TD>
+                                    </TRow>
+                                    <TRow className="detail-style">
+                                        <TH className="detail-style">
+                                            Car Income
+                                        </TH>
+                                        <TD className="detail-style">: Rp.{ this.totalIncome(this.state.jumlahMobil * 120000) },- </TD>
+                                    </TRow>
+                                    <TRow className="detail-style">
+                                        <TH className="detail-style">
+                                            Motorcycle Income
+                                        </TH>
+                                        <TD className="detail-style">: Rp.{ this.totalIncome(this.state.jumlahMotor * 60000) },- </TD>
+                                    </TRow>
+                                    <TRow className="detail-style">
+                                        <TH className="detail-style total-report-in">Member Total</TH>
+                                        <TD className="detail-style total-report-in">: { this.state.jumlahMember } vehicle</TD>
+                                    </TRow>
+                                    <TRow className="detail-style">
+                                        <TH className="detail-style">Member Total Income</TH>
+                                        <TD className="detail-style">: Rp.{ this.totalIncome((this.state.jumlahMotor * 60000) + (this.state.jumlahMobil * 120000)) },- </TD>
+                                    </TRow>
+                                </TBody>
                             </Table>
                         </ContainerSingle>
                     </ContainerSingle>
@@ -493,46 +494,48 @@ class MemberReport extends Component {
                             </ContainerModal>
                             <ContainerModal className="modal-body">
                                 <Table className="table table-striped">
-                                    <tr className="align-left">
-                                        <TH>ID Member</TH>
-                                        <TD>:  {this.state.objmemberData.idMember}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Member Name</TH>
-                                        <TD>:  {this.state.objmemberData.namaMember}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Status</TH>
-                                        <TD>:  {this.state.objmemberData.status === true ? "Active":"Non-Active"}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>No Police</TH>
-                                        <TD>:  {this.state.objmemberData.noPol}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Type</TH>
-                                        <TD>:  {this.state.objmemberData.jenis}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Member Bill</TH>
-                                        <TD>:  Rp. {this.totalIncome(this.state.objmemberData.biayaMember)} ,-</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Register Date</TH>
-                                        <TD>:  {this.state.objmemberData.tglRegister}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Created By</TH>
-                                        <TD>:  {this.state.objmemberData.dibuatOleh}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Edited By</TH>
-                                        <TD>:  {this.state.objmemberData.dieditOleh}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Edited Date</TH>
-                                        <TD>:  {this.state.objmemberData.tglEdit}</TD>
-                                    </tr>
+                                    <TBody>
+                                        <TRow className="align-left">
+                                            <TH>ID Member</TH>
+                                            <TD>:  {this.state.objmemberData.idMember}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Member Name</TH>
+                                            <TD>:  {this.state.objmemberData.namaMember}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Status</TH>
+                                            <TD>:  {this.state.objmemberData.status === true ? "Active":"Non-Active"}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>No Police</TH>
+                                            <TD>:  {this.state.objmemberData.noPol}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Type</TH>
+                                            <TD>:  {this.state.objmemberData.jenis}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Member Bill</TH>
+                                            <TD>:  Rp. {this.totalIncome(this.state.objmemberData.biayaMember)} ,-</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Register Date</TH>
+                                            <TD>:  {this.state.objmemberData.tglRegister}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Created By</TH>
+                                            <TD>:  {this.state.objmemberData.dibuatOleh}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Edited By</TH>
+                                            <TD>:  {this.state.objmemberData.dieditOleh}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Edited Date</TH>
+                                            <TD>:  {this.state.objmemberData.tglEdit}</TD>
+                                        </TRow>
+                                    </TBody>
                                 </Table>
                             </ContainerModal>
                             <ContainerModal className="modal-footer">

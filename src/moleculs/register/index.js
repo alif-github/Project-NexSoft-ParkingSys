@@ -56,7 +56,7 @@ class Register extends Component {
         };
         this.handleCheckErrorPatern = name => {
             if (name === 'email') {
-                let emailPattern = /[\w-\.]+@([\w-]+\.)+[\w-]{0,}$/;
+                let emailPattern = /[\w-]+@([\w-]+\.)+[\w-]{0,}$/;
                 let validationEmail = emailPattern.test(this.state.email)
                 if (!validationEmail && this.state.email !== '') {
                     this.setState({

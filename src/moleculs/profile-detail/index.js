@@ -50,7 +50,7 @@ class ProfileDet extends Component {
         }
         this.handleCheckErrorPatern = name => {
             if (name === 'email') {
-                let emailPattern = /[\w-\.]+@([\w-]+\.)+[\w-]{0,}$/;
+                let emailPattern = /[\w-]+@([\w-]+\.)+[\w-]{0,}$/;
                 let validationEmail = emailPattern.test(this.state.email)
 
                 if (!validationEmail && this.state.email !== '') {
@@ -67,7 +67,7 @@ class ProfileDet extends Component {
                     })
                 }
             } else if (name === 'namaUser') {
-                let namePattern = /^[a-zA-Z\s\.]*$/;
+                let namePattern = /^[a-zA-Z\s]*$/;
                 let validationName = namePattern.test(this.state.namaUser)
 
                 if (!validationName && this.state.namaUser !== '') {

@@ -10,7 +10,9 @@ import {
     SelectSm,
     Option,
     Button,
-    I } from '../../atomics'
+    I, 
+    Table,
+    TRow} from '../../atomics'
 import { 
     CircularProgress,
     Typography
@@ -387,9 +389,9 @@ class Member extends Component {
         if (error) {
             return (
                 <ContainerSingle>
-                    <table className="table table-striped table-hover position-table">
+                    <Table className="table table-striped table-hover position-table">
                         <THead>
-                            <tr>
+                            <TRow>
                                 <TH>ID</TH>
                                 <TH>Name</TH>
                                 <TH>No Police</TH>
@@ -397,16 +399,16 @@ class Member extends Component {
                                 <TH>Status</TH>
                                 <TH>Register Date</TH>
                                 <TH>Action</TH>
-                            </tr>
+                            </TRow>
                         </THead>
                         <TBody>
-                            <tr>
+                            <TRow>
                                 <TD colSpan="7">
                                     Error for fetching data, connection refused.
                                 </TD>
-                            </tr>
+                            </TRow>
                         </TBody>
-                    </table>
+                    </Table>
                 </ContainerSingle>
             )
         // When Loading
@@ -414,9 +416,9 @@ class Member extends Component {
         } else if (!isLoaded) {
             return (
                 <ContainerSingle>
-                    <table className="table table-striped table-hover position-table">
+                    <Table className="table table-striped table-hover position-table">
                         <THead>
-                            <tr>
+                            <TRow>
                                 <TH>ID</TH>
                                 <TH>Name</TH>
                                 <TH>No Police</TH>
@@ -424,19 +426,19 @@ class Member extends Component {
                                 <TH>Status</TH>
                                 <TH>Register Date</TH>
                                 <TH>Action</TH>
-                            </tr>
+                            </TRow>
                         </THead>
                         <TBody>
-                            <tr>
+                            <TRow>
                                 <TD colSpan="7">
                                     <ContainerSingle className={useStyles.root}>
                                         <CircularProgress />
                                     </ContainerSingle>
                                     Loading...
                                 </TD>
-                            </tr>
+                            </TRow>
                         </TBody>
-                    </table>
+                    </Table>
                 </ContainerSingle>
             )
         // When Success
@@ -476,9 +478,9 @@ class Member extends Component {
                         </ContainerSingle>
                     </ContainerSingle>
                     <ContainerSingle className="table-scrolling">
-                    <table className="table table-striped table-hover position-table">
+                    <Table className="table table-striped table-hover position-table">
                         <THead className="head-member">
-                            <tr>
+                            <TRow>
                                 <TH>ID</TH>
                                 <TH>Name</TH>
                                 <TH>No Police</TH>
@@ -486,14 +488,14 @@ class Member extends Component {
                                 <TH>Status</TH>
                                 <TH>Register Date</TH>
                                 <TH>Action</TH>
-                            </tr>
+                            </TRow>
                         </THead>
                         <TBody>
                             {
                                 this.state.memberData.length > 0 ?
                                 this.state.memberData.map((el, idx) => {
                                     return (
-                                        <tr key={idx}>
+                                        <TRow key={idx}>
                                             <TD>{el.idMember}</TD>
                                             <TD>{el.namaMember}</TD>
                                             <TD>{el.noPol}</TD>
@@ -527,16 +529,16 @@ class Member extends Component {
                                                     </center>
                                                 }
                                             </TD>
-                                        </tr>
+                                        </TRow>
                                     )
                                 })
                                 :
-                                <tr>
+                                <TRow>
                                     <TD colSpan={7}>No Data</TD>
-                                </tr>
+                                </TRow>
                             }
                         </TBody>
-                    </table>
+                    </Table>
                     </ContainerSingle>
                     <ContainerSingle className={this.props.user.posisi === "Admin" ? "page-admin":"page-staff"}>
                         <ContainerSingle className={useStyles.root + ' bawah-kiri'}>

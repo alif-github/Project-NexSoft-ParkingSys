@@ -251,9 +251,6 @@ class ParkingOutPenalty extends Component {
         })
     }
     render() {
-        // if (this.state.id.length < 10) this.props.history.push("")
-        this.state.data.denda && console.log("Objek data: ", this.state.data.denda[0])
-
         const useStyles = makeStyles((theme) => ({
             root: {
                 '& > *': {

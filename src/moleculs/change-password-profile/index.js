@@ -134,7 +134,6 @@ class ChangePasswordProfile extends Component {
                         (result) => {
                             //do what you want with the response here
                             if (result.errorMessage) {
-                                console.log("Masuk error message");
                                 Swal.fire({
                                     title: 'Error!',
                                     text: result.errorMessage,

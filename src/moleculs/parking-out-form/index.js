@@ -239,9 +239,6 @@ class ParkingOutForm extends Component {
         })
     }
     render() {
-        // if (this.state.id.length < 10) this.props.history.push("")
-        console.log("Objek data: ", this.state.data)
-
         const useStyles = makeStyles((theme) => ({
             root: {
                 '& > *': {

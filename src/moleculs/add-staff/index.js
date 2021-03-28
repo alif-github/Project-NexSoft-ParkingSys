@@ -54,7 +54,7 @@ class AddStaff extends Component {
         };
         this.handleCheckErrorPatern = name => {
             if (name === 'email') {
-                let emailPattern = /[\w-\.]+@([\w-]+\.)+[\w-]{0,}$/;
+                let emailPattern = /[\w-]+@([\w-]+\.)+[\w-]{0,}$/;
                 let validationEmail = emailPattern.test(this.state.email)
 
                 if (!validationEmail && this.state.email !== '') {
@@ -71,7 +71,7 @@ class AddStaff extends Component {
                     })
                 }
             } else if (name === 'name') {
-                let namePattern = /^[a-zA-Z\s\.]*$/;
+                let namePattern = /^[a-zA-Z\s]*$/;
                 let validationName = namePattern.test(this.state.name)
 
                 if (!validationName && this.state.name !== '') {

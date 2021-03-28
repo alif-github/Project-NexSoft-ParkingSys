@@ -77,7 +77,7 @@ class UpdateMember extends Component {
                     })
                 }
             } else if (name === 'namaMember') {
-                let namePattern = /^[a-zA-Z\s\.]*$/;
+                let namePattern = /^[a-zA-Z\s]*$/;
                 let validationName = namePattern.test(this.state.namaMember)
 
                 if (!validationName && this.state.namaMember !== '') {
@@ -94,7 +94,7 @@ class UpdateMember extends Component {
                     })
                 }
             } else if (name === 'dieditOleh') {
-                let namePattern = /^[a-zA-Z\s\.]*$/;
+                let namePattern = /^[a-zA-Z\s]*$/;
                 let validationName = namePattern.test(this.state.dieditOleh)
 
                 if (!validationName && this.state.dieditOleh !== '') {
@@ -194,7 +194,6 @@ class UpdateMember extends Component {
         }
     }
     render() { 
-        console.log("nama staff:", this.props.user.namaUser);
         if (this.props.isLogin === false) {
             return this.props.history.push('')
         }

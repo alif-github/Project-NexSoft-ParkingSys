@@ -8,7 +8,8 @@ import {
     H5,
     ButtonModal,
     ContainerModal,
-    I } from '../../atomics'
+    I, 
+    TBody} from '../../atomics'
 import './style.css'
 
 class ModalDetailStaff extends Component {
@@ -36,38 +37,41 @@ class ModalDetailStaff extends Component {
                         </ContainerModal>
                         <ContainerModal className="modal-body">
                             <Table className="table table-striped">
-                                <TRow className="align-left">
-                                    <TD>ID</TD>
-                                    <TD>:   {this.props.staff.idUser}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Name</TD>
-                                    <TD>:   {this.props.staff.namaUser}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Username</TD>
-                                    <TD>:   {this.props.staff.username}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>E-mail</TD>
-                                    <TD>:   {this.props.staff.email}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Address</TD>
-                                    <TD>:   {this.props.staff.alamat}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Status</TD>
-                                    <TD>:   {this.props.staff.status === true ? "Active" : "Non-Active"}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Register Date</TD>
-                                    <TD>:   {this.props.staff.tglRegister}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Posisi</TD>
-                                    <TD>:   {this.props.staff.posisi}</TD>
-                                </TRow>
+                                <TBody>
+                                    
+                                    <TRow className="align-left">
+                                        <TD>ID</TD>
+                                        <TD>:   {this.props.staff.idUser}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Name</TD>
+                                        <TD>:   {this.props.staff.namaUser}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Username</TD>
+                                        <TD>:   {this.props.staff.username}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>E-mail</TD>
+                                        <TD>:   {this.props.staff.email}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Address</TD>
+                                        <TD>:   {this.props.staff.alamat}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Status</TD>
+                                        <TD>:   {this.props.staff.status === true ? "Active" : "Non-Active"}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Register Date</TD>
+                                        <TD>:   {this.props.staff.tglRegister}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Posisi</TD>
+                                        <TD>:   {this.props.staff.posisi}</TD>
+                                    </TRow>
+                                </TBody>
                             </Table>
                         </ContainerModal>
                         <ContainerModal className="modal-footer">

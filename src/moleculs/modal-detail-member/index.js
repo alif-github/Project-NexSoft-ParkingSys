@@ -9,7 +9,8 @@ import {
     ButtonModal,
     ContainerModal,
     I, 
-    Image} from '../../atomics'
+    Image,
+    TBody} from '../../atomics'
 import './style.css'
 
 class ModalDetailMember extends Component {
@@ -37,46 +38,49 @@ class ModalDetailMember extends Component {
                         </ContainerModal>
                         <ContainerModal className="modal-body">
                             <Table className="table table-striped">
-                                <TRow className="align-left">
-                                    <TD>ID</TD>
-                                    <TD>:   {this.props.member.idMember}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Name</TD>
-                                    <TD>:   {this.props.member.namaMember}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Police Number</TD>
-                                    <TD>:   {this.props.member.noPol}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Type</TD>
-                                    <TD>:   {this.props.member.jenis}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Status</TD>
-                                    <TD>:   {this.props.member.status === true ? "Active" : "Non-Active"}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Created By</TD>
-                                    <TD>:   {this.props.member.dibuatOleh}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Register Date</TD>
-                                    <TD>:   {this.props.member.tglRegister}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Edited By</TD>
-                                    <TD>:   {this.props.member.dieditOleh}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Edited Date</TD>
-                                    <TD>:   {this.props.member.tglEdit}</TD>
-                                </TRow>
-                                <TRow className="align-left">
-                                    <TD>Price</TD>
-                                    <TD>:   Rp.{this.props.member.biayaMember},-</TD>
-                                </TRow>
+                                <TBody>
+
+                                    <TRow className="align-left">
+                                        <TD>ID</TD>
+                                        <TD>:   {this.props.member.idMember}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Name</TD>
+                                        <TD>:   {this.props.member.namaMember}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Police Number</TD>
+                                        <TD>:   {this.props.member.noPol}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Type</TD>
+                                        <TD>:   {this.props.member.jenis}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Status</TD>
+                                        <TD>:   {this.props.member.status === true ? "Active" : "Non-Active"}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Created By</TD>
+                                        <TD>:   {this.props.member.dibuatOleh}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Register Date</TD>
+                                        <TD>:   {this.props.member.tglRegister}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Edited By</TD>
+                                        <TD>:   {this.props.member.dieditOleh}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Edited Date</TD>
+                                        <TD>:   {this.props.member.tglEdit}</TD>
+                                    </TRow>
+                                    <TRow className="align-left">
+                                        <TD>Price</TD>
+                                        <TD>:   Rp.{this.props.member.biayaMember},-</TD>
+                                    </TRow>
+                                </TBody>
                             </Table>
                             <ContainerModal>
                                 {

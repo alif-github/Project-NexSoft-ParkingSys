@@ -13,7 +13,10 @@ import {
     Input,
     H5,
     ContainerModal,
-    Table} from '../../atomics';
+    Table,
+    THead,
+    TRow,
+    TBody} from '../../atomics';
 import {
     Grid,
     Typography
@@ -399,8 +402,8 @@ class TransactionReportStaff extends Component {
                         </ContainerSingle>
                         <ContainerSingle>
                             <Table className="table table-striped table-hover position-table table-size">
-                                <thead>
-                                    <tr>
+                                <THead>
+                                    <TRow>
                                         <TH className="th-size">Ticket Code</TH>
                                         <TH className="th-size">No. Police</TH>
                                         <TH className="th-size">Type</TH>
@@ -410,14 +413,14 @@ class TransactionReportStaff extends Component {
                                         <TH className="th-size">Penalty</TH>
                                         <TH className="th-size">Total</TH>
                                         <TH className="th-size">Action</TH>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                    </TRow>
+                                </THead>
+                                <TBody>
                                     {
                                         this.state.transactionData.length > 0 ? 
                                         this.state.transactionData.map((el, idx) => {
                                             return (
-                                                <tr key={idx}>
+                                                <TRow key={idx}>
                                                     <TD className="th-size">{el.id}</TD>
                                                     <TD className="th-size">{el.noPol}</TD>
                                                     <TD className="th-size">
@@ -452,15 +455,15 @@ class TransactionReportStaff extends Component {
                                                             Detail
                                                         </ButtonModal>
                                                     </TD>
-                                                </tr>
+                                                </TRow>
                                             )
                                         })
                                         :
-                                        <tr>
+                                        <TRow>
                                             <TD colSpan="9">No Transaction</TD>
-                                        </tr>
+                                        </TRow>
                                     }
-                                </tbody>
+                                </TBody>
                             </Table>
                         </ContainerSingle>
                         <ContainerSingle>
@@ -498,43 +501,45 @@ class TransactionReportStaff extends Component {
                         <hr></hr>
                         <ContainerSingle>
                             <Table className="table-detail-style">
-                                <tr>
-                                    <TH className="detail-style">Date</TH>
-                                    <TD className="detail-style">: {this.dateSetRead(new Date(this.state.chooseDate))}</TD>
-                                </tr>
-                                <tr>
-                                    <TH className="detail-style">Total Parking Bill</TH>
-                                    <TD className="detail-style">
-                                        {
-                                            this.state.parkingBill > 0 ?
-                                            ": Rp. "+this.totalIncome(this.state.parkingBill)+",-"
-                                            :
-                                            ": No Transaction"
-                                        }
-                                    </TD>
-                                </tr>
-                                <tr>
-                                    <TH className="detail-style">Total Penalty</TH>
-                                    <TD className="detail-style">
-                                        {
-                                            (this.state.denda) > 0 ?
-                                            ": Rp. "+this.totalIncome(this.state.denda)+",-"
-                                            :
-                                            ": No Transaction"
-                                        }
-                                    </TD>
-                                </tr>
-                                <tr>
-                                    <th className="detail-style total">Total Income</th>
-                                    <td className="detail-style total">
-                                        {
-                                            (this.state.parkingBill + this.state.denda) > 0 ?
-                                            ": Rp. "+this.totalIncome(this.state.parkingBill + this.state.denda)+",-"
-                                            :
-                                            ": No Transaction"
-                                        }
-                                    </td>
-                                </tr>
+                                <TBody>
+                                    <TRow>
+                                        <TH className="detail-style">Date</TH>
+                                        <TD className="detail-style">: {this.dateSetRead(new Date(this.state.chooseDate))}</TD>
+                                    </TRow>
+                                    <TRow>
+                                        <TH className="detail-style">Total Parking Bill</TH>
+                                        <TD className="detail-style">
+                                            {
+                                                this.state.parkingBill > 0 ?
+                                                ": Rp. "+this.totalIncome(this.state.parkingBill)+",-"
+                                                :
+                                                ": No Transaction"
+                                            }
+                                        </TD>
+                                    </TRow>
+                                    <TRow>
+                                        <TH className="detail-style">Total Penalty</TH>
+                                        <TD className="detail-style">
+                                            {
+                                                (this.state.denda) > 0 ?
+                                                ": Rp. "+this.totalIncome(this.state.denda)+",-"
+                                                :
+                                                ": No Transaction"
+                                            }
+                                        </TD>
+                                    </TRow>
+                                    <TRow>
+                                        <TH className="detail-style total">Total Income</TH>
+                                        <TD className="detail-style total">
+                                            {
+                                                (this.state.parkingBill + this.state.denda) > 0 ?
+                                                ": Rp. "+this.totalIncome(this.state.parkingBill + this.state.denda)+",-"
+                                                :
+                                                ": No Transaction"
+                                            }
+                                        </TD>
+                                    </TRow>
+                                </TBody>
                             </Table>
                         </ContainerSingle>
                     </ContainerSingle>
@@ -550,50 +555,52 @@ class TransactionReportStaff extends Component {
                             </ContainerModal>
                             <ContainerModal className="modal-body">
                                 <Table className="table table-striped">
-                                    <tr className="align-left">
-                                        <TH>ID Data</TH>
-                                        <TD>:   {this.state.objTransactionData.idData}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Ticket Code</TH>
-                                        <TD>:   {this.state.objTransactionData.id}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>No. Police</TH>
-                                        <TD>:   {this.state.objTransactionData.noPol}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Type</TH>
-                                        <TD>:   {this.state.objTransactionData.jenisKendaraan[0].jenis}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Date Parking In</TH>
-                                        <TD>:   {this.state.objTransactionData.tglJamMasuk}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Date Parking Out</TH>
-                                        <TD>:   {this.state.objTransactionData.tglJamKeluar}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Penalty</TH>
-                                        <TD>:   {this.state.objTransactionData.denda[0].denda}</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Penalty Bill</TH>
-                                        <TD>:  Rp. {this.state.objTransactionData.denda[0].jumlahDenda} ,-</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Parking Bill</TH>
-                                        <TD>:  Rp. {this.state.objTransactionData.biayaParkir} ,-</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Total</TH>
-                                        <TD>:  Rp. {this.state.objTransactionData.biayaParkir + this.state.objTransactionData.denda[0].jumlahDenda} ,-</TD>
-                                    </tr>
-                                    <tr className="align-left">
-                                        <TH>Created By</TH>
-                                        <TD>:  {this.state.objTransactionData.namaStaff}</TD>
-                                    </tr>
+                                    <TBody>
+                                        <TRow className="align-left">
+                                            <TH>ID Data</TH>
+                                            <TD>:   {this.state.objTransactionData.idData}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Ticket Code</TH>
+                                            <TD>:   {this.state.objTransactionData.id}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>No. Police</TH>
+                                            <TD>:   {this.state.objTransactionData.noPol}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Type</TH>
+                                            <TD>:   {this.state.objTransactionData.jenisKendaraan[0].jenis}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Date Parking In</TH>
+                                            <TD>:   {this.state.objTransactionData.tglJamMasuk}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Date Parking Out</TH>
+                                            <TD>:   {this.state.objTransactionData.tglJamKeluar}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Penalty</TH>
+                                            <TD>:   {this.state.objTransactionData.denda[0].denda}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Penalty Bill</TH>
+                                            <TD>:  Rp. {this.state.objTransactionData.denda[0].jumlahDenda} ,-</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Parking Bill</TH>
+                                            <TD>:  Rp. {this.state.objTransactionData.biayaParkir} ,-</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Total</TH>
+                                            <TD>:  Rp. {this.state.objTransactionData.biayaParkir + this.state.objTransactionData.denda[0].jumlahDenda} ,-</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Created By</TH>
+                                            <TD>:  {this.state.objTransactionData.namaStaff}</TD>
+                                        </TRow>
+                                    </TBody>
                                 </Table>
                             </ContainerModal>
                             <ContainerModal className="modal-footer">

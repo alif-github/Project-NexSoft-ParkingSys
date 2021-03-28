@@ -441,7 +441,7 @@ class Staff extends Component {
                         </ContainerSingle>
                     </ContainerSingle>
                     <ContainerSingle className="table-scrolling">
-                    <table className="table table-striped table-hover position-table">
+                    <Table className="table table-striped table-hover position-table">
                         <THead>
                             <TRow>
                                 <TH>ID</TH>
@@ -522,7 +522,7 @@ class Staff extends Component {
                                 })
                             }
                         </TBody>
-                    </table>
+                    </Table>
                     </ContainerSingle>
                     <ContainerSingle className="page">
                         <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
