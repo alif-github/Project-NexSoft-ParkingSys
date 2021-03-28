@@ -1,31 +1,9 @@
 import React, { Component } from 'react';
-import { 
-    ContainerSingle,
-    H3,
-    H5,
-    Image,
-    A,
-    Span } from '../../atomics/index'
-import {
-    Grid,
-    Paper,
-    Avatar,
-    TextField,
-    IconButton,
-    Input,
-    InputLabel,
-    InputAdornment,
-    FormControl,
-    Button,
-    FormHelperText
-} from '@material-ui/core'
-import {
-    PersonAdd as PersonAddIcon, 
-    Visibility, 
-    VisibilityOff 
-} from '@material-ui/icons';
-import Swal from 'sweetalert2'
+import { ContainerSingle,H3,H5,Image,A,Span } from '../../atomics/index'
+import { Grid,Paper,Avatar,TextField,IconButton,Input,InputLabel,InputAdornment,FormControl,Button,FormHelperText } from '@material-ui/core'
+import { PersonAdd as PersonAddIcon, Visibility, VisibilityOff } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import Swal from 'sweetalert2'
 import clsx from 'clsx';
 import './style.css'
 
@@ -35,22 +13,21 @@ class Register extends Component {
         this.state = {
             showPassword: false,
             showPasswordConfirm: false, 
+            errorEmail: false,
+            errorPassword: false,
+            errorPasswordConfirm: false,
+            passwordConfirm: '',
+            helperTextEmail: ' ',
+            helperTextPassword: ' ',
+            helperTextPasswordConfirm: ' ',
             name: '',
             username: '',
             email: '',
             address: '',
             password: '',
-            passwordConfirm: '',
-            errorEmail: false,
-            errorPassword: false,
-            errorPasswordConfirm: false,
-            helperTextEmail: ' ',
-            helperTextPassword: ' ',
-            helperTextPasswordConfirm: ' ',
         }
         this.handleSetValue = (event) => {
-            this.setState({ 
-                ...this.state, 
+            this.setState({
                 [event.target.name]: event.target.value,
             },() => this.handleCheckErrorPatern(event.target.name));
         };
@@ -60,13 +37,11 @@ class Register extends Component {
                 let validationEmail = emailPattern.test(this.state.email)
                 if (!validationEmail && this.state.email !== '') {
                     this.setState({
-                        ...this.state,
                         errorEmail: true,
                         helperTextEmail: 'email must include @ and .'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorEmail: false,
                         helperTextEmail: ' '
                     })
@@ -76,13 +51,11 @@ class Register extends Component {
                 let validationPassword = passwordPattern.test(this.state.password)
                 if (!validationPassword && this.state.password !== '') {
                     this.setState({
-                        ...this.state,
                         errorPassword: true,
                         helperTextPassword: 'password minimal 6-8 character minimal 1 Uppercase font, Lowercase font, and number'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorPassword: false,
                         helperTextPassword: ' '
                     })
@@ -92,13 +65,11 @@ class Register extends Component {
                 let passwordPatternTest = this.state.password;
                 if (passwordConfirmPattern !== passwordPatternTest && this.state.passwordConfirm !== '') {
                     this.setState({
-                        ...this.state,
                         errorPasswordConfirm: true,
                         helperTextPasswordConfirm: 'password must be same above, check your input'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorPasswordConfirm: false,
                         helperTextPasswordConfirm: ' '
                     })
@@ -106,10 +77,10 @@ class Register extends Component {
             }
         }
         this.handleClickShowPassword = () => {
-            this.setState({ ...this.state, showPassword: !this.state.showPassword });
+            this.setState({ showPassword: !this.state.showPassword });
         };
         this.handleClickShowPasswordConfirm = () => {
-            this.setState({ ...this.state, showPasswordConfirm: !this.state.showPasswordConfirm });
+            this.setState({ showPasswordConfirm: !this.state.showPasswordConfirm });
         };
         this.handleMouseDownPassword = (event) => {
             event.preventDefault();
@@ -118,8 +89,7 @@ class Register extends Component {
             event.preventDefault();
         };
         this.handleFetchingCreateUserAPI = () => {
-            const {errorEmail,errorPassword,errorPasswordConfirm} = this.state
-            const {name,username,address,email,password} = this.state
+            const {errorEmail,errorPassword,errorPasswordConfirm,name,username,address,email,password} = this.state
             
             if (
                 errorEmail === true || 
@@ -171,7 +141,7 @@ class Register extends Component {
                             if (result.errors) {
                                 Swal.fire({
                                     title: 'Error!',
-                                    text: 'Please check your form',
+                                    text: result.errors[0].defaultMessage,
                                     icon: 'error',
                                     timer: 2000,
                                     timerProgressBar: true,
@@ -187,18 +157,19 @@ class Register extends Component {
                                     showConfirmButton: false,
                                 })
                             } else {
+                                let backToLogin = setTimeout(() => this.props.history.push(''), 2000);
                                 Toast.fire({
                                     icon: 'success',
                                     title: result.successMessage,
                                 })
-                                this.props.history.push('')
+                                .then(backToLogin)
                             }
                         },
                         // Note: it's important to handle errors here
                         // instead of a catch() block so that we don't swallow
                         // exceptions from actual bugs in components.
                         (error) => {
-                            // this.props.history.push('/500-internal-server-error')
+                            this.props.history.push('/500-internal-server-error')
                         }
                     )
             }   
@@ -254,9 +225,7 @@ class Register extends Component {
 
         return ( 
             <>
-
                 {/* Border From Login Form to Image Introduction */}
-
                 <ContainerSingle className="container-registration-image">
                     <ContainerSingle className="image-login">
                         <Image className="image-logo-login" src="/images/secure-parking-header.png"/>
@@ -344,7 +313,8 @@ class Register extends Component {
                                             value={this.state.password}
                                             name="password"
                                             onChange={this.handleSetValue}
-                                            endAdornment={
+                                            endAdornment=
+                                            {
                                             <InputAdornment position="end">
                                                 <IconButton
                                                 aria-label="toggle password visibility"
@@ -371,7 +341,8 @@ class Register extends Component {
                                             value={this.state.passwordConfirm}
                                             name="passwordConfirm"
                                             onChange={this.handleSetValue}
-                                            endAdornment={
+                                            endAdornment=
+                                            {
                                             <InputAdornment position="end">
                                                 <IconButton
                                                 aria-label="toggle password visibility"
@@ -401,7 +372,8 @@ class Register extends Component {
                                 className='linkStyle' 
                                 onClick={() => this.props.history.push("")}>
                                 <Span className="span-registered">Back to login</Span>
-                            </A></center>
+                            </A>
+                            </center>
                         </Paper>
                     </Grid>
                 </ContainerSingle>

@@ -100,8 +100,6 @@ class DashBoardStaff extends Component {
         }
     }
     render() {
-        console.log("refresh:",this.state.isMustRefresh);
-        console.log("memberID:",this.state.memberId);
         const useStyles = makeStyles((theme) => ({
             root: {
                 '& > *': {

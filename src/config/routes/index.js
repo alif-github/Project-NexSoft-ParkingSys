@@ -1,9 +1,8 @@
 import React from 'react';
+import { connect } from "react-redux"
 import { BrowserRouter as Router , Switch , Route } from 'react-router-dom'
 import { ChangePassword, HomePage, InternalServerError, Register , HomePageStaff } from '../../organisms/login'
 import Login from '../../moleculs/login-mat-ui/login'
-import { connect } from "react-redux"
-
 import DashBoardAdmin from '../../moleculs/content-dashboard'
 import DashBoardStaff from '../../moleculs/content-dashboard-staff'
 import Staff from '../../moleculs/content-staff'
@@ -15,7 +14,6 @@ import AddMember from '../../moleculs/add-member'
 import ParkingOutForm from '../../moleculs/parking-out-form'
 import ParkingOutPenalty from '../../moleculs/parking-out-penalty'
 import ReportStaff from '../../moleculs/report-staff'
-
 import Page404 from "../../moleculs/404-Not-Found";
 import ProfileDet from "../../moleculs/profile-detail"
 import ChangePasswordProfile from '../../moleculs/change-password-profile';

@@ -1,35 +1,13 @@
 import React, { Component } from 'react';
-import './style.css'
-import { 
-    A,
-    ContainerSingle,
-    Span,
-    Image,
-    H1,
-    H5,
-} from '../../atomics/index'
-import { 
-    Grid,
-    Paper,
-    Avatar,
-    TextField,
-    IconButton,
-    Input,
-    InputLabel,
-    InputAdornment,
-    FormControl,
-    Button,
-    FormHelperText
-} from '@material-ui/core'
-import { 
-    LockOutlined as LockOutlinedIcon, 
-    Visibility, 
-    VisibilityOff } from '@material-ui/icons';
-import Swal from 'sweetalert2'
+import { A,ContainerSingle,Span,Image,H1,H5 } from '../../atomics/index'
+import { Grid,Paper,Avatar,TextField,IconButton,Input,InputLabel,InputAdornment,FormControl,Button,FormHelperText} from '@material-ui/core'
+import { LockOutlined as LockOutlinedIcon, Visibility, VisibilityOff } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux'
+import Swal from 'sweetalert2'
 import clsx from 'clsx';
 import Carousel from 'react-bootstrap/Carousel'
-import { connect } from 'react-redux'
+import './style.css'
 
 class Login extends Component {
     constructor(props) {
@@ -51,10 +29,10 @@ class Login extends Component {
             }
         })
         this.handleSetValue = (event) => {
-            this.setState({ ...this.state, [event.target.name]: event.target.value });
+            this.setState({ [event.target.name]: event.target.value });
         };
         this.handleClickShowPassword = () => {
-            this.setState({ ...this.state, showPassword: !this.state.showPassword });
+            this.setState({ showPassword: !this.state.showPassword });
         };
         this.handleMouseDownPassword = (event) => {
             event.preventDefault();
@@ -114,6 +92,7 @@ class Login extends Component {
                 .then(
                     (result) => {
                         //do what you want with the response here
+                        //yang bisa masuk hanya admin dengan kondisi aktif ataupun non-aktif serta staff dengan syarat status harus true, atau aktif
                         if ((!result.errorMessage && result.posisi === "Admin") || (!result.errorMessage && result.posisi === "Staff" && result.status === true)) {
                             Swal.fire({
                                 title: 'Success!',

@@ -1,37 +1,23 @@
 import React, { Component } from 'react';
-import {
-    ContainerSingle,
-    Button,
-    H5,
-    I,
-    Span,
-    Image, } from '../../atomics'
-import {
-    Grid,
-    Paper,
-    TextField,
-    FormControl,
-    MenuItem,
-    InputLabel,
-    Select
-} from '@material-ui/core'
-import Swal from 'sweetalert2'
+import { ContainerSingle,Button,H5,I,Span,Image } from '../../atomics'
+import { Grid,Paper,TextField,FormControl,MenuItem,InputLabel,Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from "react-redux"
+import Swal from 'sweetalert2'
 import './style.css'
 
 class AddMember extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            createdBy: this.props.userOn,
+            errorName: false,
+            errorNoPol: false,
+            helperTextName: ' ',
+            helperTextNoPol: ' ',
             name: '',
             noPol: '',
-            createdBy: this.props.userOn,
             type: 1,
-            errorName: false,
-            helperTextName: ' ',
-            errorNoPol: false,
-            helperTextNoPol: ' '
          }
         this.handleCancelAdd = () => {
             const { name , noPol } = this.state
@@ -52,8 +38,7 @@ class AddMember extends Component {
             } else this.props.history.push('/member')
         }
         this.handleSetValue = (event) => {
-            this.setState({ 
-                ...this.state, 
+            this.setState({
                 [event.target.name]: event.target.value,
             },() => this.handleCheckErrorPatern(event.target.name));
         };
@@ -64,13 +49,11 @@ class AddMember extends Component {
 
                 if (!validationNoPol && this.state.noPol !== '') {
                     this.setState({
-                        ...this.state,
                         errorNoPol: true,
                         helperTextNoPol: 'unable because wrong format, ex: B 8888 ABC'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorNoPol: false,
                         helperTextNoPol: ' '
                     })
@@ -81,13 +64,11 @@ class AddMember extends Component {
 
                 if (!validationName && this.state.name !== '') {
                     this.setState({
-                        ...this.state,
                         errorName: true,
                         helperTextName: 'unable input number character or special character'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorName: false,
                         helperTextName: ' '
                     })
@@ -95,8 +76,7 @@ class AddMember extends Component {
             }
         }
         this.handleFetchingCreateUserAPI = () => {
-            const {errorNoPol , errorName} = this.state
-            const { name , noPol , createdBy , type } = this.state
+            const {errorNoPol , errorName , name , noPol , createdBy , type} = this.state
 
             if (
                 errorNoPol === true ||
@@ -136,7 +116,7 @@ class AddMember extends Component {
                             if (result.errors) {
                                 Swal.fire({
                                     title: 'Error!',
-                                    text: 'Please check your form',
+                                    text: result.errors[0].defaultMessage,
                                     icon: 'error',
                                     timer: 2000,
                                     timerProgressBar: true,
@@ -166,7 +146,14 @@ class AddMember extends Component {
                         // instead of a catch() block so that we don't swallow
                         // exceptions from actual bugs in components.
                         (error) => {
-                            // this.props.history.push('/500-internal-server-error')
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Internal Server Error',
+                                icon: 'error',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            })
                         }
                     )
                     .then(

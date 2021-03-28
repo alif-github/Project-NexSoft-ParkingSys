@@ -1,38 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { 
-    ContainerSingle, 
-    SelectSm,
-    Option,
-    Span,
-    I,
-    ButtonModal, 
-    TH,
-    TD,
-    Button,
-    Input,
-    H5,
-    ContainerModal,
-    Table,
-    THead,
-    TRow,
-    TBody} from '../../atomics';
-import {
-    Grid,
-    Typography
-} from '@material-ui/core'
+import { ContainerSingle, SelectSm, Option, Span, I, ButtonModal, TH, TD, Button, Input, H5, ContainerModal, Table, THead, TRow, TBody} from '../../atomics';
+import { Grid, Typography } from '@material-ui/core'
 import { Pagination } from '@material-ui/lab'
-import DateFnsUtils from '@date-io/date-fns' 
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import DateFnsUtils from '@date-io/date-fns' 
 import './style.css'
 
 class TransactionReportStaff extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            error: false,
+            errorStaff: false,
+            chooseDate: new Date(),
             transactionData: [],
             dataStaff: [],
+            denda: 0,
+            parkingBill: 0,
+            countData: 0, 
+            offset: 0,
+            page: 1,
+            limit: 5,
+            date: "",
+            toogleFind: "ID",
+            toogleFindStaff: "",
+            inputFind: "",
             objTransactionData: {
                 jenisKendaraan: [{jenis: ""}],
                 denda: [
@@ -42,17 +36,6 @@ class TransactionReportStaff extends Component {
                     }
                 ]
             },
-            denda: 0,
-            parkingBill: 0,
-            chooseDate: new Date(),
-            countData: 0, 
-            page: 1,
-            offset: 0,
-            limit: 5,
-            date: "",
-            toogleFind: "ID",
-            toogleFindStaff: "",
-            inputFind: ""
          }
         this.handleSetValue = el => {
             if (el.target.value === '') {
@@ -149,17 +132,22 @@ class TransactionReportStaff extends Component {
                 .then(
                     (result) => {
                         //do what you want with the response here
-                        this.setState({
-                        isLoaded: true,
-                        transactionData: result.data,
-                        denda: result.denda,
-                        parkingBill: result.parkingBill,
-                        countData: Math.ceil(result.jumlah/limit)
-                        });
+                        if (result.errorMessage) {
+                            this.setState({
+                                error: true 
+                            })
+                        } else {
+                            this.setState({
+                                error: false,
+                                transactionData: result.data,
+                                denda: result.denda,
+                                parkingBill: result.parkingBill,
+                                countData: Math.ceil(result.jumlah/limit)
+                            });
+                        }
                     },
                     (error) => {
                         this.setState({
-                            isLoaded: false,
                             error
                         });
                     }
@@ -190,40 +178,22 @@ class TransactionReportStaff extends Component {
                         .then(
                             (result) => {
                                 //do what you want with the response here
-                                this.setState({
-                                    isLoaded: true,
-                                    transactionData: result.data,
-                                    denda: result.denda,
-                                    parkingBill: result.parkingBill,
-                                    countData: Math.ceil(result.jumlah/limit)
-                                });
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        error: true
+                                    })
+                                } else {
+                                    this.setState({
+                                        error: false,
+                                        transactionData: result.data,
+                                        denda: result.denda,
+                                        parkingBill: result.parkingBill,
+                                        countData: Math.ceil(result.jumlah/limit)
+                                    });
+                                }
                             },
                             (error) => {
                                 this.setState({
-                                    isLoaded: false,
-                                    error
-                                });
-                            }
-                        )
-                    fetch("http://localhost:8080/parkir/user/",requestOptionsPage)
-                        .then((response) => {
-                            return response.json()
-                        })
-                        .then(
-                            (result) => {
-                                //do what you want with the response here
-                                this.setState({
-                                    isLoaded: true,
-                                    userData: result.data,
-                                    countData: Math.ceil(result.jumlah/this.state.limit)
-                                });
-                            },
-                            // Note: it's important to handle errors here
-                            // instead of a catch() block so that we don't swallow
-                            // exceptions from actual bugs in components.
-                            (error) => {
-                                this.setState({
-                                    isLoaded: false,
                                     error
                                 });
                             }
@@ -249,17 +219,22 @@ class TransactionReportStaff extends Component {
                         .then(
                             (result) => {
                                 //do what you want with the response here
-                                this.setState({
-                                    isLoaded: true,
-                                    transactionData: result.data,
-                                    denda: result.denda,
-                                    parkingBill: result.parkingBill,
-                                    countData: Math.ceil(result.jumlah/limit)
-                                });
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        error: true
+                                    })
+                                } else {
+                                    this.setState({
+                                        error: false,
+                                        transactionData: result.data,
+                                        denda: result.denda,
+                                        parkingBill: result.parkingBill,
+                                        countData: Math.ceil(result.jumlah/limit)
+                                    });
+                                }
                             },
                             (error) => {
                                 this.setState({
-                                    isLoaded: false,
                                     error
                                 });
                             }
@@ -295,18 +270,23 @@ class TransactionReportStaff extends Component {
             .then(
                 (result) => {
                     //do what you want with the response here
-                    this.setState({
-                      isLoaded: true,
-                      transactionData: result.data,
-                      denda: result.denda,
-                      parkingBill: result.parkingBill,
-                      date: formatted_date,
-                      countData: Math.ceil(result.jumlah/limit)
-                    });
+                    if (result.errorMessage) {
+                        this.setState({
+                            error: true
+                        })
+                    } else {
+                        this.setState({
+                          error: false,
+                          transactionData: result.data,
+                          denda: result.denda,
+                          parkingBill: result.parkingBill,
+                          date: formatted_date,
+                          countData: Math.ceil(result.jumlah/limit)
+                        });
+                    }
                 },
                 (error) => {
                     this.setState({
-                        isLoaded: false,
                         error
                     });
                 }
@@ -318,11 +298,22 @@ class TransactionReportStaff extends Component {
             .then(
                 (result) => {
                     //do what you want with the response here
-                    this.setState({
-                        dataStaff: result.data
-                    });
+                    if (result.errorMessage) {
+                        this.setState({
+                            errorStaff: true
+                        })
+                    } else {
+                        this.setState({
+                            errorStaff: false,
+                            dataStaff: result.data
+                        });
+                    }
                 },
-                (error) => {}
+                (errorStaff) => {
+                    this.setState({
+                        errorStaff
+                    })
+                }
             )   
     }
     render() {
@@ -356,14 +347,19 @@ class TransactionReportStaff extends Component {
                                                 <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindByStaff}>
                                                     <Option className="option-menu-report" value="">-All-</Option>
                                                     {
-                                                        this.state.dataStaff.length > 0 ?
-                                                        this.state.dataStaff.map((el,idx) => {
-                                                            return (
-                                                                <Option className="option-menu-report" key={idx} value={el.idUser}>{el.namaUser}</Option>            
-                                                            )
-                                                        })
+                                                        this.state.errorStaff ?
+                                                            <Option className="option-menu-report">*Error*</Option>
                                                         :
-                                                        <Option className="option-menu-report">No Data</Option>
+                                                        (
+                                                            this.state.dataStaff.length > 0 ?
+                                                            this.state.dataStaff.map((el,idx) => {
+                                                                return (
+                                                                    <Option className="option-menu-report" key={idx} value={el.idUser}>{el.namaUser}</Option>            
+                                                                )
+                                                            })
+                                                            :
+                                                            <Option className="option-menu-report">No Data</Option>
+                                                        )
                                                     }
                                                 </SelectSm>
                                         </ContainerSingle>
@@ -417,51 +413,58 @@ class TransactionReportStaff extends Component {
                                 </THead>
                                 <TBody>
                                     {
-                                        this.state.transactionData.length > 0 ? 
-                                        this.state.transactionData.map((el, idx) => {
-                                            return (
-                                                <TRow key={idx}>
-                                                    <TD className="th-size">{el.id}</TD>
-                                                    <TD className="th-size">{el.noPol}</TD>
-                                                    <TD className="th-size">
-                                                        {
-                                                        el.jenisKendaraan.length > 0  ? 
-                                                        el.jenisKendaraan[0].jenis
-                                                        :
-                                                        "-"
-                                                        }
-                                                    </TD>
-                                                    <TD className="th-size">{el.tglJamMasuk}</TD>
-                                                    <TD className="th-size">{el.tglJamKeluar}</TD>
-                                                    <TD className="th-size">
-                                                        {
-                                                            el.id.includes("MEMBER-") ?
-                                                            "Free"
-                                                            :
-                                                            "Rp."+this.totalIncome(el.biayaParkir)+",-"
-                                                        }
-                                                    </TD>
-                                                    <TD className="th-size">{el.denda.length > 0 && "Rp."+this.totalIncome(el.denda[0].jumlahDenda)+",-"}</TD>
-                                                    <TD className="th-size">
-                                                        {
-                                                            el.id.includes("MEMBER-") ?
-                                                            el.denda.length > 0 && "Rp."+this.totalIncome(el.denda[0].jumlahDenda)+",-"
-                                                            :
-                                                            "Rp."+this.totalIncome(el.nominal)+",-"
-                                                        }
-                                                    </TD>
-                                                    <TD className="th-size">
-                                                        <ButtonModal onClick={() => this.handleModal(idx)} type="button" className="btn btn-secondary btn-modal-report" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                            Detail
-                                                        </ButtonModal>
-                                                    </TD>
-                                                </TRow>
-                                            )
-                                        })
+                                        this.state.error ?
+                                            <TRow>
+                                                <TD colSpan="9">Error Fetching Data</TD>
+                                            </TRow>
                                         :
-                                        <TRow>
-                                            <TD colSpan="9">No Transaction</TD>
-                                        </TRow>
+                                        (
+                                            this.state.transactionData.length > 0 ? 
+                                            this.state.transactionData.map((el, idx) => {
+                                                return (
+                                                    <TRow key={idx}>
+                                                        <TD className="th-size">{el.id}</TD>
+                                                        <TD className="th-size">{el.noPol}</TD>
+                                                        <TD className="th-size">
+                                                            {
+                                                            el.jenisKendaraan.length > 0  ? 
+                                                            el.jenisKendaraan[0].jenis
+                                                            :
+                                                            "-"
+                                                            }
+                                                        </TD>
+                                                        <TD className="th-size">{el.tglJamMasuk}</TD>
+                                                        <TD className="th-size">{el.tglJamKeluar}</TD>
+                                                        <TD className="th-size">
+                                                            {
+                                                                el.id.includes("MEMBER-") ?
+                                                                "Free"
+                                                                :
+                                                                "Rp."+this.totalIncome(el.biayaParkir)+",-"
+                                                            }
+                                                        </TD>
+                                                        <TD className="th-size">{el.denda.length > 0 && "Rp."+this.totalIncome(el.denda[0].jumlahDenda)+",-"}</TD>
+                                                        <TD className="th-size">
+                                                            {
+                                                                el.id.includes("MEMBER-") ?
+                                                                el.denda.length > 0 && "Rp."+this.totalIncome(el.denda[0].jumlahDenda)+",-"
+                                                                :
+                                                                "Rp."+this.totalIncome(el.nominal)+",-"
+                                                            }
+                                                        </TD>
+                                                        <TD className="th-size">
+                                                            <ButtonModal onClick={() => this.handleModal(idx)} type="button" className="btn btn-secondary btn-modal-report" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                                Detail
+                                                            </ButtonModal>
+                                                        </TD>
+                                                    </TRow>
+                                                )
+                                            })
+                                            :
+                                            <TRow>
+                                                <TD colSpan="9">No Transaction</TD>
+                                            </TRow>
+                                        )
                                     }
                                 </TBody>
                             </Table>
@@ -471,10 +474,15 @@ class TransactionReportStaff extends Component {
                                 <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
                                     <Typography className="page-title">
                                         {
-                                            this.state.transactionData.length > 0 ?
-                                            "Page: "+this.state.page+""
+                                            this.state.error ?
+                                            "Page: Error"
                                             :
-                                            "Page: No-data"
+                                            (
+                                                this.state.transactionData.length > 0 ?
+                                                "Page: "+this.state.page+""
+                                                :
+                                                "Page: No-data"
+                                            )
                                         }
                                     </Typography>
                                     <Pagination count={this.state.countData} page={this.state.page} onChange={this.handleChangePage} />
@@ -510,10 +518,15 @@ class TransactionReportStaff extends Component {
                                         <TH className="detail-style">Total Parking Bill</TH>
                                         <TD className="detail-style">
                                             {
-                                                this.state.parkingBill > 0 ?
-                                                ": Rp. "+this.totalIncome(this.state.parkingBill)+",-"
+                                                this.state.error ?
+                                                ": Error"
                                                 :
-                                                ": No Transaction"
+                                                (
+                                                    this.state.parkingBill > 0 ?
+                                                    ": Rp. "+this.totalIncome(this.state.parkingBill)+",-"
+                                                    :
+                                                    ": No Transaction"
+                                                )
                                             }
                                         </TD>
                                     </TRow>
@@ -521,23 +534,33 @@ class TransactionReportStaff extends Component {
                                         <TH className="detail-style">Total Penalty</TH>
                                         <TD className="detail-style">
                                             {
-                                                (this.state.denda) > 0 ?
-                                                ": Rp. "+this.totalIncome(this.state.denda)+",-"
+                                                this.state.error ?
+                                                ": Error"
                                                 :
-                                                ": No Transaction"
+                                                (
+                                                    this.state.denda > 0 ?
+                                                    ": Rp. "+this.totalIncome(this.state.denda)+",-"
+                                                    :
+                                                    ": No Transaction"
+                                                )
                                             }
                                         </TD>
                                     </TRow>
                                     <TRow>
                                         <TH className="detail-style total">Total Income</TH>
-                                        <TD className="detail-style total">
+                                        <TH className="detail-style total">
                                             {
-                                                (this.state.parkingBill + this.state.denda) > 0 ?
-                                                ": Rp. "+this.totalIncome(this.state.parkingBill + this.state.denda)+",-"
+                                                this.state.error ?
+                                                ": Error"
                                                 :
-                                                ": No Transaction"
+                                                (
+                                                    (this.state.parkingBill + this.state.denda) > 0 ?
+                                                    ": Rp. "+this.totalIncome(this.state.parkingBill + this.state.denda)+",-"
+                                                    :
+                                                    ": No Transaction"
+                                                )
                                             }
-                                        </TD>
+                                        </TH>
                                     </TRow>
                                 </TBody>
                             </Table>

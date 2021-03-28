@@ -1,45 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { 
-    ContainerSingle, 
-    SelectSm,
-    Option,
-    Span,
-    I,
-    ButtonModal, 
-    TH,
-    TD,
-    Button,
-    Input,
-    H5,
-    ContainerModal,
-    Table,
-    THead,
-    TRow,
-    TBody} from '../../atomics';
-import {
-    Grid,
-    Typography
-} from '@material-ui/core'
+import { ContainerSingle,SelectSm,Option,Span,I,ButtonModal,TH,TD,Button,Input,H5,ContainerModal,Table,THead,TRow,TBody } from '../../atomics';
+import { Grid,Typography } from '@material-ui/core'
 import { Pagination } from '@material-ui/lab'
-import DateFnsUtils from '@date-io/date-fns' 
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import DateFnsUtils from '@date-io/date-fns' 
 import './style.css'
 
 class MemberReport extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            error: false,
+            chooseDate: new Date(),
             memberData: [],
             objmemberData: {},
             jumlahMember: 0,
             jumlahMobil: 0,
             jumlahMotor: 0,
-            chooseDate: new Date(),
             countData: 0, 
-            page: 1,
             offset: 0,
+            page: 1,
             limit: 5,
             date: "",
             toogleFind: "ID",
@@ -132,21 +114,26 @@ class MemberReport extends Component {
                 .then(
                     (result) => {
                         //do what you want with the response here
-                        this.setState({
-                            isLoaded: true,
-                            memberData: result.data,
-                            jumlahMember: result.jumlah,
-                            jumlahMobil: result.mobil,
-                            jumlahMotor: result.motor,
-                            countData: Math.ceil(result.jumlah/limit)
-                        });
+                        if (result.errorMessage) {
+                            this.setState({
+                                error: true
+                            })
+                        } else {
+                            this.setState({
+                                error: false,
+                                memberData: result.data,
+                                jumlahMember: result.jumlah,
+                                jumlahMobil: result.mobil,
+                                jumlahMotor: result.motor,
+                                countData: Math.ceil(result.jumlah/limit)
+                            });
+                        }
                     },
                     // Note: it's important to handle errors here
                     // instead of a catch() block so that we don't swallow
                     // exceptions from actual bugs in components.
                     (error) => {
                         this.setState({
-                            isLoaded: false,
                             error
                         });
                     }
@@ -174,8 +161,13 @@ class MemberReport extends Component {
                         .then(
                             (result) => {
                                 //do what you want with the response here
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        error: true
+                                    })
+                                }
                                 this.setState({
-                                    isLoaded: true,
+                                    error: false,
                                     memberData: result.data,
                                     jumlahMember: result.jumlah,
                                     jumlahMobil: result.mobil,
@@ -188,7 +180,6 @@ class MemberReport extends Component {
                             // exceptions from actual bugs in components.
                             (error) => {
                                 this.setState({
-                                    isLoaded: false,
                                     error
                                 });
                             }
@@ -211,18 +202,23 @@ class MemberReport extends Component {
                         .then(
                             (result) => {
                                 //do what you want with the response here
-                                this.setState({
-                                    isLoaded: true,
-                                    memberData: result.data,
-                                    jumlahMember: result.jumlah,
-                                    jumlahMobil: result.mobil,
-                                    jumlahMotor: result.motor,
-                                    countData: Math.ceil(result.jumlah/limit)
-                                });
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        error: true
+                                    })
+                                } else {
+                                    this.setState({
+                                        error: false,
+                                        memberData: result.data,
+                                        jumlahMember: result.jumlah,
+                                        jumlahMobil: result.mobil,
+                                        jumlahMotor: result.motor,
+                                        countData: Math.ceil(result.jumlah/limit)
+                                    });
+                                }
                             },
                             (error) => {
                                 this.setState({
-                                    isLoaded: false,
                                     error
                                 });
                             }
@@ -245,18 +241,23 @@ class MemberReport extends Component {
                         .then(
                             (result) => {
                                 //do what you want with the response here
-                                this.setState({
-                                    isLoaded: true,
-                                    memberData: result.data,
-                                    jumlahMember: result.jumlah,
-                                    jumlahMobil: result.mobil,
-                                    jumlahMotor: result.motor,
-                                    countData: Math.ceil(result.jumlah/limit)
-                                });
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        error: true
+                                    })
+                                } else {
+                                    this.setState({
+                                        error: false,
+                                        memberData: result.data,
+                                        jumlahMember: result.jumlah,
+                                        jumlahMobil: result.mobil,
+                                        jumlahMotor: result.motor,
+                                        countData: Math.ceil(result.jumlah/limit)
+                                    });
+                                }
                             },
                             (error) => {
                                 this.setState({
-                                    isLoaded: false,
                                     error
                                 });
                             }
@@ -289,8 +290,13 @@ class MemberReport extends Component {
             .then(
                 (result) => {
                     //do what you want with the response here
+                    if (result.errorMessage) {
+                        this.setState({
+                            error: true
+                        })
+                    }
                     this.setState({
-                      isLoaded: true,
+                      error: false,
                       memberData: result.data,
                       jumlahMember: result.jumlah,
                       jumlahMobil: result.mobil,
@@ -301,7 +307,6 @@ class MemberReport extends Component {
                 },
                 (error) => {
                     this.setState({
-                        isLoaded: false,
                         error
                     });
                 }
@@ -472,11 +477,11 @@ class MemberReport extends Component {
                                     </TRow>
                                     <TRow className="detail-style">
                                         <TH className="detail-style total-report-in">Member Total</TH>
-                                        <TD className="detail-style total-report-in">: { this.state.jumlahMember } vehicle</TD>
+                                        <TH className="detail-style total-report-in">: { this.state.jumlahMember } vehicle</TH>
                                     </TRow>
                                     <TRow className="detail-style">
                                         <TH className="detail-style">Member Total Income</TH>
-                                        <TD className="detail-style">: Rp.{ this.totalIncome((this.state.jumlahMotor * 60000) + (this.state.jumlahMobil * 120000)) },- </TD>
+                                        <TH className="detail-style">: Rp.{ this.totalIncome((this.state.jumlahMotor * 60000) + (this.state.jumlahMobil * 120000)) },- </TH>
                                     </TRow>
                                 </TBody>
                             </Table>

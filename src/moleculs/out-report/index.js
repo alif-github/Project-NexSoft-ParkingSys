@@ -1,59 +1,42 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { 
-    ContainerSingle, 
-    SelectSm,
-    Option,
-    Span,
-    I,
-    ButtonModal, 
-    TH,
-    TD,
-    Button,
-    Input,
-    H5,
-    ContainerModal,
-    Table,
-    THead,
-    TRow,
-    TBody} from '../../atomics';
-import {
-    Grid,
-    Typography
-} from '@material-ui/core'
+import { ContainerSingle,SelectSm,Option,Span,I,ButtonModal,TH,TD,Button,Input,H5,ContainerModal,Table,THead,TRow,TBody } from '../../atomics';
+import { Grid,Typography } from '@material-ui/core'
 import { Pagination } from '@material-ui/lab'
+import { KeyboardDatePicker,MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { createMuiTheme,makeStyles,ThemeProvider } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns' 
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import './style.css'
 
 class OutReportStaff extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            error: false,
+            errorStaff: false,
+            chooseDate: new Date(),
+            outCar: 0,
+            outMotorCycle: 0,
+            out: 0,
+            countData: 0, 
+            offset: 0,
+            page: 1,
+            limit: 5,
+            date: "",
+            toogleFind: "ID",
+            toogleFindStaff: "",
+            inputFind: "",
+            dataStaff: [],
             transactionData: [
                 {
                     id: "",
                     idData: "",
-                    jenisKendaraan: [
-                        {
-                            jenis: ""
-                        }
-                    ],
-                    denda: [
-                        {
-                            denda: ""
-                        }
-                    ]
+                    jenisKendaraan: [{jenis: ""}],
+                    denda: [{denda: ""}]
                 }
             ],
-            dataStaff: [],
             objTransactionData: {
-                jenisKendaraan: [
-                    {
-                        jenis: ""
-                    }
-                ],
+                jenisKendaraan: [{jenis: ""}],
                 denda: [
                     {
                         denda: "",
@@ -61,18 +44,6 @@ class OutReportStaff extends Component {
                     }
                 ]
             },
-            outCar: 0,
-            outMotorCycle: 0,
-            out: 0,
-            chooseDate: new Date(),
-            countData: 0, 
-            page: 1,
-            offset: 0,
-            limit: 5,
-            date: "",
-            toogleFind: "ID",
-            toogleFindStaff: "",
-            inputFind: ""
          }
         this.handleSetValue = el => {
             if (el.target.value === '') {
@@ -169,21 +140,26 @@ class OutReportStaff extends Component {
                 .then(
                     (result) => {
                         //do what you want with the response here
-                        this.setState({
-                        isLoaded: true,
-                        transactionData: result.data,
-                        outCar: result.outCar,
-                        outMotorCycle: result.outMotor,
-                        out: result.out,
-                        countData: Math.ceil(result.jumlah/limit)
-                        });
+                        if (result.errorMessage) {
+                            this.setState({
+                                error: true
+                            })
+                        } else {
+                            this.setState({
+                                error: false,
+                                transactionData: result.data,
+                                outCar: result.outCar,
+                                outMotorCycle: result.outMotor,
+                                out: result.out,
+                                countData: Math.ceil(result.jumlah/limit)
+                            });
+                        }
                     },
                     // Note: it's important to handle errors here
                     // instead of a catch() block so that we don't swallow
                     // exceptions from actual bugs in components.
                     (error) => {
                         this.setState({
-                            isLoaded: false,
                             error
                         });
                     }
@@ -214,21 +190,26 @@ class OutReportStaff extends Component {
                         .then(
                             (result) => {
                                 //do what you want with the response here
-                                this.setState({
-                                    isLoaded: true,
-                                    transactionData: result.data,
-                                    outCar: result.outCar,
-                                    outMotorCycle: result.outMotor,
-                                    out: result.out,
-                                    countData: Math.ceil(result.jumlah/limit)
-                                });
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        error: true
+                                    })
+                                } else {
+                                    this.setState({
+                                        error: false,
+                                        transactionData: result.data,
+                                        outCar: result.outCar,
+                                        outMotorCycle: result.outMotor,
+                                        out: result.out,
+                                        countData: Math.ceil(result.jumlah/limit)
+                                    });
+                                }
                             },
                             // Note: it's important to handle errors here
                             // instead of a catch() block so that we don't swallow
                             // exceptions from actual bugs in components.
                             (error) => {
                                 this.setState({
-                                    isLoaded: false,
                                     error
                                 });
                             }
@@ -254,21 +235,26 @@ class OutReportStaff extends Component {
                         .then(
                             (result) => {
                                 //do what you want with the response here
-                                this.setState({
-                                    isLoaded: true,
-                                    transactionData: result.data,
-                                    outCar: result.outCar,
-                                    outMotorCycle: result.outMotor,
-                                    out: result.out,
-                                    countData: Math.ceil(result.jumlah/limit)
-                                });
+                                if (result.errorMessage) {
+                                    this.setState({
+                                        error: true
+                                    })
+                                } else {
+                                    this.setState({
+                                        error: false,
+                                        transactionData: result.data,
+                                        outCar: result.outCar,
+                                        outMotorCycle: result.outMotor,
+                                        out: result.out,
+                                        countData: Math.ceil(result.jumlah/limit)
+                                    });
+                                }
                             },
                             // Note: it's important to handle errors here
                             // instead of a catch() block so that we don't swallow
                             // exceptions from actual bugs in components.
                             (error) => {
                                 this.setState({
-                                    isLoaded: false,
                                     error
                                 });
                             }
@@ -304,22 +290,27 @@ class OutReportStaff extends Component {
             .then(
                 (result) => {
                     //do what you want with the response here
-                    this.setState({
-                      isLoaded: true,
-                      transactionData: result.data,
-                      outCar: result.outCar,
-                      outMotorCycle: result.outMotor,
-                      out: result.out,
-                      date: formatted_date,
-                      countData: Math.ceil(result.jumlah/limit)
-                    });
+                    if (result.errorMessage) {
+                        this.setState({
+                            error: true
+                        })
+                    } else {
+                        this.setState({
+                          error: false,
+                          transactionData: result.data,
+                          outCar: result.outCar,
+                          outMotorCycle: result.outMotor,
+                          out: result.out,
+                          date: formatted_date,
+                          countData: Math.ceil(result.jumlah/limit)
+                        });
+                    }
                 },
                 // Note: it's important to handle errors here
                 // instead of a catch() block so that we don't swallow
                 // exceptions from actual bugs in components.
                 (error) => {
                     this.setState({
-                        isLoaded: false,
                         error
                     });
                 }
@@ -331,11 +322,22 @@ class OutReportStaff extends Component {
             .then(
                 (result) => {
                     //do what you want with the response here
-                    this.setState({
-                        dataStaff: result.data
-                    });
+                    if (result.errorMessage) {
+                        this.setState({
+                            errorStaff: true
+                        })
+                    } else {
+                        this.setState({
+                            errorStaff: false,
+                            dataStaff: result.data
+                        });
+                    }
                 },
-                (error) => {}
+                (errorStaff) => {
+                    this.setState({
+                        errorStaff
+                    })
+                }
             )
     }
     render() {
@@ -369,14 +371,19 @@ class OutReportStaff extends Component {
                                                 <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindByStaff}>
                                                     <Option className="option-menu-report" value="">-All-</Option>
                                                     {
-                                                        this.state.dataStaff.length > 0 ?
-                                                        this.state.dataStaff.map((el,idx) => {
-                                                            return (
-                                                                <Option className="option-menu-report" key={idx} value={el.idUser}>{el.namaUser}</Option>            
-                                                            )
-                                                        })
+                                                        this.state.errorStaff ?
+                                                            <Option className="option-menu-report">*Error*</Option>
                                                         :
-                                                        <Option className="option-menu-report">No Data</Option>
+                                                        (
+                                                            this.state.dataStaff.length > 0 ?
+                                                            this.state.dataStaff.map((el,idx) => {
+                                                                return (
+                                                                    <Option className="option-menu-report" key={idx} value={el.idUser}>{el.namaUser}</Option>            
+                                                                )
+                                                            })
+                                                            :
+                                                            <Option className="option-menu-report">No Data</Option>
+                                                        )
                                                     }
                                                 </SelectSm>
                                         </ContainerSingle>
@@ -425,33 +432,40 @@ class OutReportStaff extends Component {
                                 </THead>
                                 <TBody>
                                     {
-                                        this.state.transactionData.length > 0 ? 
-                                        this.state.transactionData.map((el, idx) => {
-                                            return (
-                                                <TRow key={idx}>
-                                                    <TD className="th-size">{el.id}</TD>
-                                                    <TD className="th-size">{el.noPol}</TD>
-                                                    <TD className="th-size">
-                                                        {
-                                                        el.jenisKendaraan.length > 0  ? 
-                                                        el.jenisKendaraan[0].jenis
-                                                        :
-                                                        "-"
-                                                        }
-                                                    </TD>
-                                                    <TD className="th-size">{el.tglJamKeluar}</TD>
-                                                    <TD className="th-size">
-                                                        <ButtonModal onClick={() => this.handleModal(idx)} type="button" className="btn btn-secondary btn-modal-report" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                            Detail
-                                                        </ButtonModal>
-                                                    </TD>
-                                                </TRow>
-                                            )
-                                        })
+                                        this.state.error ?
+                                            <TRow>
+                                                <TD colSpan="5">Error Fetching Data</TD>
+                                            </TRow>
                                         :
-                                        <TRow>
-                                            <TD colSpan="9">No Transaction</TD>
-                                        </TRow>
+                                        (
+                                            this.state.transactionData.length > 0 ? 
+                                            this.state.transactionData.map((el, idx) => {
+                                                return (
+                                                    <TRow key={idx}>
+                                                        <TD className="th-size">{el.id}</TD>
+                                                        <TD className="th-size">{el.noPol}</TD>
+                                                        <TD className="th-size">
+                                                            {
+                                                            el.jenisKendaraan.length > 0  ? 
+                                                            el.jenisKendaraan[0].jenis
+                                                            :
+                                                            "-"
+                                                            }
+                                                        </TD>
+                                                        <TD className="th-size">{el.tglJamKeluar}</TD>
+                                                        <TD className="th-size">
+                                                            <ButtonModal onClick={() => this.handleModal(idx)} type="button" className="btn btn-secondary btn-modal-report" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                                Detail
+                                                            </ButtonModal>
+                                                        </TD>
+                                                    </TRow>
+                                                )
+                                            })
+                                            :
+                                            <TRow>
+                                                <TD colSpan="5">No Transaction</TD>
+                                            </TRow>
+                                        )
                                     }
                                 </TBody>
                             </Table>
@@ -461,10 +475,15 @@ class OutReportStaff extends Component {
                                 <ContainerSingle className={useStyles.root + ' bawah-kiri'}>
                                     <Typography className="page-title">
                                         {
-                                            this.state.transactionData.length > 0 ?
-                                            "Page: "+this.state.page+""
+                                            this.state.error ?
+                                            "Page: Error"
                                             :
-                                            "Page: No-data"
+                                            (
+                                                this.state.transactionData.length > 0 ?
+                                                "Page: "+this.state.page+""
+                                                :
+                                                "Page: No-data"
+                                            )
                                         }
                                     </Typography>
                                     <Pagination count={this.state.countData} page={this.state.page} onChange={this.handleChangePage} />
@@ -510,7 +529,7 @@ class OutReportStaff extends Component {
                                     </TRow>
                                     <TRow className="detail-style">
                                         <TH className="detail-style total-report-in">OUT Total</TH>
-                                        <TD className="detail-style total-report-in">: { this.state.out } person</TD>
+                                        <TH className="detail-style total-report-in">: { this.state.out } person</TH>
                                     </TRow>
                                 </TBody>
                             </Table>

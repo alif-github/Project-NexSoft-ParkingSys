@@ -291,20 +291,22 @@ class ProfileDet extends Component {
                                     <ContainerSingle className="control-2">
                                         {
                                             this.state.statusButtonUpdate === "Edit" ?
+                                            <>
                                             <Button className="btn btn-warning btn-float" onClick={() => this.handleOpenDisabled()}>
                                                 <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
                                                 Edit
                                             </Button>
+                                            <Button className="btn btn-warning btn-float" onClick={() => this.props.history.push("/profile/change-password")}>
+                                                <Span><I className="fa fa-key fa-icon" aria-hidden="true"></I></Span>
+                                                Change Password
+                                            </Button>
+                                            </>
                                             :
                                             <Button className="btn btn-success btn-float i-float" onClick={() => this.handleFetchingUpdateUserAPI()}>
                                                 <Span><I className="fa fa-cloud fa-icon" aria-hidden="true"></I></Span>
                                                 Update
                                             </Button>
                                         }
-                                        <Button className="btn btn-warning btn-float" onClick={() => this.props.history.push("/profile/change-password")}>
-                                            <Span><I className="fa fa-key fa-icon" aria-hidden="true"></I></Span>
-                                            Change Password
-                                        </Button>
                                         <Button className="btn btn-danger btn-float" onClick={() => this.props.history.push("")}>
                                             <Span><I className="fa fa-backward fa-icon" aria-hidden="true"></I></Span>
                                             Back

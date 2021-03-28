@@ -1,31 +1,12 @@
 import React, { Component } from 'react';
-import {
-    A,
-    ContainerSingle,
-    H3,
-    H5,
-    Image,
-    Span } from '../../atomics/index'
-import { 
-    Grid,
-    Paper,
-    Avatar,
-    IconButton,
-    Input,
-    InputLabel,
-    InputAdornment,
-    FormControl,
-    Button,
-    FormHelperText } from '@material-ui/core'
-import { 
-    LockOutlined as LockOutlinedIcon, 
-    Visibility, 
-    VisibilityOff } from '@material-ui/icons';
+import { A,ContainerSingle,H3,H5,Image,Span } from '../../atomics/index'
+import { Grid,Paper,Avatar,IconButton,Input,InputLabel,InputAdornment,FormControl,Button,FormHelperText } from '@material-ui/core'
+import { LockOutlined as LockOutlinedIcon, Visibility, VisibilityOff } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux'
 import clsx from 'clsx';
 import Swal from 'sweetalert2'
 import './style.css'
-import { connect } from 'react-redux'
 
 class ChangePassword extends Component {
     constructor(props) {
@@ -33,17 +14,16 @@ class ChangePassword extends Component {
         this.state = {
             showPassword: false,
             showPasswordConfirm: false, 
-            password: '',
-            passwordConfirm: '',
             errorPassword: false,
             errorPasswordConfirm: false,
+            password: '',
+            passwordConfirm: '',
             helperTextPassword: ' ',
             helperTextPasswordConfirm: ' ',
         }
 
         this.handleSetValue = (event) => {
-            this.setState({ 
-                ...this.state, 
+            this.setState({
                 [event.target.name]: event.target.value,
             },() => this.handleCheckErrorPatern(event.target.name));
         };
@@ -53,13 +33,11 @@ class ChangePassword extends Component {
                 let validationPassword = passwordPattern.test(this.state.password)
                 if (!validationPassword && this.state.password !== '') {
                     this.setState({
-                        ...this.state,
                         errorPassword: true,
                         helperTextPassword: 'password minimal 6-8 character minimal 1 Uppercase font, Lowercase font, and number'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorPassword: false,
                         helperTextPassword: ' '
                     })
@@ -69,26 +47,22 @@ class ChangePassword extends Component {
                 let passwordPatternTest = this.state.password;
                 if (passwordConfirmPattern !== passwordPatternTest && this.state.passwordConfirm !== '') {
                     this.setState({
-                        ...this.state,
                         errorPasswordConfirm: true,
                         helperTextPasswordConfirm: 'password must be same above, check your input'
                     })
                 } else {
                     this.setState({
-                        ...this.state,
                         errorPasswordConfirm: false,
                         helperTextPasswordConfirm: ' '
                     })
                 }
-            } else {
-
             }
         }
         this.handleClickShowPassword = () => {
-            this.setState({ ...this.state, showPassword: !this.state.showPassword });
+            this.setState({ showPassword: !this.state.showPassword });
         };
         this.handleClickShowPasswordConfirm = () => {
-            this.setState({ ...this.state, showPasswordConfirm: !this.state.showPasswordConfirm });
+            this.setState({ showPasswordConfirm: !this.state.showPasswordConfirm });
         };
         this.handleMouseDownPassword = (event) => {
             event.preventDefault();
@@ -101,9 +75,7 @@ class ChangePassword extends Component {
             this.props.history.push('')
         };
         this.handleChangePasswordAPI = () => {
-            
-            const { password } = this.state
-            const { errorPassword , errorPasswordConfirm } = this.state
+            const { password , errorPassword , errorPasswordConfirm } = this.state
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top',
@@ -151,17 +123,23 @@ class ChangePassword extends Component {
                                     showConfirmButton: false,
                                 })
                             } else {
+                                let backToLogin = setTimeout(() => this.handleBackToLogin(), 2000);
                                 Toast.fire({
                                     icon: 'success',
                                     title: result.successMessage,
                                 })
-                                this.props.history.push('')
+                                .then(backToLogin)
                             }
                         },
-                        // Note: it's important to handle errors here
-                        // instead of a catch() block so that we don't swallow
-                        // exceptions from actual bugs in components.
                         (error) => {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Connection Time Out!',
+                                icon: 'error',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            })
                         }
                     )
             }
@@ -221,7 +199,6 @@ class ChangePassword extends Component {
         return ( 
             <>
                 {/* Border From Login Form to Image Introduction */}
-
                 <ContainerSingle className="container-login-image">
                     <ContainerSingle className="image-login">
                         <Image className="image-logo-login" src="/images/secure-parking-header.png"/>
@@ -243,83 +220,84 @@ class ChangePassword extends Component {
 
                 {/* Change Password */}
                 <ContainerSingle className="container-login">
-                <div className={useStyles.container}>
-                    <Grid>
-                        <Paper elevation={10} style={paperStyle}>
-                            <Grid align='center'>
-                                <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
-                                <h5 style={titleLoginStyle}>Change Password</h5>
-                            </Grid>
-                            <FormControl 
-                                error={this.state.errorPassword === true} 
-                                fullWidth 
-                                style={inputStyle} 
-                                className={clsx(useStyles.margin, useStyles.textField)}>
-                                <InputLabel required htmlFor="standard-adornment-password">Password</InputLabel>
-                                <Input
-                                    id="standard-adornment-password"
-                                    type={this.state.showPassword ? 'text' : 'password'}
-                                    value={this.state.password}
-                                    name="password"
-                                    onChange={this.handleSetValue}
-                                    endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={this.handleClickShowPassword}
-                                        onMouseDown={this.handleMouseDownPassword}
-                                        >
-                                        {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                    }
-                                />
-                            <FormHelperText id="component-error-text">{this.state.helperTextPassword}</FormHelperText>
-                            </FormControl>
-                            <FormControl 
-                                error={this.state.errorPasswordConfirm === true}
-                                fullWidth 
-                                style={inputStyle} 
-                                className={clsx(useStyles.margin, useStyles.textField)}>
-                                <InputLabel required htmlFor="standard-adornment-password">Confirmation Password</InputLabel>
-                                <Input
-                                    id="standard-adornment-password"
-                                    type={this.state.showPasswordConfirm ? 'text' : 'password'}
-                                    value={this.state.passwordConfirm}
-                                    name="passwordConfirm"
-                                    onChange={this.handleSetValue}
-                                    endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={this.handleClickShowPasswordConfirm}
-                                        onMouseDown={this.handleMouseDownPasswordConfirm}
-                                        >
-                                        {this.state.showPasswordConfirm ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                    }
-                                />
-                            <FormHelperText id="component-error-text">{this.state.helperTextPasswordConfirm}</FormHelperText>
-                            </FormControl>
-                            <center>
-                            <Button 
-                                style={buttonStyle}
-                                onClick={() => this.handleChangePasswordAPI()} 
-                                variant="contained" 
-                                color="primary">
-                                Register
-                            </Button>
-                            </center>
-                            <center>
-                            <A 
-                                className='linkStyle' 
-                                onClick={() => this.handleBackToLogin()}>
-                                <Span className="span-registered">Back to login</Span>
-                            </A></center>
-                        </Paper>
-                    </Grid>
-                </div>
+                    <ContainerSingle className={useStyles.container}>
+                        <Grid>
+                            <Paper elevation={10} style={paperStyle}>
+                                <Grid align='center'>
+                                    <Avatar style={avatarStyle}><LockOutlinedIcon/></Avatar>
+                                    <h5 style={titleLoginStyle}>Change Password</h5>
+                                </Grid>
+                                <FormControl 
+                                    error={this.state.errorPassword === true} 
+                                    fullWidth 
+                                    style={inputStyle} 
+                                    className={clsx(useStyles.margin, useStyles.textField)}>
+                                    <InputLabel required htmlFor="standard-adornment-password">Password</InputLabel>
+                                    <Input
+                                        id="standard-adornment-password"
+                                        type={this.state.showPassword ? 'text' : 'password'}
+                                        value={this.state.password}
+                                        name="password"
+                                        onChange={this.handleSetValue}
+                                        endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={this.handleClickShowPassword}
+                                            onMouseDown={this.handleMouseDownPassword}
+                                            >
+                                            {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                        }
+                                    />
+                                    <FormHelperText id="component-error-text">{this.state.helperTextPassword}</FormHelperText>
+                                </FormControl>
+                                <FormControl 
+                                    error={this.state.errorPasswordConfirm === true}
+                                    fullWidth 
+                                    style={inputStyle} 
+                                    className={clsx(useStyles.margin, useStyles.textField)}>
+                                    <InputLabel required htmlFor="standard-adornment-password">Confirmation Password</InputLabel>
+                                    <Input
+                                        id="standard-adornment-password"
+                                        type={this.state.showPasswordConfirm ? 'text' : 'password'}
+                                        value={this.state.passwordConfirm}
+                                        name="passwordConfirm"
+                                        onChange={this.handleSetValue}
+                                        endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={this.handleClickShowPasswordConfirm}
+                                            onMouseDown={this.handleMouseDownPasswordConfirm}
+                                            >
+                                            {this.state.showPasswordConfirm ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                        }
+                                    />
+                                <FormHelperText id="component-error-text">{this.state.helperTextPasswordConfirm}</FormHelperText>
+                                </FormControl>
+                                <center>
+                                <Button 
+                                    style={buttonStyle}
+                                    onClick={() => this.handleChangePasswordAPI()} 
+                                    variant="contained" 
+                                    color="primary">
+                                    Register
+                                </Button>
+                                </center>
+                                <center>
+                                <A 
+                                    className='linkStyle' 
+                                    onClick={() => this.handleBackToLogin()}>
+                                    <Span className="span-registered">Back to login</Span>
+                                </A>
+                                </center>
+                            </Paper>
+                        </Grid>
+                    </ContainerSingle>
                 </ContainerSingle>
             </>
          );
