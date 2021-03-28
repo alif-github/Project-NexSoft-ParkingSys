@@ -8,16 +8,19 @@ public class User {
 
     @NotNull(message = "nama user must be fill in")
     @NotEmpty(message = "nama user must be fill in")
+    @Size(max = 50 , message = "Maximum length is 50 words")
     private String namaUser;
 
     @NotNull(message = "email must be fill in")
     @NotEmpty(message = "email must be fill in")
     @Email(message = "format email false, use 'example@gmail.com'")
+    @Size(max = 50 , message = "Maximum length is 50 words")
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{0,}$" , message = "format email false, use 'example@gmail.com'")
     private String email;
 
     @NotNull(message = "username must be fill in")
     @NotEmpty(message = "username must be fill in")
+    @Size(max = 50 , message = "Maximum length is 50 words")
     private String username;
 
     @NotNull(message = "password must be fill in")

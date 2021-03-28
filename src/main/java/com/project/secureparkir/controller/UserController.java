@@ -1,5 +1,6 @@
 package com.project.secureparkir.controller;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import com.project.secureparkir.model.User;
 import com.project.secureparkir.service.UserServices;
 import com.project.secureparkir.util.CustomErrorType;
@@ -14,7 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.CommunicationException;
 import javax.validation.Valid;
+import java.net.ConnectException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,17 +39,22 @@ public class UserController {
     public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
         logger.info("Create data user");
 
-        if (userServices.isNameExist(user)) {
-            logger.error("user exist, you can't create the data");
-            return new ResponseEntity<>(new CustomErrorType("Name "+user.getNamaUser()+" had been usage"), HttpStatus.CONFLICT);
-        } else {
-            if (userServices.findByUsername(user.getUsername()) == null) {
-                userServices.saveUser(user); //save user
-                return new ResponseEntity<>(new CustomSuccessType("Register Succes"), HttpStatus.CREATED);
+        try {
+            if (userServices.isNameExist(user)) {
+                logger.error("user exist, you can't create the data");
+                return new ResponseEntity<>(new CustomErrorType("Name "+user.getNamaUser()+" had been usage"), HttpStatus.CONFLICT);
             } else {
-                return new ResponseEntity<>(new CustomErrorType("Username had been usage!"), HttpStatus.CONFLICT);
+                if (userServices.findByUsername(user.getUsername()) == null) {
+                    userServices.saveUser(user); //save user
+                    return new ResponseEntity<>(new CustomSuccessType("Register Succes"), HttpStatus.CREATED);
+                } else {
+                    return new ResponseEntity<>(new CustomErrorType("Username had been usage!"), HttpStatus.CONFLICT);
+                }
             }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CustomErrorType("Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     //Show User Data-ok
@@ -153,30 +162,34 @@ public class UserController {
 
     //Update Data By Id-ok
     @PutMapping("/user/update/")
-    public ResponseEntity<?> updateSingleUserById(@RequestParam("id") String idUser, @RequestBody User user) {
+    public ResponseEntity<?> updateSingleUserById(@Valid @RequestParam("id") String idUser, @RequestBody User user) {
         logger.info("Update User");
 
-        List<User> userList = userServices.findByIdUser(idUser);
-        User isUsernameExist = userServices.findByUsername(user.getUsername());
-
-        if (userList == null) {
-            logger.error("user cannot found, you can't show the data");
-            return new ResponseEntity<>(new CustomErrorType("Unable to update user , because not found"), HttpStatus.NOT_FOUND);
-        } else {
-            if (isUsernameExist == null) {
-                userServices.updateByIdUser(idUser, user);
-                return new ResponseEntity<>(new CustomSuccessType("Success updating "+user.getNamaUser()+""), HttpStatus.OK);
-            } else if (isUsernameExist.getUsername().equalsIgnoreCase(user.getUsername())) {
-                if (isUsernameExist.getIdUser().equalsIgnoreCase(user.getIdUser())) {
+        try {
+            List<User> userList = userServices.findByIdUser(idUser);
+            User isUsernameExist = userServices.findByUsername(user.getUsername());
+            if (userList == null) {
+                logger.error("user cannot found, you can't show the data");
+                return new ResponseEntity<>(new CustomErrorType("Unable to update user , because not found or connection refused"), HttpStatus.NOT_FOUND);
+            } else {
+                if (isUsernameExist == null) {
                     userServices.updateByIdUser(idUser, user);
                     return new ResponseEntity<>(new CustomSuccessType("Success updating "+user.getNamaUser()+""), HttpStatus.OK);
+                } else if (isUsernameExist.getUsername().equalsIgnoreCase(user.getUsername())) {
+                    if (isUsernameExist.getIdUser().equalsIgnoreCase(user.getIdUser())) {
+                        userServices.updateByIdUser(idUser, user);
+                        return new ResponseEntity<>(new CustomSuccessType("Success updating "+user.getNamaUser()+""), HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity<>(new CustomErrorType("Unable to update user , because username "+user.getUsername()+" had been usage"), HttpStatus.CONFLICT);
+                    }
                 } else {
                     return new ResponseEntity<>(new CustomErrorType("Unable to update user , because username "+user.getUsername()+" had been usage"), HttpStatus.CONFLICT);
                 }
-            } else {
-                return new ResponseEntity<>(new CustomErrorType("Unable to update user , because username "+user.getUsername()+" had been usage"), HttpStatus.CONFLICT);
             }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CustomErrorType(e.getCause().getMessage()), HttpStatus.CONFLICT);
         }
+
     }
 
     //Read Data By User-ok
