@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { ContainerSingle, Image } from '../../atomics';
+import { ContainerSingle, Image, Table, TBody, TD, TH, TRow } from '../../atomics';
+import { H5, I, Span, Button} from '../../atomics/index'
+import { Grid,Paper,TextField, } from '@material-ui/core'
+import { connect } from 'react-redux'
 import {withRouter} from 'react-router-dom';
-import Swal from 'sweetalert2'
-import {
-    H5, I, Span, Button} from '../../atomics/index'
 import { makeStyles } from '@material-ui/core/styles';
-import { 
-    Grid,
-    Paper,
-    TextField, } from '@material-ui/core'
+import Swal from 'sweetalert2'
 import './style.css';
 
 class ParkingOutPenalty extends Component {
@@ -19,7 +16,8 @@ class ParkingOutPenalty extends Component {
             idData:"",
             idJenis: 1,
             data: {},
-            biayaParkir: 'Free'
+            biayaParkir: 'Free',
+            status: ""
         }
         this.handleCancelAdd = () => {
             Swal.fire({
@@ -68,7 +66,9 @@ class ParkingOutPenalty extends Component {
             const requestOptions = {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({})
+                body: JSON.stringify({
+                    staffOut: ''+this.props.user.idUser+''
+                })
             };
             //fetching data to url API Back-End
             fetch("http://localhost:8080/ticket/parkir-out/?id=&noPol="+noPol+"", requestOptions)
@@ -240,15 +240,71 @@ class ParkingOutPenalty extends Component {
                     // Note: it's important to handle errors here
                     // instead of a catch() block so that we don't swallow
                     // exceptions from actual bugs in components.
-                    (error) => {}
+                    (error) => {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Server Not Connect',
+                            icon: 'error',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                        })
+                    }
                 )
+        }
+        this.totalIncome = nilaiUang => {
+            var bilangan = nilaiUang;
+
+            var	number_string = ''+bilangan+'',
+                sisa 	= number_string.length % 3,
+                rupiah 	= number_string.substr(0, sisa),
+                ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+                    
+            if (ribuan) {
+                var separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            return rupiah;
         }
     }
     componentDidMount() {
         let noPol = this.props.match.params.noPol
-        this.setState({
-            noPol: noPol
-        })
+        const requestOptionsPage = {
+            method: 'GET'
+        };
+        fetch("http://localhost:8080/member/find-by-plat/?noPol="+noPol+"",requestOptionsPage)
+            .then((response) => {
+                return response.json()
+            })
+            .then(
+                (result) => {
+                    //do what you want with the response here
+                    if (result.errorMessage) {
+                        this.setState({
+                            noPol: noPol,
+                            status: "reguler"
+                        })
+                    } else {
+                        this.setState({
+                            noPol: noPol,
+                            status: "member"
+                        })
+                    }
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Server Not Connect',
+                        icon: 'error',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                    })
+                }
+            )
     }
     render() {
         const useStyles = makeStyles((theme) => ({
@@ -352,34 +408,45 @@ class ParkingOutPenalty extends Component {
                         <Grid item xs={12}>
                             <Paper elevation={10} style={paperTotalShowStyle}>
                                 <Grid item xs={12} style={gridIsiStyle}>
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <th className="column-payment" scope="row">Parking Payment</th>
-                                                <td className="column-payment">
+                                    <Table className="table">
+                                        <TBody>
+                                            <TRow>
+                                                <TH className="column-payment" scope="row">Parking Payment</TH>
+                                                <TD className="column-payment">
                                                     {
-                                                        this.state.data.biayaParkir
+                                                        this.state.status === "member" ?
+                                                        "Free"
+                                                        :
+                                                        "Rp. "+this.totalIncome(this.state.data.biayaParkir)+",-"
                                                     }
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th className="column-payment" scope="row">Fine Payment</th>
-                                                <td className="column-payment">
+                                                </TD>
+                                            </TRow>
+                                            <TRow>
+                                                <TH className="column-payment" scope="row">Fine Payment</TH>
+                                                <TD className="column-payment">
                                                     {
-                                                        this.state.data.denda && this.state.data.denda[0].jumlahDenda
+                                                        this.state.data.denda && 
+                                                        "Rp. "+this.totalIncome(this.state.data.denda[0].jumlahDenda)+",-"
                                                     }
-                                                </td>
-                                            </tr>
-                                            <tr className="table-dark">
-                                                <th className="column-payment" scope="row">Total Payment</th>
-                                                <td className="column-payment">
+                                                </TD>
+                                            </TRow>
+                                            <TRow className="table-dark">
+                                                <TH className="column-payment" scope="row">Total Payment</TH>
+                                                <TD className="column-payment">
                                                     {
-                                                        this.state.data.nominal
+                                                        this.state.status === "member" ?
+                                                        this.state.data.denda && 
+                                                        "Rp. "+this.totalIncome(this.state.data.denda[0].jumlahDenda)+",-"
+                                                        :
+                                                        (
+                                                            this.state.data.denda &&
+                                                            "Rp. "+this.totalIncome((this.state.data.denda[0].jumlahDenda + this.state.data.biayaParkir))+",-"
+                                                        )
                                                     }
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                </TD>
+                                            </TRow>
+                                        </TBody>
+                                    </Table>
                                 </Grid>
                             </Paper>
                         </Grid>
@@ -389,5 +456,13 @@ class ParkingOutPenalty extends Component {
          );
     }
 }
+
+const mapStateToProps = state => ({
+    user: state.auth.user
+})
+
+const mapDispatchToProps = dispatch => {
+    return {}
+}
  
-export default withRouter(ParkingOutPenalty);
+export default connect(mapStateToProps , mapDispatchToProps)(withRouter(ParkingOutPenalty));

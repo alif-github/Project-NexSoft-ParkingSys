@@ -522,7 +522,7 @@ class MemberReport extends Component {
                                         </TRow>
                                         <TRow className="align-left">
                                             <TH>Member Bill</TH>
-                                            <TD>:  Rp. {this.totalIncome(this.state.objmemberData.biayaMember)} ,-</TD>
+                                            <TD>:  Rp. {this.totalIncome(this.state.objmemberData.biayaMember)},-</TD>
                                         </TRow>
                                         <TRow className="align-left">
                                             <TH>Register Date</TH>

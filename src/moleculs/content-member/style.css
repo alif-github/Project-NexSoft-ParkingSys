@@ -39,11 +39,19 @@ TD {
     margin-bottom: 1vh;
 }
 
-.panel-control-findby , .panel-control-selectby , .panel-control-inputby, .panel-control-search {
+.panel-control-findby , .panel-control-selectby , .panel-control-search {
     float: left;
     width: 20%;
     padding: 0.5vh;
     box-sizing: border-box;
+}
+
+.panel-control-inputby-2 {
+    float: left;
+    width: 38%;
+    padding: 0.5vh;
+    box-sizing: border-box;
+    margin-bottom: 1vh;
 }
 
 .panel-control-findby {
@@ -56,11 +64,6 @@ TD {
     margin-bottom: 1vh;
 }
 
-.panel-control-inputby {
-    width: 30%;
-    margin-bottom: 1vh;
-}
-
 .panel-control-add-member {
     float: right;
     width: 10%;
@@ -70,7 +73,11 @@ TD {
     float: right;
 }
 
-.bawah-kiri, .bawah-kanan {
+.bawah-kanan {
+    width: 50%;
+    float: left;
+}
+.bawah-kiri {
     width: 50%;
     float: left;
 }

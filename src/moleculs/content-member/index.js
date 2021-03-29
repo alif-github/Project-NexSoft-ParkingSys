@@ -1,25 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
-import {
-    ContainerSingle,
-    Span,
-    THead,
-    TH,
-    TBody,
-    TD,
-    SelectSm,
-    Option,
-    Button,
-    I, 
-    Table,
-    TRow} from '../../atomics'
-import { 
-    CircularProgress,
-    Typography
-} from '@material-ui/core'
+import { ContainerSingle,Span,THead,TH,TBody,TD,SelectSm,Option,Button,I,Table,TRow, Label } from '../../atomics'
+import { CircularProgress,Typography } from '@material-ui/core'
 import Swal from 'sweetalert2'
 import { makeStyles } from '@material-ui/core'
 import { Pagination } from '@material-ui/lab'
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { ThemeProvider } from '@material-ui/core/styles';
+import DateFnsUtils from '@date-io/date-fns' 
 import './style.css'
 import ModalDetailMember from '../modal-detail-member';
 
@@ -30,6 +18,9 @@ class Member extends Component {
             error: null,
             isLoaded: false,
             isHandleFind: false,
+            disabled: true,
+            checked: false,
+            chooseDate: new Date(),
             memberInputFind: "",
             countData: 0, 
             page: 1,
@@ -61,40 +52,100 @@ class Member extends Component {
                 this.handleShowMemberBy()
             }
         }
+        this.handleCheckBox = () => {
+            if (this.state.checked) {
+                this.setState({
+                    checked: false,
+                    disabled: true,
+                    page: 1,
+                    chooseDate: new Date()
+                },() => this.refreshMemberData())
+            } else {
+                this.setState({
+                    checked: true,
+                    disabled: false
+                })
+            }
+        }
+        this.handleDateChange = (date) => {
+            this.setState({
+                chooseDate: date,
+                page: 1
+            },() => this.refreshMemberData())
+        }
+        this.dateSetRead = dateValue => {
+            let current_datetime = dateValue
+            let year = current_datetime.getFullYear().toString().substr(2,2);
+            let month = ("0" + (current_datetime.getMonth() + 1)).slice(-2)
+            let day = ("0" + current_datetime.getDate()).slice(-2)
+            let formatted_date = month + "-" + day + "-" + year
+
+            return formatted_date;
+        }
 
         //---------------------------------------------------------------------------------------------------------------------
         //When data must be refresh, this is the solutions
         //---------------------------------------------------------------------------------------------------------------------
         this.refreshMemberData = () => {
-            const {page,limit,toggleFindStatus} = this.state;
+            const { page,limit,toggleFindStatus,chooseDate,checked } = this.state;
             let start = (page - 1)*limit;
+            let dateValue = this.dateSetRead(chooseDate)
+            if (chooseDate === new Date()) {
+                this.dateSetRead(chooseDate)
+            }
             //method to request API
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember=&status="+toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
-                .then((response) => {
-                    return response.json()
-                })
-                .then(
-                    (result) => {
-                        //do what you want with the response here
-                        this.setState({
-                        isLoaded: true,
-                        memberData: result.data,
-                        countData: Math.ceil(result.jumlah/this.state.limit)
-                        });
-                    },
-                    // Note: it's important to handle errors here
-                    // instead of a catch() block so that we don't swallow
-                    // exceptions from actual bugs in components.
-                    (error) => {
-                        this.setState({
-                            isLoaded: false,
-                            error
-                        });
-                    }
-                )
+            if (checked) {
+                fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember=&status="+toggleFindStatus+"&tglRegister="+dateValue+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    .then((response) => {
+                        return response.json()
+                    })
+                    .then(
+                        (result) => {
+                            //do what you want with the response here
+                            this.setState({
+                            isLoaded: true,
+                            memberData: result.data,
+                            countData: Math.ceil(result.jumlah/this.state.limit)
+                            });
+                        },
+                        // Note: it's important to handle errors here
+                        // instead of a catch() block so that we don't swallow
+                        // exceptions from actual bugs in components.
+                        (error) => {
+                            this.setState({
+                                isLoaded: false,
+                                error
+                            });
+                        }
+                    )
+            } else {
+                fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember=&status="+toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    .then((response) => {
+                        return response.json()
+                    })
+                    .then(
+                        (result) => {
+                            //do what you want with the response here
+                            this.setState({
+                            isLoaded: true,
+                            memberData: result.data,
+                            countData: Math.ceil(result.jumlah/this.state.limit)
+                            });
+                        },
+                        // Note: it's important to handle errors here
+                        // instead of a catch() block so that we don't swallow
+                        // exceptions from actual bugs in components.
+                        (error) => {
+                            this.setState({
+                                isLoaded: false,
+                                error
+                            });
+                        }
+                    )
+            }
         }
         //---------------------------------------------------------------------------------------------------------------------
         // handle page and limit
@@ -226,6 +277,7 @@ class Member extends Component {
 
         this.handleShowMemberBy = () => {
             const findMemberValue = this.state.inputFind;
+            let dateValue = this.dateSetRead(this.state.chooseDate)
             
             if (this.state.toogleFind === "ID") {
                 if (findMemberValue === "") {
@@ -237,7 +289,7 @@ class Member extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/member/read-member/?idMember="+findMemberValue+"&noPol=&namaMember=&status="+this.state.toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    fetch("http://localhost:8080/member/read-member/?idMember="+findMemberValue+"&noPol=&namaMember=&status="+this.state.toggleFindStatus+"&tglRegister="+dateValue+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -271,7 +323,7 @@ class Member extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember="+findMemberValue+"&status="+this.state.toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol=&namaMember="+findMemberValue+"&status="+this.state.toggleFindStatus+"&tglRegister="+dateValue+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -305,7 +357,7 @@ class Member extends Component {
                     const requestOptionsPage = {
                         method: 'GET'
                     };
-                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol="+findMemberValue+"&namaMember=&status="+this.state.toggleFindStatus+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
+                    fetch("http://localhost:8080/member/read-member/?idMember=&noPol="+findMemberValue+"&namaMember=&status="+this.state.toggleFindStatus+"&tglRegister="+dateValue+"&limit="+this.state.limit+"&offset="+start+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -448,7 +500,29 @@ class Member extends Component {
                 <ContainerSingle>
                     <ContainerSingle className="panel-control">
                         <ContainerSingle className="panel-control-findby">
-                            Status :
+                            <ContainerSingle className="form-check">
+                                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={this.handleCheckBox} checked={this.state.checked}/>
+                                <Label className="form-check-label" htmlFor="flexCheckDefault">
+                                    Date
+                                </Label>
+                            </ContainerSingle>
+                        </ContainerSingle>
+                        <ContainerSingle className="panel-control-selectby"> 
+                            <ThemeProvider>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <KeyboardDatePicker
+                                        className={useStyles.root}
+                                        disabled={this.state.disabled}
+                                        clearable
+                                        onKeyDown={(e) => e.preventDefault()}
+                                        placeholder="Pick date"
+                                        value= {this.state.chooseDate}
+                                        onChange={date => this.handleDateChange(date)}
+                                        maxDate={new Date()}
+                                        minDate={new Date("03-16-2021")}
+                                    />
+                                </MuiPickersUtilsProvider>
+                            </ThemeProvider>
                         </ContainerSingle>
                         <ContainerSingle className="panel-control-selectby"> 
                             <SelectSm className="form-select form-select-sm select-opt" onChange={this.handleFindByStatus}>
@@ -464,7 +538,7 @@ class Member extends Component {
                                 <Option value="NoPol">Police Number</Option>
                             </SelectSm>
                         </ContainerSingle>
-                        <ContainerSingle className="panel-control-inputby input-group mb-3">
+                        <ContainerSingle className="panel-control-inputby-2 input-group mb-3">
                             <input type="text" className="form-control form-control-sm form-opt" onChange={el => this.handleSetValue(el)} placeholder="Find..." aria-label="Recipient's username" aria-describedby="button-addon2"/>
                             <Button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => this.handleClickedFind()}>
                                 <Span><I className="fa fa-search fa-icon" aria-hidden="true"></I></Span>
@@ -509,22 +583,23 @@ class Member extends Component {
                                                         <ContainerSingle onClick={() => this.props.addDummy(this.state.memberData[idx])}>
                                                             <ModalDetailMember />
                                                         </ContainerSingle>
-                                                        <ContainerSingle>
-                                                            <Button className="btn btn-warning" 
-                                                                onClick={() => {this.props.history.push('/member/update/'+el.idMember);this.props.addDummy(this.state.memberData[idx])}}>
-                                                                <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
-                                                                Edit
-                                                            </Button>
-                                                        </ContainerSingle> 
-                                                        <ContainerSingle>
                                                             {
                                                                 this.props.user.posisi === "Admin" &&
-                                                                <Button className="btn btn-danger" onClick={() => this.handleDeleteMemberConfirm(el.idMember,el.namaMember)}>
-                                                                    <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
-                                                                    Delete
-                                                                </Button>
+                                                                <>
+                                                                    <ContainerSingle>
+                                                                        <Button className="btn btn-warning" onClick={() => {this.props.history.push('/member/update/'+el.idMember);this.props.addDummy(this.state.memberData[idx])}}>
+                                                                            <Span><I className="fa fa-wrench fa-icon" aria-hidden="true"></I></Span>
+                                                                            Edit
+                                                                        </Button>
+                                                                    </ContainerSingle>
+                                                                    <ContainerSingle>
+                                                                        <Button className="btn btn-danger" onClick={() => this.handleDeleteMemberConfirm(el.idMember,el.namaMember)}>
+                                                                            <Span><I className="fa fa-trash fa-icon" aria-hidden="true"></I></Span>
+                                                                            Delete
+                                                                        </Button>
+                                                                    </ContainerSingle>
+                                                                </>
                                                             }
-                                                        </ContainerSingle>
                                                     </ContainerSingle>
                                                     </center>
                                                 }

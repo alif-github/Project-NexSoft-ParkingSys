@@ -74,3 +74,11 @@
     font-size: small;
     height: 20vh;
 }
+.free-span {
+    background-color: green;
+    border-radius: 1vh;
+    padding: 0.6vh;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    color: white;
+}

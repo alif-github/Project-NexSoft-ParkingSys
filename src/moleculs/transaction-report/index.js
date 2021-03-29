@@ -28,6 +28,7 @@ class TransactionReportStaff extends Component {
             toogleFindStaff: "",
             inputFind: "",
             objTransactionData: {
+                id: "",
                 jenisKendaraan: [{jenis: ""}],
                 denda: [
                     {
@@ -125,7 +126,7 @@ class TransactionReportStaff extends Component {
             let nama;
             if (this.props.user.posisi === "Admin") nama = toogleFindStaff
             else nama = this.props.user.idUser
-            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
+            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&staffOut="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -171,7 +172,7 @@ class TransactionReportStaff extends Component {
                     let nama;
                     if (this.props.user.posisi === "Admin") nama = toogleFindStaff
                     else nama = this.props.user.idUser
-                    fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
+                    fetch("http://localhost:8080/ticket/read-ticket/?id="+findUserValue+"&limit="+limit+"&offset="+start+"&staffOut="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -212,7 +213,7 @@ class TransactionReportStaff extends Component {
                     let nama;
                     if (this.props.user.posisi === "Admin") nama = toogleFindStaff
                     else nama = this.props.user.idUser
-                    fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&namaStaff="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
+                    fetch("http://localhost:8080/ticket/read-ticket/?noPol="+findUserValue+"&limit="+limit+"&offset="+start+"&staffOut="+nama+"&dateTime="+dateValue+"",requestOptionsPage)
                         .then((response) => {
                             return response.json()
                         })
@@ -263,7 +264,7 @@ class TransactionReportStaff extends Component {
         let nama;
         if (this.props.user.posisi === "Admin") nama = toogleFindStaff
         else nama = this.props.user.idUser
-        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+nama+"&dateTime="+formatted_date+"",requestOptionsPage)
+        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&staffOut="+nama+"&dateTime="+formatted_date+"",requestOptionsPage)
             .then((response) => {
                 return response.json()
             })
@@ -317,6 +318,7 @@ class TransactionReportStaff extends Component {
             )   
     }
     render() {
+        console.log("obj check:",this.state.objTransactionData.id)
         const useStyles = makeStyles((theme) => ({
             root: {
               flexGrow: 1,
@@ -438,7 +440,7 @@ class TransactionReportStaff extends Component {
                                                         <TD className="th-size">
                                                             {
                                                                 el.id.includes("MEMBER-") ?
-                                                                "Free"
+                                                                <Span className="free-span">Free</Span>
                                                                 :
                                                                 "Rp."+this.totalIncome(el.biayaParkir)+",-"
                                                             }
@@ -609,19 +611,37 @@ class TransactionReportStaff extends Component {
                                         </TRow>
                                         <TRow className="align-left">
                                             <TH>Penalty Bill</TH>
-                                            <TD>:  Rp. {this.state.objTransactionData.denda[0].jumlahDenda} ,-</TD>
+                                            <TD>:  Rp. {this.totalIncome(this.state.objTransactionData.denda[0].jumlahDenda)},-</TD>
                                         </TRow>
                                         <TRow className="align-left">
                                             <TH>Parking Bill</TH>
-                                            <TD>:  Rp. {this.state.objTransactionData.biayaParkir} ,-</TD>
+                                            <TD>
+                                                {
+                                                    this.state.objTransactionData.id.includes("MEMBER-") ?
+                                                    <Span className="free-span">Free</Span>
+                                                    :
+                                                    ": Rp. "+this.totalIncome(this.state.objTransactionData.biayaParkir)+",-"
+                                                }
+                                            </TD>
                                         </TRow>
                                         <TRow className="align-left">
                                             <TH>Total</TH>
-                                            <TD>:  Rp. {this.state.objTransactionData.biayaParkir + this.state.objTransactionData.denda[0].jumlahDenda} ,-</TD>
+                                            <TD>
+                                                {
+                                                    this.state.objTransactionData.id.includes("MEMBER-") ?
+                                                    ": Rp. "+this.totalIncome(this.state.objTransactionData.denda[0].jumlahDenda)+",-"
+                                                    :
+                                                    ": Rp. "+this.totalIncome(this.state.objTransactionData.biayaParkir + this.state.objTransactionData.denda[0].jumlahDenda)+",-"
+                                                }
+                                            </TD>
                                         </TRow>
                                         <TRow className="align-left">
-                                            <TH>Created By</TH>
+                                            <TH>Parking IN Staff</TH>
                                             <TD>:  {this.state.objTransactionData.namaStaff}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Parking OUT Staff</TH>
+                                            <TD>:  {this.state.objTransactionData.staffOut}</TD>
                                         </TRow>
                                     </TBody>
                                 </Table>

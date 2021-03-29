@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ContainerSingle, Image } from '../../atomics';
+import { connect } from "react-redux"
 import {withRouter} from 'react-router-dom';
 import Swal from 'sweetalert2'
 import {
@@ -67,7 +68,9 @@ class ParkingOutForm extends Component {
             const requestOptions = {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({})
+                body: JSON.stringify({
+                    staffOut: ''+this.props.user.idUser+''
+                })
             };
             //fetching data to url API Back-End
             fetch("http://localhost:8080/ticket/parkir-out/?id="+id+"&noPol=", requestOptions)
@@ -329,5 +332,13 @@ class ParkingOutForm extends Component {
          );
     }
 }
+
+const mapStateToProps = state => ({
+    user: state.auth.user
+})
+
+const mapDispatchToProps = dispatch => {
+    return {}
+}
  
-export default withRouter(ParkingOutForm);
+export default connect(mapStateToProps , mapDispatchToProps)(withRouter(ParkingOutForm));

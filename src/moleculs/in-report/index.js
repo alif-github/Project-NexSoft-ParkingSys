@@ -36,6 +36,7 @@ class InReportStaff extends Component {
             ],
             dataStaff: [],
             objTransactionData: {
+                id: "",
                 jenisKendaraan: [{jenis: ""}],
                 denda: [
                     {
@@ -580,19 +581,37 @@ class InReportStaff extends Component {
                                         </TRow>
                                         <TRow className="align-left">
                                             <TH>Penalty Bill</TH>
-                                            <TD>:  Rp. {this.state.objTransactionData.denda[0].jumlahDenda} ,-</TD>
+                                            <TD>:  Rp. {this.totalIncome(this.state.objTransactionData.denda[0].jumlahDenda)},-</TD>
                                         </TRow>
                                         <TRow className="align-left">
                                             <TH>Parking Bill</TH>
-                                            <TD>:  Rp. {this.state.objTransactionData.biayaParkir} ,-</TD>
+                                            <TD>
+                                                {
+                                                    this.state.objTransactionData.id.includes("MEMBER-") ?
+                                                    <Span className="free-span">Free</Span>
+                                                    :
+                                                    ": Rp. "+this.totalIncome(this.state.objTransactionData.biayaParkir)+",-"
+                                                }
+                                            </TD>
                                         </TRow>
                                         <TRow className="align-left">
                                             <TH>Total</TH>
-                                            <TD>:  Rp. {this.state.objTransactionData.biayaParkir + this.state.objTransactionData.denda[0].jumlahDenda} ,-</TD>
+                                            <TD>
+                                                {
+                                                    this.state.objTransactionData.id.includes("MEMBER-") ?
+                                                    ": Rp. "+this.totalIncome(this.state.objTransactionData.denda[0].jumlahDenda)+",-"
+                                                    :
+                                                    ": Rp. "+this.totalIncome(this.state.objTransactionData.biayaParkir + this.state.objTransactionData.denda[0].jumlahDenda)+",-"
+                                                }
+                                            </TD>
                                         </TRow>
                                         <TRow className="align-left">
-                                            <TH>Created By</TH>
+                                            <TH>Parking IN Staff</TH>
                                             <TD>:  {this.state.objTransactionData.namaStaff}</TD>
+                                        </TRow>
+                                        <TRow className="align-left">
+                                            <TH>Parking OUT Staff</TH>
+                                            <TD>:  {this.state.objTransactionData.staffOut}</TD>
                                         </TRow>
                                     </TBody>
                                 </Table>
