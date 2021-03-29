@@ -106,4 +106,19 @@ public class MemberController {
             return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
         }
     }
+
+    //Find by no plat
+    @GetMapping("/find-by-plat/")
+    public ResponseEntity<?> findByNoPlat (@RequestParam("noPol") String noPol) {
+        try {
+            Member member = memberServices.findByNoPlat(noPol);
+            if (member == null) {
+                return new ResponseEntity<>(new CustomErrorType("Data Not Found"), HttpStatus.BAD_GATEWAY);
+            } else {
+                return new ResponseEntity<>(member, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CustomErrorType("Failed to fetching data"), HttpStatus.BAD_GATEWAY);
+        }
+    }
 }

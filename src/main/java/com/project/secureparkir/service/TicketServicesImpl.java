@@ -105,6 +105,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
                 String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
                 String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
@@ -145,6 +147,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
                 String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
                 String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
@@ -178,6 +182,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
                 String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
                 String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
@@ -211,6 +217,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -239,6 +247,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
                 String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
                 String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
@@ -272,6 +282,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("tglJamMasuk") && !String.valueOf(params.get("tglJamMasuk")).isBlank()) {
                 String tglAwalMasuk = ""+params.get("tglJamMasuk")+" 00:00:01";
                 String tglAkhirMasuk = ""+params.get("tglJamMasuk")+" 23:59:59";
@@ -305,6 +317,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -333,6 +347,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -361,6 +377,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -389,6 +407,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";
@@ -417,6 +437,8 @@ public class TicketServicesImpl implements TicketServices {
                 whereQuery.add("noPol='"+params.get("noPol")+"'");
             if (params.containsKey("namaStaff") && !String.valueOf(params.get("namaStaff")).isBlank())
                 whereQuery.add("namaStaff='"+params.get("namaStaff")+"'");
+            if (params.containsKey("staffOut") && !String.valueOf(params.get("staffOut")).isBlank())
+                whereQuery.add("staffOut='"+params.get("staffOut")+"'");
             if (params.containsKey("dateTime") && !String.valueOf(params.get("dateTime")).isBlank()) {
                 String tglAwal = ""+params.get("dateTime")+" 00:00:01";
                 String tglAkhir = ""+params.get("dateTime")+" 23:59:59";

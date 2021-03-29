@@ -64,6 +64,7 @@ public class TicketRepositoryImpl implements TicketRepository {
                                 rs.getDouble("biayaParkir"),
                                 rs.getInt("idDenda"),
                                 rs.getString("namaStaff"),
+                                rs.getString("staffOut"),
                                 rs.getDouble("nominal")
                         ));
     }
@@ -84,6 +85,7 @@ public class TicketRepositoryImpl implements TicketRepository {
                                 rs.getDouble("biayaParkir"),
                                 rs.getInt("idDenda"),
                                 rs.getString("namaStaff"),
+                                rs.getString("staffOut"),
                                 rs.getDouble("nominal"),
                                 null,
                                 null
@@ -125,6 +127,7 @@ public class TicketRepositoryImpl implements TicketRepository {
                                 rs.getDouble("biayaParkir"),
                                 rs.getInt("idDenda"),
                                 rs.getString("namaStaff"),
+                                rs.getString("staffOut"),
                                 rs.getDouble("nominal"),
                                 null,
                                 null
@@ -175,14 +178,15 @@ public class TicketRepositoryImpl implements TicketRepository {
         ticket.setIdData(UUID.randomUUID().toString());
         ticket.setTglJamMasuk(formatter.format(ts));
         ticket.setTglJamKeluar("-");
+        ticket.setStaffOut("-");
         ticket.setBiayaParkir(0);
         ticket.setIdDenda(0);
         ticket.setNominal(0);
         ticket.setIdDenda(3);
         //---------------------------------------------------
 
-        String sql = "INSERT INTO ticket(idData, id,noPol,idJenis,tglJamMasuk,tglJamKeluar,biayaParkir,idDenda,namaStaff,nominal)" +
-                "VALUES(?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO ticket(idData, id,noPol,idJenis,tglJamMasuk,tglJamKeluar,biayaParkir,idDenda,namaStaff,staffOut,nominal)" +
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
         databases.update(sql,
                 ticket.getIdData(),
                 ticket.getId(),
@@ -193,6 +197,7 @@ public class TicketRepositoryImpl implements TicketRepository {
                 ticket.getBiayaParkir(),
                 ticket.getIdDenda(),
                 ticket.getNamaStaff(),
+                ticket.getStaffOut(),
                 ticket.getNominal());
     }
 
@@ -212,6 +217,7 @@ public class TicketRepositoryImpl implements TicketRepository {
                         rs.getDouble("biayaParkir"),
                         rs.getInt("idDenda"),
                         rs.getString("namaStaff"),
+                        rs.getString("staffOut"),
                         rs.getDouble("nominal"),
                         null,
                         null
@@ -241,7 +247,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public void exitTicketNormal(String idData, Ticket ticket) {
-        String sqlUpdate = "UPDATE ticket SET tglJamKeluar = ? WHERE idData = ?";
+        String sqlUpdate = "UPDATE ticket SET tglJamKeluar = ? , staffOut = ? WHERE idData = ?";
 
         //---------------------------------------------------
         Date date = new Date();
@@ -252,12 +258,13 @@ public class TicketRepositoryImpl implements TicketRepository {
 
         databases.update(sqlUpdate,
                 ticket.getTglJamKeluar(),
+                ticket.getStaffOut(),
                 idData);
     }
 
     @Override
     public void exitTicketDenda(String idData, String id, Ticket ticket) {
-        String sqlUpdate = "UPDATE ticket SET tglJamKeluar = ?, idDenda = ? WHERE idData = ?";
+        String sqlUpdate = "UPDATE ticket SET tglJamKeluar = ?, staffOut = ?, idDenda = ? WHERE idData = ?";
 
         //---------------------------------------------------
         Date date = new Date();
@@ -273,6 +280,7 @@ public class TicketRepositoryImpl implements TicketRepository {
         }
         databases.update(sqlUpdate,
                 ticket.getTglJamKeluar(),
+                ticket.getStaffOut(),
                 ticket.getIdDenda(),
                 idData);
 
@@ -304,6 +312,7 @@ public class TicketRepositoryImpl implements TicketRepository {
                                 rs.getDouble("biayaParkir"),
                                 rs.getInt("idDenda"),
                                 rs.getString("namaStaff"),
+                                rs.getString("staffOut"),
                                 rs.getDouble("nominal"),
                                 null,
                                 null

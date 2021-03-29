@@ -12,6 +12,7 @@ public class Ticket {
     private double biayaParkir;
     private int idDenda;
     private String namaStaff;
+    private String staffOut;
     private double nominal;
 
     //Join Table.
@@ -21,7 +22,7 @@ public class Ticket {
 
     public Ticket(String idData, String id, String noPol, int idJenis, String tglJamMasuk,
                   String tglJamKeluar, double biayaParkir, int idDenda,
-                  String namaStaff, double nominal) {
+                  String namaStaff, String staffOut, double nominal) {
         this.idData = idData;
         this.id = id;
         this.noPol = noPol;
@@ -31,11 +32,12 @@ public class Ticket {
         this.biayaParkir = biayaParkir;
         this.idDenda = idDenda;
         this.namaStaff = namaStaff;
+        this.staffOut = staffOut;
         this.nominal = nominal;
     }
 
     public Ticket(String idData, String id, String noPol, int idJenis, String tglJamMasuk, String tglJamKeluar,
-                  double biayaParkir, int idDenda, String namaStaff, double nominal,
+                  double biayaParkir, int idDenda, String namaStaff, String staffOut, double nominal,
                   List<Denda> denda, List<JenisKendaraan> jenisKendaraan) {
         this.idData = idData;
         this.id = id;
@@ -46,6 +48,7 @@ public class Ticket {
         this.biayaParkir = biayaParkir;
         this.idDenda = idDenda;
         this.namaStaff = namaStaff;
+        this.staffOut = staffOut;
         this.nominal = nominal;
         this.denda = denda;
         this.jenisKendaraan = jenisKendaraan;
@@ -151,6 +154,14 @@ public class Ticket {
         this.jenisKendaraan = jenisKendaraan;
     }
 
+    public String getStaffOut() {
+        return staffOut;
+    }
+
+    public void setStaffOut(String staffOut) {
+        this.staffOut = staffOut;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +
@@ -163,6 +174,7 @@ public class Ticket {
                 ", biayaParkir=" + biayaParkir +
                 ", idDenda=" + idDenda +
                 ", namaStaff='" + namaStaff + '\'' +
+                ", staffOut='" + staffOut + '\'' +
                 ", nominal=" + nominal +
                 ", denda=" + denda +
                 ", jenisKendaraan=" + jenisKendaraan +
