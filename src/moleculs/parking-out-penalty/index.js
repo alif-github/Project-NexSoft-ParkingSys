@@ -231,7 +231,14 @@ class ParkingOutPenalty extends Component {
                 .then(
                     (result) => {
                         //do what you want with the response here
-                        if (result.data.length > 0) {
+                        if (result.data.length > 0) { 
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Parking Out Success',
+                                icon: 'success',
+                                timerProgressBar: false,
+                                showConfirmButton: true,
+                            })
                             this.setState({
                                 data: result.data[0]
                             })
@@ -417,7 +424,12 @@ class ParkingOutPenalty extends Component {
                                                         this.state.status === "member" ?
                                                         "Free"
                                                         :
-                                                        "Rp. "+this.totalIncome(this.state.data.biayaParkir)+",-"
+                                                        (
+                                                            this.state.biayaParkir === "Free" ?
+                                                            ""
+                                                            :  
+                                                            "Rp. "+this.totalIncome(this.state.data.biayaParkir)+",-"
+                                                        )
                                                     }
                                                 </TD>
                                             </TRow>

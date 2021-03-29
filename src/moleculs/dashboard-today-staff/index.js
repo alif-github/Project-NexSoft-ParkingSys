@@ -9,7 +9,7 @@ import {
 import DateFnsUtils from '@date-io/date-fns' 
 import { Pagination } from '@material-ui/lab'
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import './style.css'
 
 class DashboardTransaction extends Component {
@@ -84,14 +84,15 @@ class DashboardTransaction extends Component {
                     (result) => {
                         //do what you want with the response here
                         this.setState({
-                        isLoaded: true,
-                        ticketData: result.data,
-                        parkingBill: result.parkingBill,
-                        denda: result.denda,
-                        in: result.in,
-                        out: result.out,
-                        countData: Math.ceil(result.jumlah/limit)
+                            isLoaded: true,
+                            ticketData: result.data,
+                            parkingBill: result.parkingBill,
+                            denda: result.denda,
+                            in: result.in,
+                            out: result.out,
+                            countData: Math.ceil(result.jumlah/limit)
                         });
+                        this.props.toogleStatusOff()
                     },
                     // Note: it's important to handle errors here
                     // instead of a catch() block so that we don't swallow
@@ -142,6 +143,7 @@ class DashboardTransaction extends Component {
     }
 
     render() {
+        this.props.tooglestatus === true && this.handleRefreshData()
         const useStyles = makeStyles((theme) => ({
             root: {
               flexGrow: 1,
@@ -192,18 +194,13 @@ class DashboardTransaction extends Component {
             textAlign: 'center',
             padding: 1
         }
-        const theme = createMuiTheme({
-            status: {
-              danger: 'red',
-            },
-          });
         return ( 
             <ContainerSingle>
                 <Grid container spacing={3}>
                     <Grid item xs={12} style={gridStyle}>
                         <Paper elevation={3} style={pickDateStyle}>
                             <Span className="title-pick">Pick Date : </Span>
-                            <ThemeProvider theme={theme}>
+                            <ThemeProvider>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                     <KeyboardDatePicker
                                         className={useStyles.root}
@@ -322,11 +319,14 @@ class DashboardTransaction extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.auth.user
+    user: state.auth.user,
+    tooglestatus: state.tooglestatus.toogleUpdate
 })
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        toogleStatusOff: () => dispatch({ type: 'TOOGLE_OFF'})
+    }
 }
  
 export default connect(mapStateToProps , mapDispatchToProps)(DashboardTransaction);

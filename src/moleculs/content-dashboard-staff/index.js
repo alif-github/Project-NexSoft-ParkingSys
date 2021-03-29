@@ -69,6 +69,7 @@ class DashBoardStaff extends Component {
                                     icon: 'success',
                                     showConfirmButton: true,
                                 })
+                                this.props.toogleStatusOn()
                             }
                         })
                         .then(
@@ -233,11 +234,14 @@ class DashBoardStaff extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.auth.user
+    user: state.auth.user,
+    tooglestatus: state.tooglestatus.toogleUpdate
 })
 
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        toogleStatusOn: () => dispatch({ type: 'TOOGLE_ON'})
+    }
 }
  
 export default connect(mapStateToProps , mapDispatchToProps)(DashBoardStaff);
