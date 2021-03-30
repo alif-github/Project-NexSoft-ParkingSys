@@ -76,7 +76,7 @@ class DashboardTransaction extends Component {
             const requestOptionsPage = {
                 method: 'GET'
             };
-            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&staffOut="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
                 .then((response) => {
                     return response.json()
                 })
@@ -88,7 +88,6 @@ class DashboardTransaction extends Component {
                             ticketData: result.data,
                             parkingBill: result.parkingBill,
                             denda: result.denda,
-                            in: result.in,
                             out: result.out,
                             countData: Math.ceil(result.jumlah/limit)
                         });
@@ -103,7 +102,25 @@ class DashboardTransaction extends Component {
                             error
                         });
                     }
-                )   
+                ) 
+            fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+start+"&namaStaff="+this.props.user.idUser+"&dateTime="+dateValue+"",requestOptionsPage)
+                .then((response) => {
+                    return response.json()
+                })
+                .then(
+                    (result) => {
+                        this.setState({
+                            isLoaded: true,
+                            in: result.in
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isLoaded: false,
+                            error
+                        });
+                    }
+                )       
         }
     }
     componentDidMount() {
@@ -117,7 +134,7 @@ class DashboardTransaction extends Component {
         const requestOptionsPage = {
             method: 'GET'
         };
-        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+this.props.user.idUser+"&dateTime="+formatted_date+"",requestOptionsPage)
+        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&staffOut="+this.props.user.idUser+"&dateTime="+formatted_date+"",requestOptionsPage)
             .then((response) => {
                 return response.json()
             })
@@ -128,9 +145,26 @@ class DashboardTransaction extends Component {
                       ticketData: result.data,
                       parkingBill: result.parkingBill,
                       denda: result.denda,
-                      in: result.in,
                       out: result.out,
                       countData: Math.ceil(result.jumlah/limit)
+                    });
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: false,
+                        error
+                    });
+                }
+            )
+        fetch("http://localhost:8080/ticket/read-ticket/?limit="+limit+"&offset="+offset+"&namaStaff="+this.props.user.idUser+"&dateTime="+formatted_date+"",requestOptionsPage)
+            .then((response) => {
+                return response.json()
+            })
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        in: result.in
                     });
                 },
                 (error) => {
